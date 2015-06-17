@@ -36,44 +36,27 @@
     \let\footnoterule\relax
     \let \footnote \thanks
     \begin{center}%
-     % {\LARGE\textbf{Szko\l{}a G\l{}\'owna Handlowa}\\
-%        Wydzia\l{} Matematyki, Informatyki i Mechaniki\par
-     % }
-         \includegraphics[width=100mm]{sgh.png}\\
-      \vspace{5mm plus 1fill} 
-      {\Large\bf Studium Magisterskie}
+      {\LARGE\textbf{Uniwersytet Warszawski}\\
+        Wydzia\l{} Matematyki, Informatyki i Mechaniki\par}
+      \vspace{1cm plus 1fill} 
+      {\Large\bf\@author\par}
       \vspace{0.2cm}
-      \vspace{8mm plus 1fill}
-      \begin{flushleft}\large
-        \begin{tabular}{l}
-          
-          Kierunek \bfseries \@kierunek\par\\
-        \end{tabular}
-      \end{flushleft}
-      
-      \vspace{8mm plus 1fill}
-      \begin{flushright}\large
-        \begin{tabular}{l}
-          
-          Imi¦ i nazwisko autora \bfseries \@author\par\\
-          Nr albumu \bfseries \@nralbumu\par\\
-        \end{tabular}
-      \end{flushright}
-      \vspace{8mm plus 1fill}
+      {\large Nr albumu: \@nralbumu\par}
+      \vspace{8mm plus .1fill}
       {\Huge\textbf{\@title}\par}
-      \vspace{8mm plus 1fill}
-      \vspace{1cm plus .1fill}
+      \vspace{8mm plus .1fill}
+      {\large\bf Praca \@rodzajpracy\\[3pt]
+        na kierunku \MakeUppercase{\@kierunek} \\
 %----zakres---
+        \@zakres \par}
+      \vspace{2cm plus 1.5fill}
       \begin{flushright}\large
         \begin{tabular}{l}
-          Praca magisterska\\
-          napisana w Instytucie\\
-          \bfseries \@instytut\\ 
-          pod kierunkiem naukowym\\          
+          Praca wykonana pod kierunkiem\\
           \bfseries \@opiekun
         \end{tabular}
       \end{flushright}
-      \vspace{5mm plus 1fill}
+      \vspace{1cm plus 1fill}
       {\large \@date\par}
     \end{center}
     \@thanks
@@ -130,8 +113,6 @@
 %----zakres nie konieczny-----
 \def\zakres#1{\gdef\@zakres{w zakresie \MakeUppercase{#1}}}
 \def\@zakres{}
-\def\instytut#1{\gdef\@instytut{#1}}
-\def\@instytut{???\ClassError{pracamgr}{Brak danych o instytucie }\@ehc}
 \def\opiekun#1{\gdef\@opiekun{#1}}
 \def\@opiekun{???\ClassError{pracamgr}{Brak danych opiekuna pracy}\@ehc}
 \def\keywords#1{\gdef\@keywords{#1}}
