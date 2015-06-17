@@ -9,41 +9,6 @@
 \ProvidesClass{pracamgr}[2006/05/05 v0.5.0 Praca magisterska]
 
 
-
-
-% Required packages
-\RequirePackage{graphicx}
-\RequirePackage{hyperref}
-\hypersetup{
-	linktocpage,
-    colorlinks,
-    citecolor=Crimson,
-    filecolor=black,
-    linkcolor=black,
-    urlcolor=Crimson,
-}
-
-\RequirePackage[centertags]{amsmath}
-\RequirePackage{amssymb}
-\RequirePackage[numbers, comma, sort&compress]{natbib}
-\RequirePackage[small, md, sc]{titlesec}
-\RequirePackage[tight,nice]{units}
-\RequirePackage{verbatim}
-
-% colors
-\RequirePackage{color}
-\definecolor{Crimson}{rgb}{0.6471, 0.1098, 0.1882}
-
-\RequirePackage{url}
-\RequirePackage[titles]{tocloft}
-\setcounter{tocdepth}{1}
-\renewcommand{\cftchapfont}{\normalsize \scshape}
-
-
-
-
-
-
 \def\@baseclass{report}
 \def\@rodzajpracy{magisterska}
 \DeclareOption{licencjacka}{\def\@rodzajpracy{licencjacka}}
@@ -65,9 +30,6 @@
 \addtolength\textheight{\topskip}
 \marginparwidth15mm
 
-
-
-
 \renewcommand\maketitle{%
   \begin{titlepage}%
     \let\footnotesize\small
@@ -79,13 +41,13 @@
      % }
          \includegraphics[width=100mm]{sgh.png}\\
       \vspace{5mm plus 1fill} 
-      {\Large\bf Master studies}
+      {\Large\bf Studium Magisterskie}
       \vspace{0.2cm}
       \vspace{8mm plus 1fill}
       \begin{flushleft}\large
         \begin{tabular}{l}
           
-          Faculty \bfseries \@kierunek\par\\
+          Kierunek \bfseries \@kierunek\par\\
         \end{tabular}
       \end{flushleft}
       
@@ -93,8 +55,8 @@
       \begin{flushright}\large
         \begin{tabular}{l}
           
-          Author name: \bfseries \@author\par\\
-          Id no.: \bfseries \@nralbumu\par\\
+          Imi¦ i nazwisko autora \bfseries \@author\par\\
+          Nr albumu \bfseries \@nralbumu\par\\
         \end{tabular}
       \end{flushright}
       \vspace{8mm plus 1fill}
@@ -116,6 +78,39 @@
     \end{center}
     \@thanks
   \end{titlepage}%
+  \begin{titlepage}
+    \c@page=2
+    \large
+    \null
+    \vfill
+    
+   \textbf{\Large O\'swiadczenie kieruj¡cego prac¡ }
+      \vspace{10mm}
+      
+   Potwierdzam, {\.z}e niniejsza praca zosta{\l}a przygotowana pod moim 
+   kierunkiem i kwalifikuje si¦ do przedstawienia jej w post¦powaniu 
+   o nadanie tytu{\l}u zawodowego. 
+   \vspace{15mm}
+   
+   Data \hfill Podpis kieruj¡cego prac¡ 
+   
+   \vspace{3cm}
+   \textbf{\Large O\'swiadczenie autora (autor\'ow) pracy}
+    \vspace{10mm}
+    
+   \'{S}wiadom odpowiedzialno\'sci prawnej o\'swiadczam, {\.z}e niniejsza praca dyplomowa zosta{\l}a 
+   napisana przeze mnie samodzielnie i nie zawiera tre\'sci uzyskanych w spos\'ob niezgodny 
+   z obowi¡zuj¡cymi przepisami. 
+   
+   O\'swiadczam r\'ownie{\.z}, {\.z}e przedstawiona praca nie by{\l}a 
+   wcze\'sniej przedmiotem procedur zwi¡zanych z uzyskaniem tytu{\l}u zawodowego w wy{\.z}szej uczelni. 
+   
+   O\'swiadczam ponadto, {\.z}e niniejsza wersja pracy jest identyczna z za{\l}¡czon¡ wersj¡ elektroniczn¡. 
+   \vspace{15mm}
+   
+   Data \hfill Podpis autora (autor\'ow) pracy
+    \vspace{4cm}
+  \end{titlepage}
   \setcounter{footnote}{0}%
   \global\let\thanks\relax
   \global\let\maketitle\relax
@@ -161,7 +156,7 @@
 {\par  
   \vspace*{26pt}%
   \begin{center}%
-    \bfseries\large Keywords 
+    \bfseries\large S{\l}owa kluczowe
     \@endparpenalty\@M
   \end{center}
   \@keywords\par

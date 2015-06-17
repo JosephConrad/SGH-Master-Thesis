@@ -13,9 +13,7 @@
 \usepackage{graphicx}
 \usepackage[latin2]{inputenc}
 \usepackage{makeidx}\makeindex
-
  
-\usepackage[style=numeric,sorting=ydnt,defernumbers=true, backend=biber]{biblatex}
  
 %Jesli uzywasz kodowania polskich znakow ISO-8859-2 nastepna linia powinna byc odkomentowana
 %Jesli uzywasz kodowania polskich znakow CP-1250 to ta linia powinna byc 
@@ -45,19 +43,16 @@
 
 % koniec definicji 
 
-%\makeindex[intoc]
-
-
-
-\bibliography{mgr}{}
-
-
+%\makeindex[intoc] 
+ 
 
 
 %===========================================================================
-% 															Python listing settings
-%===========================================================================
- 	
+%             Bibliogrphy
+%=========================================================================== 
+\usepackage[style=numeric,sorting=ydnt,defernumbers=true, backend=bibtex]{biblatex}
+\addbibresource{biblio.bib}
+ 
 
 %===========================================================================
 % 													Begin of document 
@@ -144,7 +139,7 @@ sdfsdf
 \raggedleft\slshape Fisher Black \index{Fisher, Black}
 \end{quote}
 
-Obecnie jednym z najpopularniejszych narzêdzi do wyceny opcji jest model Blacka-Scholsa. Ceniony jest on ze wzglêdu na prostotê oraz wygodê u¿ycia, kosztem jednak wielu upraszczaj±cych za³o¿eñ. Jednym z najwa¿niejszych jest za³o¿enia o sta³ej zmienno¶ci instrumentu bazowego, co w znacz±cym stopniu ogranicza precyzje oszacowañ. Jednym z pomys³ów na obej¶cie tego problemu jest uzmiennienie tej sta³ej, czyli pozwolanie, aby dla dowolnego czasu, parametr ten przyjmowa³ ró¿n± warto¶æ. Mo¿na to zrobiæ np. poprzez pozwolenie, aby nie tylko proces ceny akcji by³ procesem stochastycznym, ale tak¿e aby sama zmienno¶æ by³a niedetrministyczna, tzn. aby by³a równie¿ definiowana przy u¿yciu procesu stochastycznego. Takie te¿ podej¶cie zosta³o wykorzystane przy budowie modelu Hestona.
+Obecnie jednym z najpopularniejszych narzêdzi do wyceny opcji jest model Blacka-Scholsa. Ceniony jest on ze wzglêdu na prostotê oraz wygodê u¿ycia, kosztem jednak wielu upraszczaj±cych za³o¿eñ. Jednym z najwa¿niejszych jest za³o¿enia o sta³ej zmienno¶ci instrumentu bazowego, co w znacz±cym stopniu ogranicza precyzje oszacowañ. Jednym z pomys³ów na obej¶cie tego problemu jest uzmiennienie tej sta³ej, czyli pozwolanie, aby dla dowolnego czasu, parametr ten przyjmowa³ ró¿n± warto¶æ. Mo¿na to zrobiæ np. poprzez pozwolenie, aby nie tylko proces ceny akcji by³ procesem stochastycznym, ale tak¿e aby sama zmienno¶æ by³a niedetrministyczna, tzn. aby by³a równie¿ definiowana przy u¿yciu procesu stochastycznego. Takie te¿ podej¶cie zosta³o wykorzystane przy budowie modelu Hestona. \cite{greenwade93}
 
 \section{Model Blacka-Scholesa}
 
@@ -232,7 +227,7 @@ Poni¿szy wykres przedstawia wygenerowane przekladowe szeregi czasowe z zadanym p
 Majac w ten sposób wyznaczone szeregi czasowe o zadanym poziomie korelacji teraz przychodzi czas na generowanie szeregu czasowego opisujacym zmienno¶æ oraz sam± cenê instrumentu finansowego. 
 Przypomnijmy, ¿e zgdonie z modelem Hestona wzory te prezentuj± siê nastêpuju±co:
 
-Maj±c funkcje generujac± skorelowane szergi czasowe mozna zdefiniowac funkcje, ktorej wynikiem bedzie cena instrumentu bazowego w danej chwili. Jej definicja bêdzie zgodna z nastêpujacym zbiorem formul:
+Maj±c funkcje generujac± skorelowane szergi czasowe mozna zdefiniowac funkcje, ktorej wynikiem bedzie cena instrumentu bazowego w danej chwili. Jej definicja bêdzie zgodna z nastêpujacym zbiorem formul: \cite{OptimalInvestment2010}
 
 \begin{equation}
 dS_t =  \mu S_t  dt + \sqrt{V_t}S_t dW_t^1
@@ -350,6 +345,8 @@ Lorem ipsum
 \raggedleft\slshape Isaac Newton
 \end{quote}
  
+
+\printbibliography
 
 \printindex
 \end{document}
