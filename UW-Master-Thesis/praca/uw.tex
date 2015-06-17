@@ -1,101 +1,35 @@
-%
-% Niniejszy plik stanowi przykład formatowania pracy magisterskiej na
-% Wydziale MIM UW.  Szkielet użytych poleceń można wykorzystywać do
-% woli, np. formatujac wlasna prace.
-%
-% Zawartosc merytoryczna stanowi oryginalnosiagniecie
-% naukowosciowe Marcina Wolinskiego.  Wszelkie prawa zastrzeżone.
-%
-% Copyright (c) 2001 by Marcin Woliński <M.Wolinski@gust.org.pl>
-% Poprawki spowodowane zmianami przepisów - Marcin Szczuka, 1.10.2004
-% Poprawki spowodowane zmianami przepisow i ujednolicenie 
-% - Seweryn Karłowicz, 05.05.2006
-% dodaj opcję [licencjacka] dla pracy licencjackiej
-\documentclass{pracamgr}
-  
+\documentclass{pracamgr}  
 \usepackage{lmodern} 
 \usepackage[polish]{babel} 
 \selectlanguage{polish} 
-
-
-
-
 \usepackage{fontspec}
 \usepackage{minted}
-  
-%Jesli uzywasz kodowania polskich znakow CP-1250 to ta linia powinna byc 
-%odkomentowana
-%\usepackage[cp1250]{inputenc}
-
+   
 % Dane magistranta:
 
 \author{Konrad Lisiecki}
-
 \nralbumu{291649}
-
 \title{Mechanizmy funkcyjne w języku C++}
-
 \tytulang{Functional programming in C++}
-
-%kierunek: Matematyka, Informatyka, ...
 \kierunek{Informatyka}
 
-% informatyka - nie okreslamy zakresu (opcja zakomentowana)
-% matematyka - zakres moze pozostac nieokreslony,
-% a jesli ma byc okreslony dla pracy mgr,
-% to przyjmuje jedna z wartosci:
-% {metod matematycznych w finansach}
-% {metod matematycznych w ubezpieczeniach}
-% {matematyki stosowanej}
-% {nauczania matematyki}
-% Dla pracy licencjackiej mamy natomiast
-% mozliwosc wpisania takiej wartosci zakresu:
-% {Jednoczesnych Studiow Ekonomiczno--Matematycznych}
-
-% \zakres{Tu wpisac, jesli trzeba, jedna z opcji podanych wyzej}
-
-% Praca wykonana pod kierunkiem:
-% (podać tytuł/stopień imię i nazwisko opiekuna
-% Instytut
-% ew. Wydział ew. Uczelnia (jeżeli nie MIM UW))
 \opiekun{dra Marcina Benke\\
   Instytut Informatyki\\
-  }
-
-% miesiąc i~rok:
-\date{Lipiec 2015}
-
-%Podać dziedzinę wg klasyfikacji Socrates-Erasmus:
-\dziedzina{ 
-%11.0 Matematyka, Informatyka:\\ 
-%11.1 Matematyka\\ 
-%11.2 Statystyka\\ 
-11.3 Informatyka\\ 
-%11.4 Sztuczna inteligencja\\ 
-%11.5 Nauki aktuarialne\\
-%11.9 Inne nauki matematyczne i informatyczne
 }
-
-%Klasyfikacja tematyczna wedlug AMS (matematyka) lub ACM (informatyka)
+\date{Lipiec 2015}
+\dziedzina{ 
+  11.3 Informatyka\\ 
+}
 \klasyfikacja{D. Software\\
   D.1 Programming techniques\\
   D.1.1 Applicative (Functional) Programming}
-
-% Słowa kluczowe:
 \keywords{C++, functional programming, C++11, funkcja lambda}
-
-% Tu jest dobre miejsce na Twoje własne makra i~środowiska:
 \newtheorem{defi}{Definicja}[section]
-
-% koniec definicji
 
 \begin{document}
 
-
-
 \maketitle
 
-%tu idzie streszczenie na strone poczatkowa
 \begin{abstract}
 Celem pracy magisterskiej jest kompleksowe przedstawienie mechanizmów programowania 
 funkcyjnego, które zostały wprowadzone do najnowszych standardów języka C++. Autor pracy skupi się
@@ -105,8 +39,8 @@ językach programowania, jak python i haskell.
 \end{abstract}
 
 \tableofcontents
-%\listoffigures
-%\listoftables
+\listoffigures
+\listoftables
 
 \chapter*{Wprowadzenie}
 \addcontentsline{toc}{chapter}{Wprowadzenie}
@@ -148,7 +82,7 @@ K\^un (fooistyczny mędrzec, XIX w. p.n.e.):
 \end{quote}
 
 \section{Funkcje lambda}
-
+  
 \begin{minted}[mathescape,
                linenos,
                numbersep=5pt,
@@ -162,7 +96,19 @@ K\^un (fooistyczny mędrzec, XIX w. p.n.e.):
   circle of diameter $d$.
   */
   const double pi = 3.1415926535
+
 \end{minted}
+
+\begin{listing}[ht]
+\inputminted[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               framesep=2mm]{csharp}{lambda1.cpp}
+\caption{Example from external file}
+\label{listing:3}
+\end{listing}
 
 
 \section{Automatyczne określanie typu}
