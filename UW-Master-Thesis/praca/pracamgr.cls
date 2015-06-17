@@ -67,31 +67,31 @@
     \null
     \vfill
     
-   \textbf{\Large O\'swiadczenie kieruj�cego prac� }
+   \textbf{\Large Oświadczenie kierującego pracą }
       \vspace{10mm}
       
-   Potwierdzam, {\.z}e niniejsza praca zosta{\l}a przygotowana pod moim 
-   kierunkiem i kwalifikuje si� do przedstawienia jej w post�powaniu 
-   o nadanie tytu{\l}u zawodowego. 
+   Potwierdzam, że niniejsza praca została przygotowana pod moim 
+   kierunkiem i kwalifikuje się do przedstawienia jej w postępowaniu 
+   o nadanie tytułu zawodowego. 
    \vspace{15mm}
    
-   Data \hfill Podpis kieruj�cego prac� 
+   Data \hfill Podpis kierującego pracą
    
    \vspace{3cm}
-   \textbf{\Large O\'swiadczenie autora (autor\'ow) pracy}
+   \textbf{\Large Oświadczenie autora (autorów) pracy}
     \vspace{10mm}
     
-   \'{S}wiadom odpowiedzialno\'sci prawnej o\'swiadczam, {\.z}e niniejsza praca dyplomowa zosta{\l}a 
-   napisana przeze mnie samodzielnie i nie zawiera tre\'sci uzyskanych w spos\'ob niezgodny 
-   z obowi�zuj�cymi przepisami. 
+   Świadom odpowiedzialności prawnej oświadczam, że niniejsza praca dyplomowa została 
+   napisana przeze mnie samodzielnie i nie zawiera treści uzyskanych w sposób niezgodny 
+   z obowiązującymi przepisami. 
    
-   O\'swiadczam r\'ownie{\.z}, {\.z}e przedstawiona praca nie by{\l}a 
-   wcze\'sniej przedmiotem procedur zwi�zanych z uzyskaniem tytu{\l}u zawodowego w wy{\.z}szej uczelni. 
+   Oświadczam również, że przedstawiona praca nie była 
+   wcześniej przedmiotem procedur związanych z uzyskaniem tytułu zawodowego w wyższej uczelni. 
    
-   O\'swiadczam ponadto, {\.z}e niniejsza wersja pracy jest identyczna z za{\l}�czon� wersj� elektroniczn�. 
+   Oświadczam ponadto, że niniejsza wersja pracy jest identyczna z załączoną wersją elektroniczną. 
    \vspace{15mm}
    
-   Data \hfill Podpis autora (autor\'ow) pracy
+   Data \hfill Podpis autora (autorów) pracy
     \vspace{4cm}
   \end{titlepage}
   \setcounter{footnote}{0}%
@@ -156,7 +156,7 @@
   \vspace*{26pt}%
 %-------------------nowosc----------------
   \begin{center}%
-    \bfseries\large Tytu{\l} pracy w j�zyku angielskim
+    \bfseries\large Tytu{\l} pracy w języku angielskim
     \@endparpenalty\@M
   \end{center}
   \@tytulang\par
