@@ -1,16 +1,16 @@
 %
-% Niniejszy plik stanowi przykÅ‚ad formatowania pracy magisterskiej na
-% Wydziale MIM UW.  Szkielet uÅ¼ytych poleceÅ„ moÅ¼na wykorzystywaÄ‡ do
+% Niniejszy plik stanowi przyk³ad formatowania pracy magisterskiej na
+% Wydziale MIM UW.  Szkielet u¿ytych poleceñ mo¿na wykorzystywaæ do
 % woli, np. formatujac wlasna prace.
 %
 % Zawartosc merytoryczna stanowi oryginalnosiagniecie
-% naukowosciowe Marcina Wolinskiego.  Wszelkie prawa zastrzeÅ¼one.
+% naukowosciowe Marcina Wolinskiego.  Wszelkie prawa zastrze¿one.
 %
-% Copyright (c) 2001 by Marcin WoliÅ„ski <M.Wolinski@gust.org.pl>
-% Poprawki spowodowane zmianami przepisÃ³w - Marcin Szczuka, 1.10.2004
+% Copyright (c) 2001 by Marcin Woliñski <M.Wolinski@gust.org.pl>
+% Poprawki spowodowane zmianami przepisów - Marcin Szczuka, 1.10.2004
 % Poprawki spowodowane zmianami przepisow i ujednolicenie 
-% - Seweryn KarÅ‚owicz, 05.05.2006
-% dodaj opcjÄ™ [licencjacka] dla pracy licencjackiej
+% - Seweryn Kar³owicz, 05.05.2006
+% dodaj opcjê [licencjacka] dla pracy licencjackiej
 \documentclass{pracamgr}
  
 \usepackage[T1]{fontenc}
@@ -24,7 +24,7 @@
 
 \usepackage{fontspec}
 \usepackage{minted}
-
+ 
 %Jesli uzywasz kodowania polskich znakow ISO-8859-2 nastepna linia powinna byc 
 %odkomentowana
 \usepackage[latin2]{inputenc}
@@ -38,7 +38,7 @@
 
 \nralbumu{291649}
 
-\title{Mechanizmy funkcyjne w jÄ™zyku C++}
+\title{Mechanizmy funkcyjne w jêzyku C++}
 
 \tytulang{Functional programming in C++}
 
@@ -60,17 +60,17 @@
 % \zakres{Tu wpisac, jesli trzeba, jedna z opcji podanych wyzej}
 
 % Praca wykonana pod kierunkiem:
-% (podaÄ‡ tytuÅ‚/stopieÅ„ imiÄ™ i nazwisko opiekuna
+% (podaæ tytu³/stopieñ imiê i nazwisko opiekuna
 % Instytut
-% ew. WydziaÅ‚ ew. Uczelnia (jeÅ¼eli nie MIM UW))
+% ew. Wydzia³ ew. Uczelnia (je¿eli nie MIM UW))
 \opiekun{dra Marcina Benke\\
   Instytut Informatyki\\
   }
 
-% miesiÄ…c i~rok:
+% miesi±c i~rok:
 \date{Lipiec 2015}
 
-%PodaÄ‡ dziedzinÄ™ wg klasyfikacji Socrates-Erasmus:
+%Podaæ dziedzinê wg klasyfikacji Socrates-Erasmus:
 \dziedzina{ 
 %11.0 Matematyka, Informatyka:\\ 
 %11.1 Matematyka\\ 
@@ -86,28 +86,27 @@
   D.1 Programming techniques\\
   D.1.1 Applicative (Functional) Programming}
 
-% SÅ‚owa kluczowe:
+% S³owa kluczowe:
 \keywords{C++, functional programming, C++11, funkcja lambda}
 
-% Tu jest dobre miejsce na Twoje wÅ‚asne makra i~Å›rodowiska:
+% Tu jest dobre miejsce na Twoje w³asne makra i~¶rodowiska:
 \newtheorem{defi}{Definicja}[section]
 
 % koniec definicji
 
 \begin{document}
-\renewcommand{\theFancyVerbLine}{
-  \sffamily\textcolor[rgb]{0.5,0.5,0.5}{\scriptsize\arabic{FancyVerbLine}}}
+
 
 
 \maketitle
 
 %tu idzie streszczenie na strone poczatkowa
 \begin{abstract}
-Celem pracy magisterskiej jest kompleksowe przedstawienie mechanizmÃ³w programowania 
-funkcyjnego, ktÃ³re zostaÅ‚y wprowadzone do najnowszych standardÃ³w jÄ™zyka C++. Autor pracy skupi siÄ™
-na sposobie realizacji wprowadzonych mechanizmÃ³w oraz zbadaniu siÅ‚y ich wyrazu. 
-W ramach pracy zostanie rÃ³wnieÅ¼ dokonane ich porÃ³wnanie z rozwiÄ…zaniami istniejÄ…cymi w innych 
-jÄ™zykach programowania, jak python i haskell.
+Celem pracy magisterskiej jest kompleksowe przedstawienie mechanizmów programowania 
+funkcyjnego, które zosta³y wprowadzone do najnowszych standardów jêzyka C++. Autor pracy skupi siê
+na sposobie realizacji wprowadzonych mechanizmów oraz zbadaniu si³y ich wyrazu. 
+W ramach pracy zostanie równie¿ dokonane ich porównanie z rozwi±zaniami istniej±cymi w innych 
+jêzykach programowania, jak python i haskell.
 \end{abstract}
 
 \tableofcontents
@@ -118,39 +117,39 @@ jÄ™zykach programowania, jak python i haskell.
 \addcontentsline{toc}{chapter}{Wprowadzenie}
 
 
-JÄ™zyk C++ jest jednym z najbardziej popularnych jÄ™zykÃ³w programowania.
-Powszechnie uwaÅ¼a siÄ™, Å¼e zastosowano w nim trzy paradygmaty programowania: programowanie imperatywne, obiektowe i generyczne.
-Jednak w standardzie C++11 wprowadzono wiele mechanizmÃ³w funkcyjnych, znanych z innych jÄ™zykÃ³w programowania.
+Jêzyk C++ jest jednym z najbardziej popularnych jêzyków programowania.
+Powszechnie uwa¿a siê, ¿e zastosowano w nim trzy paradygmaty programowania: programowanie imperatywne, obiektowe i generyczne.
+Jednak w standardzie C++11 wprowadzono wiele mechanizmów funkcyjnych, znanych z innych jêzyków programowania.
 
-WÅ‚aÅ›nie o wprowadzonych mechanizmach funkcyjnych do jÄ™zyka C++ traktuje poniÅ¼sza praca.
+W³a¶nie o wprowadzonych mechanizmach funkcyjnych do jêzyka C++ traktuje poni¿sza praca.
 
-SkÅ‚Ä…da siÄ™ ona z~czterech rozdziaÅ‚Ã³w i~dodatkÃ³w.
-W~rozdziale~\ref{r:Zmiany} opisano najwaÅ¼niejsze zmieny jakie wprowadzono do nowego standardu jÄ™zyka C++.
-RozdziaÅ‚~\ref{r:SposobRealizacji} przedstawia sposÃ³b wprowadzenia zmian do jÄ™zyka oraz siÅ‚Ä™ ich wyrazu. 
-Wprowadzone zmiany zostanÄ… dokÅ‚anie opisane pod wzglÄ™dem generycznoÅ›ci i szybkoÅ›ci rozwiÄ…zania.
+Sk³±da siê ona z~czterech rozdzia³ów i~dodatków.
+W~rozdziale~\ref{r:Zmiany} opisano najwa¿niejsze zmieny jakie wprowadzono do nowego standardu jêzyka C++.
+Rozdzia³~\ref{r:SposobRealizacji} przedstawia sposób wprowadzenia zmian do jêzyka oraz si³ê ich wyrazu. 
+Wprowadzone zmiany zostan± dok³anie opisane pod wzglêdem generyczno¶ci i szybko¶ci rozwi±zania.
 
 
-Kolejna czÄ™Å›Ä‡ pracy (rozdziaÅ‚ \ref{r:Porownanie}) porÃ³wnuje efektywnoÅ›Ä‡ i szybkoÅ›Ä‡ dziaÅ‚ania programu.
-Zostanie porÃ³wnana szybkoÅ›Ä‡ dziaÅ‚ania konstrukcji funkcyjnych z tymi spotykanymi w jÄ™zyku Haskell i Python.
+Kolejna czê¶æ pracy (rozdzia³ \ref{r:Porownanie}) porównuje efektywno¶æ i szybko¶æ dzia³ania programu.
+Zostanie porównana szybko¶æ dzia³ania konstrukcji funkcyjnych z tymi spotykanymi w jêzyku Haskell i Python.
 
-RozdziaÅ‚ \ref{r:Biblioteka} zawiera z kolei krÃ³tki opis biblioteki zaimplementowanej przy uÅ¼yciu technik 
-metaprogramowania. Jest to biblioteka dostarczajÄ…ca gotowych funkcji do operawania na listach. Jest ona 
-zaimplementowana w duchu biblioteki LINQ, obecnej w jÄ™zyku $C\#$. 
+Rozdzia³ \ref{r:Biblioteka} zawiera z kolei krótki opis biblioteki zaimplementowanej przy u¿yciu technik 
+metaprogramowania. Jest to biblioteka dostarczaj±ca gotowych funkcji do operawania na listach. Jest ona 
+zaimplementowana w duchu biblioteki LINQ, obecnej w jêzyku $C\#$. 
 
 
 W ostatnim rozdziale jest zawarte podsumowanie wprowadzonych zmian. 
-W~dodatkach z kolei, umieszczono wybrane fragmenty kodu zaimplementowanej biblioteki z rozdziaÅ‚u \ref{r:Biblioteka}.
+W~dodatkach z kolei, umieszczono wybrane fragmenty kodu zaimplementowanej biblioteki z rozdzia³u \ref{r:Biblioteka}.
 
 
-\chapter{Opis wprowadzonych zmian do jÄ™zyka C++}\label{r:Zmiany}
+\chapter{Opis wprowadzonych zmian do jêzyka C++}\label{r:Zmiany}
 
-PojÄ™ciem pierwotnym blabalii fetorycznej jest \emph{blaba}.
-BlabaliÅ›ci nie podajÄ… jego definicji, mÃ³wiÄ…c za Ciach-Pfe t-\=am
-K\^un (fooistyczny mÄ™drzec, XIX w. p.n.e.):
+Pojêciem pierwotnym blabalii fetorycznej jest \emph{blaba}.
+Blabali¶ci nie podaj± jego definicji, mówi±c za Ciach-Pfe t-\=am
+K\^un (fooistyczny mêdrzec, XIX w. p.n.e.):
 \begin{quote}
-  Blaba, ktÃ³ry jest blaba, nie jest prawdziwym blaba.
+  Blaba, który jest blaba, nie jest prawdziwym blaba.
 
-\raggedleft\slshape tÅ‚um. z~chiÅ„skiego Robert Blarbarucki
+\raggedleft\slshape t³um. z~chiñskiego Robert Blarbarucki
 \end{quote}
 
 \section{Funkcje lambda}
@@ -171,11 +170,11 @@ K\^un (fooistyczny mÄ™drzec, XIX w. p.n.e.):
 \end{minted}
 
 
-\section{Automatyczne okreÅ›lanie typu}
+\section{Automatyczne okre¶lanie typu}
 \section{Funkcje obywatelami pierwszej kategorii}
-\section{Funkcje wyÅ¼szego rzÄ™du}
+\section{Funkcje wy¿szego rzêdu}
 
-Oto dwie definicje wprowadzajÄ…ce podstawowe pojÄ™cia blabalii
+Oto dwie definicje wprowadzaj±ce podstawowe pojêcia blabalii
 fetorycznej:
 
 \begin{defi}\label{skupienie}
@@ -183,60 +182,60 @@ fetorycznej:
 \end{defi}
 
 \begin{defi}\label{fetor}
-  \emph{Fetorem} nazwiemy skupienie blaba speÅ‚niajÄ…ce nastÄ™pujÄ…cy
-  \emph{aksjomat reperkusatywnoÅ›ci}:
+  \emph{Fetorem} nazwiemy skupienie blaba spe³niaj±ce nastêpuj±cy
+  \emph{aksjomat reperkusatywno¶ci}:
   $$\forall \mathcal{X}\in Z(t)\ \exists
   \pi\subseteq\oint_{\Omega^2}\kappa\leftrightarrow 42$$
 \end{defi}
 
 
-\section{Blabalizator rÃ³Å¼nicowy}
+\section{Blabalizator ró¿nicowy}
 
-Teoretycy blabalii (zob. np. pracÄ™~\cite{grglo}) zadowalajÄ… siÄ™
-niekonstruktywnym opisem natury fetorÃ³w.
+Teoretycy blabalii (zob. np. pracê~\cite{grglo}) zadowalaj± siê
+niekonstruktywnym opisem natury fetorów.
 
-Podstawowym narzÄ™dziem blabalii empirycznej jest blabalizator
-rÃ³Å¼nicowy.  PrzyrzÄ…d ten pozwala w~sposÃ³b przybliÅ¼ony uzyskaÄ‡
-wspÃ³Å‚czynniki rozkÅ‚adu GÅ‚ombaskiego dla fetorÃ³w bazowych
+Podstawowym narzêdziem blabalii empirycznej jest blabalizator
+ró¿nicowy.  Przyrz±d ten pozwala w~sposób przybli¿ony uzyskaæ
+wspó³czynniki rozk³adu G³ombaskiego dla fetorów bazowych
 i~harmonicznych.  Praktyczne znaczenie tego procesu jest oczywiste:
-korzystajÄ…c z~reperkusatywnoÅ›ci pozwala on przejÅ›Ä‡ do przestrzeni
-$\Lambda^{\nabla}$, a~tym samym znaleÅºÄ‡ retroizotonalne wspÃ³Å‚czynniki
+korzystaj±c z~reperkusatywno¶ci pozwala on przej¶æ do przestrzeni
+$\Lambda^{\nabla}$, a~tym samym znale¼æ retroizotonalne wspó³czynniki
 semi-quasi-celibatu dla klatek Rozkoszy (zob.~\cite{JR}).
 
-Klasyczne algorytmy dla blabalizatora rÃ³Å¼nicowego wykorzystujÄ…:
+Klasyczne algorytmy dla blabalizatora ró¿nicowego wykorzystuj±:
 \begin{enumerate}
-\item dualizm falowo\dywiz korpuskularny, a w szczegÃ³lnoÅ›ci
+\item dualizm falowo\dywiz korpuskularny, a w szczególno¶ci
   \begin{enumerate}
-  \item korpuskularnÄ… naturÄ™ fetorÃ³w,
-  \item falowÄ… naturÄ™ blaba,
-  \item falowo\dywiz korpuskularnÄ… naturÄ™ gryzmoÅ‚Ã³w;
+  \item korpuskularn± naturê fetorów,
+  \item falow± naturê blaba,
+  \item falowo\dywiz korpuskularn± naturê gryzmo³ów;
   \end{enumerate}
-\item postÄ™pujÄ…cÄ… gryzmolizacjÄ™ poszczegÃ³lnych dziedzin nauki, w
-  szczegÃ³lnoÅ›ci badaÅ„ systemowych i rozcieÅ„czonych;
+\item postêpuj±c± gryzmolizacjê poszczególnych dziedzin nauki, w
+  szczególno¶ci badañ systemowych i rozcieñczonych;
 \item dynamizm fazowy stetryczenia parajonizacyjnego;
 \item wreszcie tradycyjne opozycje:
   \begin{itemize}
   \item duch --- bakteria,
-  \item mieÄ‡ --- chcieÄ‡,
-  \item myÅ›l --- owsianka,
-  \item parafina --- durszlak\footnote{WiÄ™cej o tym przypadku --- patrz
-      prace GryzybÃ³r\dywiz GÅ‚ombaskiego i innych teoretykÃ³w nurtu
-      teoretyczno\dywiz praktycznego badaÅ„ w~Instytucie Podstawowych
-      ProblemÃ³w Blabalii w~Fifie.},
-  \item logos --- termos%\footnote{SzpotaÅ„ski}
+  \item mieæ --- chcieæ,
+  \item my¶l --- owsianka,
+  \item parafina --- durszlak\footnote{Wiêcej o tym przypadku --- patrz
+      prace Gryzybór\dywiz G³ombaskiego i innych teoretyków nurtu
+      teoretyczno\dywiz praktycznego badañ w~Instytucie Podstawowych
+      Problemów Blabalii w~Fifie.},
+  \item logos --- termos%\footnote{Szpotañski}
   \end{itemize}
-  z wÅ‚aÅ›ciwym im przedziwym dynamizmem.
+  z w³a¶ciwym im przedziwym dynamizmem.
 \end{enumerate}
 
 \begin{figure}[tp]
   \centering
   \framebox{\vbox to 4cm{\vfil\hbox to
       7cm{\hfil\tiny.\hfil}\vfil}}
-  \caption{Artystyczna wizja blaba w~obrazie wÄ™gierskiego artysty
+  \caption{Artystyczna wizja blaba w~obrazie wêgierskiego artysty
     Josipa~A. Rozkoszy pt.~,,Blaba''}
 \end{figure}
 
-\chapter{Zbadanie sposobu realizacji oraz ich siÅ‚y wyrazu}\label{r:SposobRealizacji}
+\chapter{Zbadanie sposobu realizacji oraz ich si³y wyrazu}\label{r:SposobRealizacji}
  
 
 
@@ -246,15 +245,15 @@ Klasyczne algorytmy dla blabalizatora rÃ³Å¼nicowego wykorzystujÄ…:
 
 
 
-\chapter{PorÃ³wnanie z innymi jÄ™zykami}\label{r:Porownanie}
+\chapter{Porównanie z innymi jêzykami}\label{r:Porownanie}
 
 Program przygotowany dla systemu operacyjnego M\$ Windows uruchamia
-siÄ™ energicznym dwumlaskiem na jego ikonce w~folderze
-\verb+\\FIDO\FOO\BLABA+.  NastÄ™pnie kolistym ruchem rÄ™ki naleÅ¼y
-naprowadziÄ‡ kursor na menu \texttt{Blabaliza} i~uaktywniÄ‡ pozycjÄ™
-\texttt{OtwÃ³rz plik}.  Po wybraniu pliku i~zatwierdzeniu wyboru
-przyciskiem \texttt{OK} rozpocznie siÄ™ proces blabalizy.  Wyniki
-zostanÄ… zapisane w~pliku o~nazwie \texttt{99-1a.tx.43} w~bieÅ¼Ä…cym
+siê energicznym dwumlaskiem na jego ikonce w~folderze
+\verb+\\FIDO\FOO\BLABA+.  Nastêpnie kolistym ruchem rêki nale¿y
+naprowadziæ kursor na menu \texttt{Blabaliza} i~uaktywniæ pozycjê
+\texttt{Otwórz plik}.  Po wybraniu pliku i~zatwierdzeniu wyboru
+przyciskiem \texttt{OK} rozpocznie siê proces blabalizy.  Wyniki
+zostan± zapisane w~pliku o~nazwie \texttt{99-1a.tx.43} w~bie¿±cym
 folderze.
 
  
@@ -267,50 +266,50 @@ folderze.
 
 \chapter{Biblioteka LINQ w C++}\label{r:Biblioteka}
 
-GÅ‚Ã³wnym odkryciem Fifaka jest, Å¼e fetor suprakowariantny moÅ¼e
-gryzmolizowaÄ‡ dowolny ideaÅ‚ w~podprzestrzeni widÅ‚owej przestrzeni
+G³ównym odkryciem Fifaka jest, ¿e fetor suprakowariantny mo¿e
+gryzmolizowaæ dowolny idea³ w~podprzestrzeni wid³owej przestrzeni
 lamblialnej funkcji Rozkoszy.
 
-Udowodnienie tego faktu wymagaÅ‚o wykorzystania twierdzeÅ„ pochodzÄ…cych
-z~kilku niezaleÅ¼nych teorii matematycznych (zob. na przykÅ‚ad:
-\cite{russell,spyrpt,JR,beaman,hopp,srinis}).  Jednym z~filarÃ³w
-dowodu jest teoria odwzorowaÅ„ owalnych Leukocyta (zob.~\cite{leuk}).
+Udowodnienie tego faktu wymaga³o wykorzystania twierdzeñ pochodz±cych
+z~kilku niezale¿nych teorii matematycznych (zob. na przyk³ad:
+\cite{russell,spyrpt,JR,beaman,hopp,srinis}).  Jednym z~filarów
+dowodu jest teoria odwzorowañ owalnych Leukocyta (zob.~\cite{leuk}).
 
-Znaczenie twierdzenia Fifaka dla problemu blabalizy polega na tym, Å¼e
-znajÄ…c retroizotonalne wspÃ³Å‚czynniki dla klatek Rozkoszy moÅ¼na
-przeprowadziÄ‡ fetory bazowe na dwie nieskoÅ„czone bazy fetorÃ³w $\sigma$
-w~przestrzeni $K_7$ i~fetorÃ³w $\rho$ w~odpowiedniej
-quasi-quasi-przestrzeni rÃ³wnolegÅ‚ej (zob.~\cite{hopp}).  Zasadnicza
-rÃ³Å¼nica w~stosunku do innych metod blabalizy polega na tym, Å¼e
-przedstawienie to jest dokÅ‚adne.
+Znaczenie twierdzenia Fifaka dla problemu blabalizy polega na tym, ¿e
+znaj±c retroizotonalne wspó³czynniki dla klatek Rozkoszy mo¿na
+przeprowadziæ fetory bazowe na dwie nieskoñczone bazy fetorów $\sigma$
+w~przestrzeni $K_7$ i~fetorów $\rho$ w~odpowiedniej
+quasi-quasi-przestrzeni równoleg³ej (zob.~\cite{hopp}).  Zasadnicza
+ró¿nica w~stosunku do innych metod blabalizy polega na tym, ¿e
+przedstawienie to jest dok³adne.
 
 
 \chapter{Podsumowanie}
 
-W~pracy przedstawiono pierwszÄ… efektywnÄ… implementacjÄ™ blabalizatora
-rÃ³Å¼nicowego.  UmiejÄ™tnoÅ›Ä‡ wykonania blabalizy numerycznej dla danych
-,,z Å¼ycia'' stanowi dla blabalii fetorycznej podobny przeÅ‚om, jak dla
-innych dziedzin wiedzy stanowiÅ‚o ogÅ‚oszenie teorii MikoÅ‚aja Kopernika
-i~GryzybÃ³r GÅ‚ombaskiego.  Z~pewnoÅ›ciÄ… w~rozpocznynajÄ…cym siÄ™ XXI wieku
-bÄ™dziemy obserwowaÄ‡ rozkwit blabalii fetorycznej.
+W~pracy przedstawiono pierwsz± efektywn± implementacjê blabalizatora
+ró¿nicowego.  Umiejêtno¶æ wykonania blabalizy numerycznej dla danych
+,,z ¿ycia'' stanowi dla blabalii fetorycznej podobny prze³om, jak dla
+innych dziedzin wiedzy stanowi³o og³oszenie teorii Miko³aja Kopernika
+i~Gryzybór G³ombaskiego.  Z~pewno¶ci± w~rozpocznynaj±cym siê XXI wieku
+bêdziemy obserwowaæ rozkwit blabalii fetorycznej.
 
-Trudno przewidzieÄ‡ wszystkie nowe moÅ¼liwoÅ›ci, ale te co bardziej
-oczywiste moÅ¼na wskazaÄ‡ juÅ¼ teraz.  SÄ… to:
+Trudno przewidzieæ wszystkie nowe mo¿liwo¶ci, ale te co bardziej
+oczywiste mo¿na wskazaæ ju¿ teraz.  S± to:
 \begin{itemize}
-\item degryzmolizacja wieÅ„cÃ³w telecentrycznych,
+\item degryzmolizacja wieñców telecentrycznych,
 \item realizacja zimnej reakcji lambliarnej,
 \item loty celulityczne,
-\item dokÅ‚adne obliczenie wieku WszechÅ›wiata.
+\item dok³adne obliczenie wieku Wszech¶wiata.
 \end{itemize}
 
-\section{Perspektywy wykorzystania w~przemyÅ›le}
+\section{Perspektywy wykorzystania w~przemy¶le}
 
-Ze wzglÄ™du na znaczenie strategiczne wynikÃ³w pracy ten punkt ulegÅ‚
+Ze wzglêdu na znaczenie strategiczne wyników pracy ten punkt uleg³
 utajnieniu.
 
 \appendix
 
-\chapter{GÅ‚Ã³wna pÄ™tla programu zapisana w~jÄ™zyku T\=oFoo}
+\chapter{G³ówna pêtla programu zapisana w~jêzyku T\=oFoo}
 
 \begin{verbatim}
 [[foo]{,}[[a3,(([(,),{[[]]}]),
@@ -335,7 +334,7 @@ utajnieniu.
  ]. hlt
 \end{verbatim}
 
-\chapter{PrzykÅ‚adowe dane wejÅ›ciowe algorytmu}
+\chapter{Przyk³adowe dane wej¶ciowe algorytmu}
 
 \begin{center}
   \begin{tabular}{rrr}
@@ -352,13 +351,13 @@ utajnieniu.
   \end{tabular}
 \end{center}
 
-\chapter{PrzykÅ‚adowe wyniki blabalizy
-    (ze~wspÃ³Å‚czynnikami~$\sigma$-$\rho$)}
+\chapter{Przyk³adowe wyniki blabalizy
+    (ze~wspó³czynnikami~$\sigma$-$\rho$)}
 
 \begin{center}
   \begin{tabular}{lrrrr}
-    & WspÃ³Å‚czynniki \\
-    & GÅ‚ombaskiego & $\rho$ & $\sigma$ & $\sigma$-$\rho$\\
+    & Wspó³czynniki \\
+    & G³ombaskiego & $\rho$ & $\sigma$ & $\sigma$-$\rho$\\
     $\gamma_{0}$ & 1,331 & 2,01 & 13,42 & 0,01 \\
     $\gamma_{1}$ & 1,331 & 113,01 & 13,42 & 0,01 \\
     $\gamma_{2}$ & 1,332 & 0,01 & 13,42 & 0,01 \\
@@ -385,27 +384,27 @@ utajnieniu.
     function}, Mathematica Absurdica, 117 (1965) 338--9.
 
 \bibitem[Blar16]{eb1} Elizjusz Blarbarucki, \textit{O pewnych
-    aspektach pewnych aspektÃ³w}, Astrolog Polski, Zeszyt 16, Warszawa
+    aspektach pewnych aspektów}, Astrolog Polski, Zeszyt 16, Warszawa
   1916.
 
 \bibitem[Fif00]{ffgg} Filigran Fifak, Gizbert Gryzogrzechotalski,
-  \textit{O blabalii fetorycznej}, MateriaÅ‚y Konferencji Euroblabal
+  \textit{O blabalii fetorycznej}, Materia³y Konferencji Euroblabal
   2000.
 
 \bibitem[Fif01]{ff-sr} Filigran Fifak, \textit{O fetorach
     $\sigma$-$\rho$}, Acta Fetorica, 2001.
 
-\bibitem[GÅ‚omb04]{grglo} GryzybÃ³r GÅ‚ombaski, \textit{Parazytonikacja
-    blabiczna fetorÃ³w --- nowa teoria wszystkiego}, Warszawa 1904.
+\bibitem[G³omb04]{grglo} Gryzybór G³ombaski, \textit{Parazytonikacja
+    blabiczna fetorów --- nowa teoria wszystkiego}, Warszawa 1904.
 
 \bibitem[Hopp96]{hopp} Claude Hopper, \textit{On some $\Pi$-hedral
     surfaces in quasi-quasi space}, Omnius University Press, 1996.
 
 \bibitem[Leuk00]{leuk} Lechoslav Leukocyt, \textit{Oval mappings ab ovo},
-  MateriaÅ‚y BiaÅ‚ostockiej Konferencji HodowcÃ³w Drobiu, 2000.
+  Materia³y Bia³ostockiej Konferencji Hodowców Drobiu, 2000.
 
-\bibitem[Rozk93]{JR} Josip A.~Rozkosza, \textit{O pewnych wÅ‚asnoÅ›ciach
-    pewnych funkcji}, PÃ³Å‚nocnopomorski Dziennik Matematyczny 63491
+\bibitem[Rozk93]{JR} Josip A.~Rozkosza, \textit{O pewnych w³asno¶ciach
+    pewnych funkcji}, Pó³nocnopomorski Dziennik Matematyczny 63491
   (1993).
 
 \bibitem[Spy59]{spyrpt} Mrowclaw Spyrpt, \textit{A matrix is a matrix
@@ -418,8 +417,8 @@ utajnieniu.
 \bibitem[Whi25]{russell} Alfred N. Whitehead, Bertrand Russell,
   \textit{Principia Mathematica}, Cambridge University Press, 1925.
 
-\bibitem[Zen69]{heu} Zenon Zenon, \textit{UÅ¼yteczne heurystyki
-    w~blabalizie}, MÅ‚ody Technik, nr~11, 1969.
+\bibitem[Zen69]{heu} Zenon Zenon, \textit{U¿yteczne heurystyki
+    w~blabalizie}, M³ody Technik, nr~11, 1969.
 
 \end{thebibliography}
 
