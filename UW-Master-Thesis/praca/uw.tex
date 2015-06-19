@@ -4,7 +4,33 @@
 \selectlanguage{polish} 
 \usepackage{fontspec}
 \usepackage{minted}
+
+% package for hyperinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
    
+\definecolor{grey}{gray}{0.9}
+\definecolor{bg}{HTML}{FAFAFA}
+\definecolor{darkgray}{HTML}{D5D5D5}
+
+\makeatletter
+\renewenvironment{minted@colorbg}[1]{
+\setlength{\fboxsep}{\z@}
+\def\minted@bgcol{#1}
+\noindent
+\begin{lrbox}{\minted@bgbox}
+\begin{minipage}{\linewidth}}
+{\end{minipage}
+\end{lrbox}%
+\colorbox{\minted@bgcol}{\usebox{\minted@bgbox}}}
+\makeatother
+
 % Dane magistranta:
 
 \author{Konrad Lisiecki}
@@ -28,6 +54,7 @@
 
 \begin{document}
 
+\tableofcontents
 \maketitle
 
 \begin{abstract}
@@ -38,9 +65,6 @@ W ramach pracy zostanie również dokonane ich porównanie z rozwiązaniami istn
 językach programowania, jak python i haskell.
 \end{abstract}
 
-\tableofcontents
-\listoffigures
-\listoftables
 
 \chapter*{Wprowadzenie}
 \addcontentsline{toc}{chapter}{Wprowadzenie}
@@ -81,14 +105,26 @@ K\^un (fooistyczny mędrzec, XIX w. p.n.e.):
 \raggedleft\slshape tłum. z~chińskiego Robert Blarbarucki
 \end{quote}
 
+
+std::find_if(container.begin(), container.end(),
+             [](int val) { return 0 < val && val < 10; });
+
+
 \section{Funkcje lambda}
-  
-\begin{minted}[mathescape,
-               linenos,
-               numbersep=5pt,
-               gobble=2,
-               frame=lines,
-               framesep=2mm]{csharp}
+
+Funkcje lambda, chociaż nie zwiększają siły wyrazu języka C++, moją olbrzymi wpływ na jakość pisanego 
+oprogramowania. Przede wszystki
+ 
+\begin{listing}[ht]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{cpp}
+{listings/lambda0.cpp}
+\caption{Przykład funkcji wyższego rzędu w języku Python}
+\label{lst:HigherOrderPython}
+\end{listing}
+
+
+
+\begin{minted}[mathescape, linenos, numbersep=5pt, bgcolor=bg, gobble=2, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{cpp}
   string title = "This"
   /*
   Defined as $\pi=\lim_{n\to\infty}\frac{P_n}{d}$ where $P$ is the perimeter
@@ -100,23 +136,40 @@ K\^un (fooistyczny mędrzec, XIX w. p.n.e.):
 \end{minted}
 
 \begin{listing}[ht]
-\inputminted[mathescape,
-               linenos,
-               numbersep=5pt,
-               gobble=2,
-               frame=lines,
-               framesep=2mm]{csharp}{lambda1.cpp}
-\caption{Example from external file}
+\inputminted[mathescape, linenos, numbersep=5pt, gobble=2, frame=lines, framesep=2mm]{cpp}{lambda1.cpp}
+\caption{Przykład poprawnego i niepoprawnego użycia capture-list w wyrażeniach lambda}
 \label{listing:3}
 \end{listing}
+
+
+\begin{listing}[ht]
+\inputminted[mathescape, linenos, numbersep=5pt, frame=lines, framesep=2mm]{cpp}{firstCategory.cpp}
+\caption{Przykład poprawnego i niepoprawnego użycia capture-list w wyrażeniach lambda}
+\label{listing:3}
+\end{listing}
+
+\begin{listing}[ht]
+\inputminted[mathescape, linenos, numbersep=5pt, gobble=2, frame=lines, framesep=2mm]{cpp}{accumulate.cpp}
+\caption{Przykład poprawnego i niepoprawnego użycia capture-list w wyrażeniach lambda}
+\label{listing:3}
+\end{listing}
+
 
 
 \section{Automatyczne określanie typu}
 \section{Funkcje obywatelami pierwszej kategorii}
 \section{Funkcje wyższego rzędu}
 
-Oto dwie definicje wprowadzające podstawowe pojęcia blabalii
-fetorycznej:
+Wprowadzaenie do standardu C++11 funkcji anonimowych znaczanie ułatwiło korzystanie z STL-owych funkcji, takich jak:
+\begin{enumerate}
+\item $trasform$
+\item $remove\_if$
+\item $accumulate$
+\end{enumerate}
+
+Obecnie nie ma potrzeby definiowania nowej funkcji z nazwy, można po prostu użyć funkcji lambda.
+Efektem jest znaczące uproszczenie kodu, co czyni go bardziej czytelnym i napisanym w bardziej funkcyjnym stylu.
+ 
 
 \begin{defi}\label{skupienie}
   Silny, zwarty i gotowy fetor bazowy nazwiemy \emph{skupieniem}.
@@ -128,46 +181,7 @@ fetorycznej:
   $$\forall \mathcal{X}\in Z(t)\ \exists
   \pi\subseteq\oint_{\Omega^2}\kappa\leftrightarrow 42$$
 \end{defi}
-
-
-\section{Blabalizator różnicowy}
-
-Teoretycy blabalii (zob. np. pracę~\cite{grglo}) zadowalają się
-niekonstruktywnym opisem natury fetorów.
-
-Podstawowym narzędziem blabalii empirycznej jest blabalizator
-różnicowy.  Przyrząd ten pozwala w~sposób przybliżony uzyskać
-współczynniki rozkładu Głombaskiego dla fetorów bazowych
-i~harmonicznych.  Praktyczne znaczenie tego procesu jest oczywiste:
-korzystając z~reperkusatywności pozwala on przejść do przestrzeni
-$\Lambda^{\nabla}$, a~tym samym znaleźć retroizotonalne współczynniki
-semi-quasi-celibatu dla klatek Rozkoszy (zob.~\cite{JR}).
-
-Klasyczne algorytmy dla blabalizatora różnicowego wykorzystują:
-\begin{enumerate}
-\item dualizm falowo\dywiz korpuskularny, a w szczególności
-  \begin{enumerate}
-  \item korpuskularną naturę fetorów,
-  \item falową naturę blaba,
-  \item falowo\dywiz korpuskularną naturę gryzmołów;
-  \end{enumerate}
-\item postępującą gryzmolizację poszczególnych dziedzin nauki, w
-  szczególności badań systemowych i rozcieńczonych;
-\item dynamizm fazowy stetryczenia parajonizacyjnego;
-\item wreszcie tradycyjne opozycje:
-  \begin{itemize}
-  \item duch --- bakteria,
-  \item mieć --- chcieć,
-  \item myśl --- owsianka,
-  \item parafina --- durszlak\footnote{Więcej o tym przypadku --- patrz
-      prace Gryzybór\dywiz Głombaskiego i innych teoretyków nurtu
-      teoretyczno\dywiz praktycznego badań w~Instytucie Podstawowych
-      Problemów Blabalii w~Fifie.},
-  \item logos --- termos%\footnote{Szpotański}
-  \end{itemize}
-  z właściwym im przedziwym dynamizmem.
-\end{enumerate}
-
+ 
 \begin{figure}[tp]
   \centering
   \framebox{\vbox to 4cm{\vfil\hbox to
@@ -175,6 +189,14 @@ Klasyczne algorytmy dla blabalizatora różnicowego wykorzystują:
   \caption{Artystyczna wizja blaba w~obrazie węgierskiego artysty
     Josipa~A. Rozkoszy pt.~,,Blaba''}
 \end{figure}
+
+
+
+
+
+
+
+
 
 \chapter{Zbadanie sposobu realizacji oraz ich siły wyrazu}\label{r:SposobRealizacji}
  
@@ -188,16 +210,39 @@ Klasyczne algorytmy dla blabalizatora różnicowego wykorzystują:
 
 \chapter{Porównanie z innymi językami}\label{r:Porownanie}
 
-Program przygotowany dla systemu operacyjnego M\$ Windows uruchamia
-się energicznym dwumlaskiem na jego ikonce w~folderze
-\verb+\\FIDO\FOO\BLABA+.  Następnie kolistym ruchem ręki należy
-naprowadzić kursor na menu \texttt{Blabaliza} i~uaktywnić pozycję
-\texttt{Otwórz plik}.  Po wybraniu pliku i~zatwierdzeniu wyboru
-przyciskiem \texttt{OK} rozpocznie się proces blabalizy.  Wyniki
-zostaną zapisane w~pliku o~nazwie \texttt{99-1a.tx.43} w~bieżącym
-folderze.
+W nieniejszym rozdziale zostanie przedstawione porównanie jak wygląda szybkość funkcji 
+wyższego rzędu w C++11 (z zastosowaniem funkcji anonimowych), w odniesieniud do innych języków.
+Do celów porównawczych wybrano język Haskell, który jest językiem funkcyjnym bez efektów ubocznych.
+Dokonano również porównania w stosounku do Pythona, który ma zaimplementowane wiele 
+funkcji wyższego rzędu w swojej bibliotece standardowej.
 
+\section{Wydajność funkcji wyższego rzędu w C++11}
+
+
+Na listingu nr \ref{lst:HigherOrderCPP} możemy zobaczyć przykład implementacji 3 funkcji wyżeszgo rzędu 
+z użycie funkcji lambda. 
+
+\begin{listing}[ht]
+\inputminted[mathescape, linenos, numbersep=5pt, frame=lines, framesep=2mm]{cpp}{../SEM1/fun.cpp}
+\caption{Przykład poprawnego i niepoprawnego użycia capture-list w wyrażeniach lambda}
+\label{lst:HigherOrderCPP}
+\end{listing}
+
+
+
+\section{Porównanie z językiem Haskell}
+\section{Porównanie z językiem Python}
+
+W tej sekcji zostanie przedstawione te same funkcje wyższego rzędu, tylko że w języku Pyhthon. 
+Znajdują się one na listingu nr \ref{lst:HigherOrderPython}:
  
+\begin{listing}[ht]
+\inputminted[mathescape, linenos, numbersep=5pt, frame=lines, framesep=2mm]{python}{../SEM1/fun.py}
+\caption{Przykład funkcji wyższego rzędu w języku Python}
+\label{lst:HigherOrderPython}
+\end{listing}
+
+
 
 
 
@@ -318,6 +363,9 @@ utajnieniu.
   \end{tabular}
 \end{center}
 
+\listoffigures
+\listoftables
+
 \begin{thebibliography}{99}
 \addcontentsline{toc}{chapter}{Bibliografia}
 
@@ -360,6 +408,7 @@ utajnieniu.
 
 \bibitem[Zen69]{heu} Zenon Zenon, \textit{Użyteczne heurystyki
     w~blabalizie}, Młody Technik, nr~11, 1969.
+
 
 \end{thebibliography}
 
