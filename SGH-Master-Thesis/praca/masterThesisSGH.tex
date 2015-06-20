@@ -1,19 +1,21 @@
-% Niniejszy plik stanowi przyk³ad formatowania pracy magisterskiej na
-% Wydziale MIM UW.  Szkielet u¿ytych poleceñ mo¿na wykorzystywaæ do
-% woli, np. formatujac wlasna prace.
-
-\documentclass{pracamgr}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
-% Wersja polska layoutu pracy
+\documentclass{pracamgr}  
+\usepackage{lmodern} 
 \usepackage[polish]{babel} 
 \selectlanguage{polish} 
-% Wersja angielska layoutu pracy
-%\usepackage[british,UKenglish,USenglish,english,american]{babel}
-\usepackage{graphicx}
-\usepackage[latin2]{inputenc}
+\usepackage{fontspec}
+\usepackage{minted}
+\usepackage{listings}
+% package for hyperinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+\usepackage{graphicx}  
 \usepackage{makeidx}\makeindex
- 
  
 %Jesli uzywasz kodowania polskich znakow ISO-8859-2 nastepna linia powinna byc odkomentowana
 %Jesli uzywasz kodowania polskich znakow CP-1250 to ta linia powinna byc 
@@ -24,21 +26,13 @@
 
 \author{Konrad Lisiecki}
 \nralbumu{48211}
-\title{Modele zmienno¶ci stochastycznej}
-\tytulang{haha}
-\kierunek{Finanse i rachunkowo¶æ}
+\title{Modele zmiennoÅ›ci stochastycznej} 
+\kierunek{Finanse i rachunkowoÅ›Ä‡}
 \instytut{Ekonometrii}
-\opiekun{dra hab. £ukasza Delonga} 
-\date{Warszawa 2015} 
-\dziedzina{  14.3 Ekonomia\\ } 
-\klasyfikacja{D. Software\\
-  D.127. haha\\
-  D.127.6. Numerical blabalysis}
+\opiekun{dra hab. Åukasza Delonga} 
+\date{Warszawa 2015}   
 
-% S³owa kluczowe:
-\keywords{haha}
-
-% Tu jest dobre miejsce na Twoje w³asne makra i~¶rodowiska:
+% Tu jest dobre miejsce na Twoje wÅ‚asne makra i~Å›rodowiska:
 \newtheorem{defi}{Definicja}[section]
 
 % koniec definicji 
@@ -55,51 +49,37 @@
  
 
 %===========================================================================
-% 													Begin of document 
+%                           Begin of document 
 %===========================================================================
-
 
 
 \begin{document}
 \maketitle
-\nocite{book-full}
-
-
-
- 
-\begin{abstract} 
-sadfsdf
-\end{abstract}
-
-\tableofcontents
-
-
-
-
-
-
+\nocite{book-full} 
 
 %===========================================================================
-% 															Wstep
+%                               Introduction
 %===========================================================================
-\chapter*{Wstep}
+\chapter*{Streszczenie} 
 
 \begin{quote}
-
-%   Alan White and I spent the next two or three years working together on this.
 We developed what is known a stochastic volatility model. This is a model where the volatility as well as the underlying asset price moves around in an unpredictable way.
-
 \raggedleft\slshape John Hull \index{Hull John}
 \end{quote}
 
-\addcontentsline{toc}{chapter}{Introduction} \markboth{INTRODUCTION}{} 
-asdfsadf
-
-
 
 
 %===========================================================================
-% 															Wprowadzenie
+%                               Table of contents
+%===========================================================================
+\tableofcontents
+ 
+
+\addcontentsline{toc}{chapter}{Introduction} \markboth{INTRODUCTION}{}
+
+
+%===========================================================================
+%                               Wprowadzenie
 %===========================================================================
 \chapter{Wprowadzenie}\label{r:pojecia}
 \begin{quote}
@@ -128,7 +108,7 @@ sdfsdf
 
 
 %===========================================================================
-% 															Model Hestona
+%                               Model Hestona
 %===========================================================================
 \chapter{Model Hestona}
 \begin{quote}
@@ -139,40 +119,40 @@ sdfsdf
 \raggedleft\slshape Fisher Black \index{Fisher, Black}
 \end{quote}
 
-Obecnie jednym z najpopularniejszych narzêdzi do wyceny opcji jest model Blacka-Scholsa. Ceniony jest on ze wzglêdu na prostotê oraz wygodê u¿ycia, kosztem jednak wielu upraszczaj±cych za³o¿eñ. Jednym z najwa¿niejszych jest za³o¿enia o sta³ej zmienno¶ci instrumentu bazowego, co w znacz±cym stopniu ogranicza precyzje oszacowañ. Jednym z pomys³ów na obej¶cie tego problemu jest uzmiennienie tej sta³ej, czyli pozwolanie, aby dla dowolnego czasu, parametr ten przyjmowa³ ró¿n± warto¶æ. Mo¿na to zrobiæ np. poprzez pozwolenie, aby nie tylko proces ceny akcji by³ procesem stochastycznym, ale tak¿e aby sama zmienno¶æ by³a niedetrministyczna, tzn. aby by³a równie¿ definiowana przy u¿yciu procesu stochastycznego. Takie te¿ podej¶cie zosta³o wykorzystane przy budowie modelu Hestona. \cite{greenwade93}
+Obecnie jednym z najpopularniejszych narzÄ™dzi do wyceny opcji jest model Blacka-Scholsa. Ceniony jest on ze wzglÄ™du na prostotÄ™ oraz wygodÄ™ uÅ¼ycia, kosztem jednak wielu upraszczajÄ…cych zaÅ‚oÅ¼eÅ„. Jednym z najwaÅ¼niejszych jest zaÅ‚oÅ¼enia o staÅ‚ej zmiennoÅ›ci instrumentu bazowego, co w znaczÄ…cym stopniu ogranicza precyzje oszacowaÅ„. Jednym z pomysÅ‚Ã³w na obejÅ›cie tego problemu jest uzmiennienie tej staÅ‚ej, czyli pozwolanie, aby dla dowolnego czasu, parametr ten przyjmowaÅ‚ rÃ³Å¼nÄ… wartoÅ›Ä‡. MoÅ¼na to zrobiÄ‡ np. poprzez pozwolenie, aby nie tylko proces ceny akcji byÅ‚ procesem stochastycznym, ale takÅ¼e aby sama zmiennoÅ›Ä‡ byÅ‚a niedetrministyczna, tzn. aby byÅ‚a rÃ³wnieÅ¼ definiowana przy uÅ¼yciu procesu stochastycznego. Takie teÅ¼ podejÅ›cie zostaÅ‚o wykorzystane przy budowie modelu Hestona. \cite{greenwade93}
 
 \section{Model Blacka-Scholesa}
 
-Jak zostalo wspomniene we wstepie podstawowym modelem matematycznym na wycenê opcji jest model Blacka-Scholesa. Najczê¶ciej definiuje siê go w nastêpuj±cej postaci:
+Jak zostalo wspomniene we wstepie podstawowym modelem matematycznym na wycenÄ™ opcji jest model Blacka-Scholesa. NajczÄ™Å›ciej definiuje siÄ™ go w nastÄ™pujÄ…cej postaci:
 \begin{equation}
 dS_t  = \mu S_t dt + \sigma S_t dW^S_t
 \end{equation}
 
-We wzorze tym $S_t$ przedstawia cenê instrumentu bazowego w momencie $t$, sta³a $\mu$ oznacza dryf, sta³a $\sigma$ oznacza zmienno¶æ, natomiast $dW^S_t$ jest standardowym procesem Wienera (procesem b³±dzenia losowego).
+We wzorze tym $S_t$ przedstawia cenÄ™ instrumentu bazowego w momencie $t$, staÅ‚a $\mu$ oznacza dryf, staÅ‚a $\sigma$ oznacza zmiennoÅ›Ä‡, natomiast $dW^S_t$ jest standardowym procesem Wienera (procesem bÅ‚Ä…dzenia losowego).
 
-Ze wzglêdu na swoj± prostotê, model ten jest podstawow± metod± do wyceny opcji, jednak wspomniana prostota niesie za sob± szereg ograniczeñ. Jednym z takich ograniczeñ jest za³o¿enie o sta³ej warto¶ci zmienno¶ci w czasie. Jak bardzo to za³o¿enie potrafi byæ niezgodne z rzeczywisto¶ci± pokaza³ chocia¿by ostatni kryzys finansowy, podczas którego zmienno¶c instrumentów finansowych by³a o wiele wiêksza ni¿ w poprzednich latach. Dlatego te¿ naturalnym uogónieniem modelu Blacka-Scholesa wydaje siê byæ wprowadzenie zmienno¶ci, która nie jest sta³a. Tak± zmianê wprowadza model Hestona. 
+Ze wzglÄ™du na swojÄ… prostotÄ™, model ten jest podstawowÄ… metodÄ… do wyceny opcji, jednak wspomniana prostota niesie za sobÄ… szereg ograniczeÅ„. Jednym z takich ograniczeÅ„ jest zaÅ‚oÅ¼enie o staÅ‚ej wartoÅ›ci zmiennoÅ›ci w czasie. Jak bardzo to zaÅ‚oÅ¼enie potrafi byÄ‡ niezgodne z rzeczywistoÅ›ciÄ… pokazaÅ‚ chociaÅ¼by ostatni kryzys finansowy, podczas ktÃ³rego zmiennoÅ›c instrumentÃ³w finansowych byÅ‚a o wiele wiÄ™ksza niÅ¼ w poprzednich latach. Dlatego teÅ¼ naturalnym uogÃ³nieniem modelu Blacka-Scholesa wydaje siÄ™ byÄ‡ wprowadzenie zmiennoÅ›ci, ktÃ³ra nie jest staÅ‚a. TakÄ… zmianÄ™ wprowadza model Hestona. 
 
 \section{Model Hestona}
 
-Na pocz±tek za³ó¿my, ¿e cena aktywa bazowego w momemcie $t$ spe³nia nastêpuj±cy proces dyfuzji:
+Na poczÄ…tek zaÅ‚Ã³Å¼my, Å¼e cena aktywa bazowego w momemcie $t$ speÅ‚nia nastÄ™pujÄ…cy proces dyfuzji:
 \begin{equation}
 dS(t)= \mu S dt + \sqrt{v(t)} S d z_1 (t),
 \end{equation}
 gdzie $z_1(t)$  jest standardowym procesem Wienera. 
 
-Je¿eli natomiast zmienno¶æ jest procesem Ornsteina-Uhlenbecka:
+JeÅ¼eli natomiast zmiennoÅ›Ä‡ jest procesem Ornsteina-Uhlenbecka:
 
 \begin{equation}
 d \sqrt{v(t)} = - \beta \sqrt{v(t)} dt + \delta d z_2 (t)
 \end{equation}
 
-wtedy na podstawie lematu Ito mo¿na wykazaæ, ¿e wariancja $v(t)$ ma nastepuj±c± postaæ:
+wtedy na podstawie lematu Ito moÅ¼na wykazaÄ‡, Å¼e wariancja $v(t)$ ma nastepujÄ…cÄ… postaÄ‡:
 \begin{equation}
 dv(t)= \kappa  [\theta -v(t)]dt+2\delta \sqrt{v(t)} d z_2 (t)
 \end{equation}
-gdzie proces $z_2(t)$ ma korelacjê z procesem $z_1(t)$ równ± $\rho$.
+gdzie proces $z_2(t)$ ma korelacjÄ™ z procesem $z_1(t)$ rÃ³wnÄ… $\rho$.
 
-Gdy przyjmiemy sta³± stopê procentow±, cena w momencie $t$ obligacji, która wygasa w chwili $t+\tau$ wynosi:
+Gdy przyjmiemy staÅ‚Ä… stopÄ™ procentowÄ…, cena w momencie $t$ obligacji, ktÃ³ra wygasa w chwili $t+\tau$ wynosi:
 \begin{equation}
 P(t, t+\tau) = e^{-r\tau}
 \end{equation}
@@ -182,11 +162,11 @@ P(t, t+\tau) = e^{-r\tau}
 \begin{figure}
   \centering
   \includegraphics[width=150mm]{vix.jpg}
-  \caption{Zmieno¶æ w czasie indeksu S\&P}\label{fig:vix}
+  \caption{ZmienoÅ›Ä‡ w czasie indeksu S\&P}\label{fig:vix}
 \end{figure}
 
 
-gdzie parametr $\sigma$ jest sta³y. Za³o¿enie to jednak okazujê siê byæ zbyt upraszczaj±ce dla szerokiej gamy szeregów czasowych. Spojrzmy np. na szereg czasowy  (\ref{fig:vix}) 
+gdzie parametr $\sigma$ jest staÅ‚y. ZaÅ‚oÅ¼enie to jednak okazujÄ™ siÄ™ byÄ‡ zbyt upraszczajÄ…ce dla szerokiej gamy szeregÃ³w czasowych. Spojrzmy np. na szereg czasowy  (\ref{fig:vix}) 
 
 
 
@@ -202,32 +182,32 @@ dv(t) = \kappa [\theta - v(t)] dt + \sigma \sqrt{v(t)} d_2 (t),
 
 
 \section{Motywacja}
-Przedstawiony w poprzednim podrozdziale model Hestona jest bardziej skomplikowany, a ni¿eli czêsto u¿ywony model Blacka-Scholesa, jednak.
-Badania empiryczne dowiod³y, ¿e logarytmiczne rozk³ady stóp zwrotu nie s± gausowskie. To znaczy, maj± grube ogony oraz charakteryzuj± siê leptokurtoz±.
+Przedstawiony w poprzednim podrozdziale model Hestona jest bardziej skomplikowany, a niÅ¼eli czÄ™sto uÅ¼ywony model Blacka-Scholesa, jednak.
+Badania empiryczne dowiodÅ‚y, Å¼e logarytmiczne rozkÅ‚ady stÃ³p zwrotu nie sÄ… gausowskie. To znaczy, majÄ… grube ogony oraz charakteryzujÄ… siÄ™ leptokurtozÄ….
 
-Ostatni kryzys finansowy z lat 2007-2008 pokazuje, ze za³o¿enie o sta³ej zmienno¶ci nie moze zostaæ uznane za prawdziwe w wiêkszo¶ci instrumentów finansowych jakie s± obecnie handlowane na rynku. Dlatego te¿ 
+Ostatni kryzys finansowy z lat 2007-2008 pokazuje, ze zaÅ‚oÅ¼enie o staÅ‚ej zmiennoÅ›ci nie moze zostaÄ‡ uznane za prawdziwe w wiÄ™kszoÅ›ci instrumentÃ³w finansowych jakie sÄ… obecnie handlowane na rynku. Dlatego teÅ¼ 
 
 
 \section{Dyskretyzacja Eulera}
- Jak wynika ze wzorów  
+ Jak wynika ze wzorÃ³w  
 
-	
-\section{Generowanie skorelowanych szeregów czasowych}
-W tej sekcji zajmiemy siê generowanie skorelowanych szeregów czasowych o zadanym stopniu korelacji $\rho$.
-Jednym z wa¿niejszych zagadnienieñ zwi±zanych z u¿yciem modelu Hestona jest odpowiednie generowanie skorelowanych szeregów czasowych. Algorytm , przedstawiony w zaloaczniku do pracy opisuje, jak majac dwa kontenery z warto¶ciami z rozk³adu jednostajnego mo¿emy wygenerowaæ nowy wektor o zadanej korelacji $\rho$ w stosunku do pierwszego kontenera z danymi. 
+  
+\section{Generowanie skorelowanych szeregÃ³w czasowych}
+W tej sekcji zajmiemy siÄ™ generowanie skorelowanych szeregÃ³w czasowych o zadanym stopniu korelacji $\rho$.
+Jednym z waÅ¼niejszych zagadnienieÅ„ zwiÄ…zanych z uÅ¼yciem modelu Hestona jest odpowiednie generowanie skorelowanych szeregÃ³w czasowych. Algorytm , przedstawiony w zaloaczniku do pracy opisuje, jak majac dwa kontenery z wartoÅ›ciami z rozkÅ‚adu jednostajnego moÅ¼emy wygenerowaÄ‡ nowy wektor o zadanej korelacji $\rho$ w stosunku do pierwszego kontenera z danymi. 
 
-Poni¿szy wykres przedstawia wygenerowane przekladowe szeregi czasowe z zadanym poziomem korelacji na poziomie $\rho = 0.2$:
+PoniÅ¼szy wykres przedstawia wygenerowane przekladowe szeregi czasowe z zadanym poziomem korelacji na poziomie $\rho = 0.2$:
 
 \begin{figure}
   \centering
   \includegraphics[width=150mm]{corr.png}
-  \caption{Zmieno¶æ w czasie indeksu S\&P}\label{fig:vix}
+  \caption{ZmienoÅ›Ä‡ w czasie indeksu S\&P}\label{fig:vix}
 \end{figure}
 
-Majac w ten sposób wyznaczone szeregi czasowe o zadanym poziomie korelacji teraz przychodzi czas na generowanie szeregu czasowego opisujacym zmienno¶æ oraz sam± cenê instrumentu finansowego. 
-Przypomnijmy, ¿e zgdonie z modelem Hestona wzory te prezentuj± siê nastêpuju±co:
+Majac w ten sposÃ³b wyznaczone szeregi czasowe o zadanym poziomie korelacji teraz przychodzi czas na generowanie szeregu czasowego opisujacym zmiennoÅ›Ä‡ oraz samÄ… cenÄ™ instrumentu finansowego. 
+Przypomnijmy, Å¼e zgdonie z modelem Hestona wzory te prezentujÄ… siÄ™ nastÄ™pujuÄ…co:
 
-Maj±c funkcje generujac± skorelowane szergi czasowe mozna zdefiniowac funkcje, ktorej wynikiem bedzie cena instrumentu bazowego w danej chwili. Jej definicja bêdzie zgodna z nastêpujacym zbiorem formul: \cite{OptimalInvestment2010}
+MajÄ…c funkcje generujacÄ… skorelowane szergi czasowe mozna zdefiniowac funkcje, ktorej wynikiem bedzie cena instrumentu bazowego w danej chwili. Jej definicja bÄ™dzie zgodna z nastÄ™pujacym zbiorem formul: \cite{OptimalInvestment2010}
 
 \begin{equation}
 dS_t =  \mu S_t  dt + \sqrt{V_t}S_t dW_t^1
@@ -243,7 +223,7 @@ dW_t^1 dW_t^2  = \rho dt
 
 
 %===========================================================================
-% 											Model Hestona na przyk³adznie
+%                       Model Hestona na przykÅ‚adznie
 %===========================================================================
 \chapter{Wycena opcji na indeks S\&P}\label{r:sp}
 Lorem ipsum
@@ -251,9 +231,9 @@ Lorem ipsum
 
 
 %===========================================================================
-% 														Zakoñczenie
+%                             ZakoÅ„czenie
 %===========================================================================
- \chapter*{Zakoñczenie}\label{r:ending}
+ \chapter*{ZakoÅ„czenie}\label{r:ending}
 Lorem ipsum
 
 
@@ -339,7 +319,7 @@ Lorem ipsum
 \addcontentsline{toc}{chapter}{Bibliography} \markboth{Bibliography}{}
 
 \begin{quote}
-"Widzia³em dalej dziêki temu, ¿e sta³em na barkach gigantów".\\
+"WidziaÅ‚em dalej dziÄ™ki temu, Å¼e staÅ‚em na barkach gigantÃ³w".\\
 %(If I have seen farther than others, it is because I was standing on the shoulders of giants).
 
 \raggedleft\slshape Isaac Newton

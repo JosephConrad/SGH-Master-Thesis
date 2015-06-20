@@ -4,7 +4,7 @@
 \selectlanguage{polish} 
 \usepackage{fontspec}
 \usepackage{minted}
-
+\usepackage{listings}
 % package for hyperinks
 \usepackage{hyperref}
 \hypersetup{
@@ -94,107 +94,178 @@ W ostatnim rozdziale jest zawarte podsumowanie wprowadzonych zmian.
 W~dodatkach z kolei, umieszczono wybrane fragmenty kodu zaimplementowanej biblioteki z rozdziału \ref{r:Biblioteka}.
 
 
+
+
+
+
 \chapter{Opis wprowadzonych zmian do języka C++}\label{r:Zmiany}
 
-Pojęciem pierwotnym blabalii fetorycznej jest \emph{blaba}.
-Blabaliści nie podają jego definicji, mówiąc za Ciach-Pfe t-\=am
-K\^un (fooistyczny mędrzec, XIX w. p.n.e.):
-\begin{quote}
-  Blaba, który jest blaba, nie jest prawdziwym blaba.
-
-\raggedleft\slshape tłum. z~chińskiego Robert Blarbarucki
-\end{quote}
+W nieniejszym rozdziale zostaną przedstawione najważniejsze zmiany jakie wprowadzono do języka C++ w nowych standarach. 
+Szczególna uwaga zostanie jednak zwrócona na mechanizmy, które są charakterystyczne dla programowania w stylu funkcyjnym.
+Należy tutaj wymienić przede wszystkim funkcje lambda oraz automatyczne określanie typu przy pomocy słowa kluczowego \textit{auto}.
 
 
-std::find_if(container.begin(), container.end(),
-             [](int val) { return 0 < val && val < 10; });
+
 
 
 \section{Funkcje lambda}
 
-Funkcje lambda, chociaż nie zwiększają siły wyrazu języka C++, moją olbrzymi wpływ na jakość pisanego 
-oprogramowania. Przede wszystki
+Funkcje lambda, chociaż nie zwiększają siły wyrazu języka C++, mają olbrzymi wpływ na jakość pisanego 
+oprogramowania.
+
+Obecnie nie ma potrzeby definiowania nowej funkcji z nazwy, można po prostu użyć funkcji lambda.
+Efektem jest znaczące uproszczenie kodu, co czyni go bardziej czytelnym i napisanym w bardziej funkcyjnym stylu.
  
+Dla przykładu porównajmy więc przykładową funkcję z biblioteki standardowej z użyciem funkcji lambda i bez niej.
+I tak, poniższy listing przedstawia funkcję \textit{find\_if} z użyciem funkcji lambda: 
+
 \begin{listing}[ht]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{cpp}
 {listings/lambda0.cpp}
-\caption{Przykład funkcji wyższego rzędu w języku Python}
+\caption{Przykład użycia funkcji anonimowej}
 \label{lst:HigherOrderPython}
 \end{listing}
 
+\noindent
+Składnia funkcji lambda składa się z 4 podstawowych elementów
+\begin{enumerate}
+\item definicji domknięcia (ang. closure),
+\item listy z parametrami
+\item typu zwracanego (opcjonalnie)
+\item bloku z kodem
+\end{enumerate}
 
+\noindent
+które mają następującą składnię:
 
-\begin{minted}[mathescape, linenos, numbersep=5pt, bgcolor=bg, gobble=2, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{cpp}
-  string title = "This"
-  /*
-  Defined as $\pi=\lim_{n\to\infty}\frac{P_n}{d}$ where $P$ is the perimeter
-  of an $n$-sided regular polygon circumscribing a
-  circle of diameter $d$.
-  */
-  const double pi = 3.1415926535
-
-\end{minted}
-
-\begin{listing}[ht]
-\inputminted[mathescape, linenos, numbersep=5pt, gobble=2, frame=lines, framesep=2mm]{cpp}{lambda1.cpp}
-\caption{Przykład poprawnego i niepoprawnego użycia capture-list w wyrażeniach lambda}
-\label{listing:3}
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{cpp}
+{listings/lambdaSyntax.cpp}
+\caption{Przykład użycia funkcji anonimowej}
+\label{lst:lambdaSyntax}
 \end{listing}
 
+W konstrukcji tej najważniejszym elementem jest definicja domknięcia. To w niej możemy 
+specyfikować do jakich zmiennych i w jakim trybie mamy dostęp wewnątrz funkcji.
+Generalnie są do dyspozycji następujące typy dostępu do zmiennych w funkcji:
+\begin{enumerate}
+\item  - \textbf{[a,&b]}, a dostępne przez wartość, b przez referencję.
+\item  - \textbf{[this]}, wskaźnik do this jest dostępny do przez wartość
+\item  - \textbf{[&]}, przekazuje wszystkich zmienne przez referencję
+\item  - \textbf{[=]}, przekazuje wszystkich zmienne przez wartość
+\item  - \textbf{[]}, nie są przekazane żadne zmienne do funkcji
+\end{enumerate}
+
+Poniższy listing nr \ref{lst:lambdaUsage} wskazuje na kilka poprawnych i niepoprawnych sposobów użycia
+funkcji anonimowych
 
 \begin{listing}[ht]
-\inputminted[mathescape, linenos, numbersep=5pt, frame=lines, framesep=2mm]{cpp}{firstCategory.cpp}
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{cpp}{lambda1.cpp}
 \caption{Przykład poprawnego i niepoprawnego użycia capture-list w wyrażeniach lambda}
-\label{listing:3}
-\end{listing}
-
-\begin{listing}[ht]
-\inputminted[mathescape, linenos, numbersep=5pt, gobble=2, frame=lines, framesep=2mm]{cpp}{accumulate.cpp}
-\caption{Przykład poprawnego i niepoprawnego użycia capture-list w wyrażeniach lambda}
-\label{listing:3}
+\label{lst:lambdaUsage}
 \end{listing}
 
 
 
 \section{Automatyczne określanie typu}
+ 
+Kolejnym cechą wprowadzoną do C++, a która jest powszechnie używana w językach funkcyjnych, jest automatyczne
+określanie typu (ang. \textit{type inference}). W C++ do osiągnięcia tego celu wprowadzono słowo kluczowe \textit{auto}.
+Podczas deklaracji zmiennej z automatycznym określeniem typu musimy od razu zainicjalizować, tak aby, kompilator 
+potrefił określić typ tej zmiennej. Obrazuje to poniższy listing nr \ref{lst:auto}: 
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{cpp}{listings/auto.cpp}
+\caption{Przykład poprawnego i niepoprawnego użycia capture-list w wyrażeniach lambda}
+\label{lst:auto}
+\end{listing}
+
+Pomimo olbrzymiej prostoty, która wiąże się z użyciem deklaracji typu \textit{auto}, 
+należy pamiętać, że w pewnych sytuacjach
+wyzanczony typ może być nieprawidłowy. Taka sytuacja występuje podczas użycia w kodzie programu wzorca 
+projektowego pełnomocnik (ang. \textit{proxy}).
+Rozwiązaniem tego problemu jest użycie wprost typowanego inicjalizatora (ang. \textit{explicitly typed initializer idiom}).
+
+Jednak weźmy pod uwagę następującą funkcję
+
+\begin{listing}[H]
+\inputminted[mathescape,  numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{cpp}{listings/auto/auto1.cpp}  
+\end{listing}
+
+i przypuśćmy, że chcielibyśmy osłabić zwracany typ z \textit{double} do \textit{float}.
+
+Powstaje więc pytanie, dlaczego nie moglibyśmy po prostu dokonać niejawnej konwersji typu:
+
+\begin{listing}[H]
+\inputminted[numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{cpp}{listings/auto/auto2.cpp}  
+\end{listing}
+
+zamiast użycia wprost typowanego inicjalizatora:
+
+
+\begin{listing}[H]
+\inputminted[numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{cpp}{listings/auto/auto3.cpp}  
+\end{listing}
+
+Argument za tym drugim rozwiązaniem jest związany z czytalnością kodu. Wykorzystując wprost typowny incjalizator 
+\textit{explicite} mówimy, że zmieniamy typ wyrażenia. Dlatego tak napisany kod jest bardziej przejrzysty: mówimy 
+wprost, że checmy dokonać konwersji typu.
+
+
+
+
+
+
+
+
+
 \section{Funkcje obywatelami pierwszej kategorii}
+
+Wraz z pojawieniem się funkcji anonimowych funkcje stały się obywatelami pierwszej kategorii w języku C++.
+
+\begin{listing}[ht]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{cpp}{firstCategory.cpp}
+\caption{Przykład poprawnego i niepoprawnego użycia capture-list w wyrażeniach lambda}
+\label{listing:3}
+\end{listing}
+
+
+
+
+
+
 \section{Funkcje wyższego rzędu}
 
-Wprowadzaenie do standardu C++11 funkcji anonimowych znaczanie ułatwiło korzystanie z STL-owych funkcji, takich jak:
+
+Funkcje wyższego rzędu, czyli funkcje, które przyjmują jako argument lub zwracają funkcje, są 
+podstawowym narzędziem w każdym programie funkcyjnym. 
+Także w C++ mamy do dyspozycji wiele funkcji wyższego rzędu w STL-u.
+
+Jednakże, prowadzenie do standardu C++11 funkcji anonimowych znaczanie ułatwiło korzystanie z STL-owych funkcji, 
+takich jak:
 \begin{enumerate}
-\item $trasform$
-\item $remove\_if$
-\item $accumulate$
+\item \textit{trasform}
+\item \textit{remove\_if}
+\item \textit{accumulate}
 \end{enumerate}
 
-Obecnie nie ma potrzeby definiowania nowej funkcji z nazwy, można po prostu użyć funkcji lambda.
-Efektem jest znaczące uproszczenie kodu, co czyni go bardziej czytelnym i napisanym w bardziej funkcyjnym stylu.
- 
+\noindent
+I tak, poniższy listing nr \ref{lst:accumulate} przedstawian przykładową implementację funkcji \textit{accumulate}:
 
-\begin{defi}\label{skupienie}
-  Silny, zwarty i gotowy fetor bazowy nazwiemy \emph{skupieniem}.
-\end{defi}
-
-\begin{defi}\label{fetor}
-  \emph{Fetorem} nazwiemy skupienie blaba spełniające następujący
-  \emph{aksjomat reperkusatywności}:
-  $$\forall \mathcal{X}\in Z(t)\ \exists
-  \pi\subseteq\oint_{\Omega^2}\kappa\leftrightarrow 42$$
-\end{defi}
- 
-\begin{figure}[tp]
-  \centering
-  \framebox{\vbox to 4cm{\vfil\hbox to
-      7cm{\hfil\tiny.\hfil}\vfil}}
-  \caption{Artystyczna wizja blaba w~obrazie węgierskiego artysty
-    Josipa~A. Rozkoszy pt.~,,Blaba''}
-\end{figure}
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{cpp}{accumulate.cpp}
+\caption{Definicja funkcji accumulate}
+\label{lst:accumulate}
+\end{listing}
 
 
+Jak widzimy w definicji funkcji jako ostatni argument mamy pewną binarną funkcję, którą możemy
+zdefiniować przy pomocy funkcji anonimowej.
 
-
-
-
+\section{Funkcje zagnieżdżone}
+\section{Domknięcia}
+\section{Częściowa aplikacja funkcji}
+\section{Currying}
 
 
 
@@ -222,8 +293,8 @@ funkcji wyższego rzędu w swojej bibliotece standardowej.
 Na listingu nr \ref{lst:HigherOrderCPP} możemy zobaczyć przykład implementacji 3 funkcji wyżeszgo rzędu 
 z użycie funkcji lambda. 
 
-\begin{listing}[ht]
-\inputminted[mathescape, linenos, numbersep=5pt, frame=lines, framesep=2mm]{cpp}{../SEM1/fun.cpp}
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{cpp}{../SEM1/fun.cpp}
 \caption{Przykład poprawnego i niepoprawnego użycia capture-list w wyrażeniach lambda}
 \label{lst:HigherOrderCPP}
 \end{listing}
@@ -233,11 +304,11 @@ z użycie funkcji lambda.
 \section{Porównanie z językiem Haskell}
 \section{Porównanie z językiem Python}
 
-W tej sekcji zostanie przedstawione te same funkcje wyższego rzędu, tylko że w języku Pyhthon. 
+W tej sekcji zostanie przedstawione te same funkcje wyższego rzędu, tylko że w języku Python. 
 Znajdują się one na listingu nr \ref{lst:HigherOrderPython}:
  
-\begin{listing}[ht]
-\inputminted[mathescape, linenos, numbersep=5pt, frame=lines, framesep=2mm]{python}{../SEM1/fun.py}
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{python}{../SEM1/fun.py}
 \caption{Przykład funkcji wyższego rzędu w języku Python}
 \label{lst:HigherOrderPython}
 \end{listing}
@@ -365,6 +436,7 @@ utajnieniu.
 
 \listoffigures
 \listoftables
+\listoflistings
 
 \begin{thebibliography}{99}
 \addcontentsline{toc}{chapter}{Bibliografia}
