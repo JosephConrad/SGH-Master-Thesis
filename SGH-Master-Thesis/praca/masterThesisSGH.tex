@@ -17,6 +17,22 @@
 \usepackage{graphicx}  
 \usepackage{makeidx}\makeindex
  
+\definecolor{grey}{gray}{0.9}
+\definecolor{bg}{HTML}{FAFAFA}
+\definecolor{darkgray}{HTML}{D5D5D5}
+
+\makeatletter
+\renewenvironment{minted@colorbg}[1]{
+\setlength{\fboxsep}{\z@}
+\def\minted@bgcol{#1}
+\noindent
+\begin{lrbox}{\minted@bgbox}
+\begin{minipage}{\linewidth}}
+{\end{minipage}
+\end{lrbox}%
+\colorbox{\minted@bgcol}{\usebox{\minted@bgbox}}}
+\makeatother
+
 %Jesli uzywasz kodowania polskich znakow ISO-8859-2 nastepna linia powinna byc odkomentowana
 %Jesli uzywasz kodowania polskich znakow CP-1250 to ta linia powinna byc 
 %odkomentowana
@@ -26,7 +42,7 @@
 
 \author{Konrad Lisiecki}
 \nralbumu{48211}
-\title{Modele zmienności stochastycznej} 
+\title{Wycena Opcji przy użyciu Modeli Zmienności Stochastycznej} 
 \kierunek{Finanse i rachunkowość}
 \instytut{Ekonometrii}
 \opiekun{dra hab. Łukasza Delonga} 
@@ -96,6 +112,29 @@ adsafdsdfs
 \section{Definicje}
 dsfdsf
 
+\section{Systemy handlu algorytmicznego}
+
+
+\section{Modele zmienności stochastycznej}
+dsfdsf
+
+\section{Proces formowania strategii inwestycyjnej}
+Cały proces formowania strategii inwestycyjnej można ująć w 4 krokach:
+
+\begin{enumerate}
+\item 
+\item modelowanie
+\item walidacja modelu (ang. Backtesting)
+\item analiza wyników 
+\end{enumerate}
+
+\section{Backtest}
+Backtestem nazywamy symulację stworzonej strategii na danych. Dane te mogą
+być danymi historycznymi lub sztucznie wygenerowanymi.
+
+\section{Kointegracja}
+dsfdsf
+
 \begin{defi}\label{aa}
 fsdf
 \end{defi}
@@ -108,9 +147,11 @@ sdfsdf
 
 
 %===========================================================================
+%
 %                               Model Hestona
+%
 %===========================================================================
-\chapter{Model Hestona}
+\chapter{Inwestycje na rynku opcji}
 \begin{quote}
   Suppose we use the standard deviation ... of possible future returns on
   a stock ... as a measure of its volatility. Is it reasonable to take
@@ -119,7 +160,29 @@ sdfsdf
 \raggedleft\slshape Fisher Black \index{Fisher, Black}
 \end{quote}
 
-Obecnie jednym z najpopularniejszych narzędzi do wyceny opcji jest model Blacka-Scholsa. Ceniony jest on ze względu na prostotę oraz wygodę użycia, kosztem jednak wielu upraszczających założeń. Jednym z najważniejszych jest założenia o stałej zmienności instrumentu bazowego, co w znaczącym stopniu ogranicza precyzje oszacowań. Jednym z pomysłów na obejście tego problemu jest uzmiennienie tej stałej, czyli pozwolanie, aby dla dowolnego czasu, parametr ten przyjmował różną wartość. Można to zrobić np. poprzez pozwolenie, aby nie tylko proces ceny akcji był procesem stochastycznym, ale także aby sama zmienność była niedetrministyczna, tzn. aby była również definiowana przy użyciu procesu stochastycznego. Takie też podejście zostało wykorzystane przy budowie modelu Hestona. \cite{greenwade93}
+
+Obecnie jednym z najpopularniejszych narzędzi do wyceny opcji jest model Blacka-Scholsa. Ceniony jest on ze względu na prostotę oraz wygodę użycia, kosztem jednak wielu upraszczających założeń. 
+
+
+\section{Motywacja} 
+Jak zostało powiedziane we wstępie do niniejszego rozdziału, podstawowym modelem do wyceny opcji jest model Blacka-Scholesa.
+Umożliwia on wyprowadznie wzroru na cenę opcji europejskiej w postaci analitycznej. Jednakże, podczas gdy jego prostota jest jedną z jego największych zalet, to posiada on wiele założeń, które nie przystają do rzeczywistości rynkowej. Pierwsza grupa to założenia dotyczące aktywów:
+\begin{enumerate}
+\item cana aktywów bazowych ma rozkład lognormalny
+\item zmienność aktywów bazowych ijest stała i znana z góry
+\item akcje nie wypłacają dywidend
+\item wyceniane opcje są opcjami Europejskimi, tzn. przy pomocy modelu Blacka-Scholesa nie można wycenić np. opcji Amerykańskich
+\end{enumerate}
+Z kolei druga grupa założeń odnosi się do rynku na którym dane aktywa występują.
+\begin{enumerate}
+\item na rynku nie ma możliwości osiągnięcia ponadnormatywnego zysku bez ryzyka (brak możliwości arbitrażu)
+\item nie ma kosztów transakcyjych
+\item stopa procentowa na rynku $r_t$ jest stała i znana z góry 
+\end{enumerate}
+
+Wszystkie te założenia sprawiają, że model Blacka-Scholesa, mimo, że pozwala na wyznaczenie ceny opcji w postaci analitycznej, może nieprecyzyjnie wycenić wartość takiej opcji.
+Jednym z takich założeń jest to o stałej zmienności instrumentu bazowego. Jednym z pomysłów na obejście tego problemu jest uzmiennienie tej stałej, czyli pozwolanie, aby dla dowolnego czasu, parametr ten przyjmował różną wartość. Można to zrobić np. poprzez nadanie zmienności cech losowych. W takim przypadku nie tylko proces ceny akcji byłby procesem stochastycznym, ale także aby sama zmienność byłaby definiowana przy użyciu procesu stochastycznego. Takie też podejście zostało wykorzystane przy budowie modelu Hestona. \cite{greenwade93}
+
 
 \section{Model Blacka-Scholesa}
 
@@ -128,69 +191,145 @@ Jak zostalo wspomniene we wstepie podstawowym modelem matematycznym na wycenę o
 dS_t  = \mu S_t dt + \sigma S_t dW^S_t
 \end{equation}
 
-We wzorze tym $S_t$ przedstawia cenę instrumentu bazowego w momencie $t$, stała $\mu$ oznacza dryf, stała $\sigma$ oznacza zmienność, natomiast $dW^S_t$ jest standardowym procesem Wienera (procesem błądzenia losowego).
+We wzorze tym $S_t$ przedstawia cenę instrumentu bazowego w momencie $t$, stała $\mu$ oznacza dryf, stała $\sigma$ oznacza zmienność, natomiast $dW^S_t$ jest standardowym procesem Wienera.
 
-Ze względu na swoją prostotę, model ten jest podstawową metodą do wyceny opcji, jednak wspomniana prostota niesie za sobą szereg ograniczeń. Jednym z takich ograniczeń jest założenie o stałej wartości zmienności w czasie. Jak bardzo to założenie potrafi być niezgodne z rzeczywistością pokazał chociażby ostatni kryzys finansowy, podczas którego zmiennośc instrumentów finansowych była o wiele większa niż w poprzednich latach. Dlatego też naturalnym uogónieniem modelu Blacka-Scholesa wydaje się być wprowadzenie zmienności, która nie jest stała. Taką zmianę wprowadza model Hestona. 
+
+Ze względu na swoją prostotę, model ten jest podstawową metodą do wyceny opcji, jednak wspomniana prostota niesie za sobą szereg ograniczeń. Jednym z takich ograniczeń jest założenie o stałej wartości zmienności w czasie. Jak bardzo to założenie potrafi być niezgodne z rzeczywistością pokazał chociażby ostatni kryzys finansowy, podczas którego zmiennośc instrumentów finansowych była o wiele większa niż w poprzednich latach. Dlatego też naturalnym uogónieniem modelu Blacka-Scholesa wydaje się być wprowadzenie zmienności, która w rzeczywistym świecie nie jest stała. Taką zmianę wprowadza model Hestona. 
+
 
 \section{Model Hestona}
-
-Na początek załóżmy, że cena aktywa bazowego w momemcie $t$ spełnia następujący proces dyfuzji:
+Jak wspomniano w poprzednim rozdziale, model Hestona eleminuje podstawową wadę modelu Blacka-Scholesa jakim jest założenie o stałej zmienności w czasie.
+W tym celu zmienność również uzależniono od procesu losowego, tworząc kolejny proces stochastyczny. W przypadku modelu Hestona jest to model Coxa-Ingersolla-Rossa (model CIR):
 \begin{equation}
-dS(t)= \mu S dt + \sqrt{v(t)} S d z_1 (t),
+dr_t  = \kappa (\theta  - r_t)dt + \epsilon \sqrt{r_t} dW_t^v 
 \end{equation}
-gdzie $z_1(t)$  jest standardowym procesem Wienera. 
 
-Jeżeli natomiast zmienność jest procesem Ornsteina-Uhlenbecka:
+Model CIR jest często wykorzystywany przy modelowaniu zmienności stopy procentowej (stąd też oznaczenie $r_t$) ze względu na \textbf{\textit{własość powrotu do średniej długoterminowej}}. 
+(\textit{ang. mean-reversion}). Gdy zamiast $r_t$ podstawimy $v_t$ otrzymamy proces przedstawiający zmienność zmienności w czasie. Tak jak w przypadku stopy procentuwej, tak w przypadku akcji występuje własność powrotu do średniej, gdy cena akcji nie spadnie poniżej 0 \cite{TestingMeanReversion}.
+Co więcej, gdy proces spełnia warunek Fellera:
+\begin{equation}
+2 \kappa \theta > \epsilon^2
+\end{equation}
+proces jest ściśle dodatni \cite{TheLittleHestonTrap}.
+
+
+Co więcej zmienność jest zawsze jest wartością większą od zera, co wynika wprost z jej definicji. Stąd też w drugiej części wzoru mamy funkcję pierwiastkową z $v_t$: 
+
+\begin{equation} 
+dv_t  = \kappa (\theta - v_t)dt + \epsilon \sqrt{v_t} dW_t^v 
+\end{equation}
+
+Mając równanie opisujące proces zmienności można już przedstawić model Hestona, który ma postać:
 
 \begin{equation}
-d \sqrt{v(t)} = - \beta \sqrt{v(t)} dt + \delta d z_2 (t)
+dS_t  = \mu S_t dt + \sqrt{v_t} S_t dW^S_t
 \end{equation}
 
-wtedy na podstawie lematu Ito można wykazać, że wariancja $v(t)$ ma nastepującą postać:
 \begin{equation}
-dv(t)= \kappa  [\theta -v(t)]dt+2\delta \sqrt{v(t)} d z_2 (t)
+dv_t  = \kappa (\theta - v_t)dt + \epsilon \sqrt{v_t} dW_t^v 
 \end{equation}
-gdzie proces $z_2(t)$ ma korelację z procesem $z_1(t)$ równą $\rho$.
 
-Gdy przyjmiemy stałą stopę procentową, cena w momencie $t$ obligacji, która wygasa w chwili $t+\tau$ wynosi:
 \begin{equation}
-P(t, t+\tau) = e^{-r\tau}
+Cov[dW^S_t, dW^v_t] = \rho dt 
 \end{equation}
+gdzie:
+\begin{enumerate}
+\item $\mu$ oznacza dryft (\textit{ang. drift}). ceny aktywa bazowego 
+\item $\theta$ oznacza długoterminową wartością oczekiwaną $v_t$
+\item $\kappa$ jest współczynnikiem szybkości powrotu do średnej (\textit{ang. rate of mean-reversion})
+\item $\epsilon$ oznacza zmienność zmienności, czyli warinację $v_t$
+\end{enumerate}
+
+W dodatku, w przedstawiony modelu występuje równanie $Cov[dW^S_t, dW^v_t] = \rho dt $. Mówi ono o tym, że 
+dwa procesy błędzenia losowego są w rzeczywistości ze sobą skorelowane przy pomocy stałego współczynnika 
+korelacji $\rho$.
+
+Niestety, w odróżnieniu od modela Blacka-Scholsa, dla modelu Hestone nie istnieje pełne rozwiązanie analitycznie (istnieje tylko częściowe rozwiązanie analityczne). Wobec tego, aby należy się posłużyć numerycznymi metodami wyznacznia rozwiązania.
+
+% Poniższa lista przedstawia podstawowe 
+% \begin{enumerate}
+% \item rozkłąd logarytów stóp zwortu nie jest normalny
+% \item zmienność jest zmienna w czasie
+% \item autokorelacja kolejnych stóp zwrotu
+% \item trajektorie mają skoki
+% \end{enumerate}
+
+% W kolejnych rozdziała 
 
 
 
-\begin{figure}
-  \centering
-  \includegraphics[width=150mm]{vix.jpg}
-  \caption{Zmieność w czasie indeksu S\&P}\label{fig:vix}
-\end{figure}
-
-
-gdzie parametr $\sigma$ jest stały. Założenie to jednak okazuję się być zbyt upraszczające dla szerokiej gamy szeregów czasowych. Spojrzmy np. na szereg czasowy  (\ref{fig:vix}) 
 
 
 
-\begin{equation}\label{h:ito}
-dv(t) = [\delta^2 - 2 \beta v(t)] dt + 2\beta \sqrt{v(t)} dz_2(t),
-\end{equation}
-
-The (\ref{h:ito}) equation can be rewritten to the following, square root process
-
-\begin{equation}\label{h:squareroot}
-dv(t) = \kappa [\theta - v(t)] dt + \sigma \sqrt{v(t)} d_2 (t),
-\end{equation}
 
 
-\section{Motywacja}
-Przedstawiony w poprzednim podrozdziale model Hestona jest bardziej skomplikowany, a niżeli często używony model Blacka-Scholesa, jednak.
-Badania empiryczne dowiodły, że logarytmiczne rozkłady stóp zwrotu nie są gausowskie. To znaczy, mają grube ogony oraz charakteryzują się leptokurtozą.
+% %===========================================================================
+% %                               Model Hestona
+% %===========================================================================
+% \section{Model Hestona}
 
-Ostatni kryzys finansowy z lat 2007-2008 pokazuje, ze założenie o stałej zmienności nie moze zostać uznane za prawdziwe w większości instrumentów finansowych jakie są obecnie handlowane na rynku. Dlatego też 
+% Na początek załóżmy, że cena aktywa bazowego w momemcie $t$ spełnia następujący proces dyfuzji:
+% \begin{equation}
+% dS(t)= \mu S dt + \sqrt{v(t)} S d z_1 (t),
+% \end{equation}
+% gdzie $z_1(t)$  jest standardowym procesem Wienera. 
 
+% Jeżeli natomiast zmienność jest procesem Ornsteina-Uhlenbecka:
+
+% \begin{equation}
+% d \sqrt{v(t)} = - \beta \sqrt{v(t)} dt + \delta d z_2 (t)
+% \end{equation}
+
+% wtedy na podstawie lematu Ito można wykazać, że wariancja $v(t)$ ma nastepującą postać:
+% \begin{equation}
+% dv(t)= \kappa  [\theta -v(t)]dt+2\delta \sqrt{v(t)} d z_2 (t)
+% \end{equation}
+% gdzie proces $z_2(t)$ ma korelację z procesem $z_1(t)$ równą $\rho$.
+
+% Gdy przyjmiemy stałą stopę procentową, cena w momencie $t$ obligacji, która wygasa w chwili $t+\tau$ wynosi:
+% \begin{equation}
+% P(t, t+\tau) = e^{-r\tau}
+% \end{equation}
+
+
+
+% \begin{figure}
+%   \centering
+%   \includegraphics[width=150mm]{vix.jpg}
+%   \caption{Zmieność w czasie indeksu S\&P}\label{fig:vix}
+% \end{figure}
+
+
+% gdzie parametr $\sigma$ jest stały. Założenie to jednak okazuję się być zbyt upraszczające dla szerokiej gamy szeregów czasowych. Spojrzmy np. na szereg czasowy  (\ref{fig:vix}) 
+
+
+
+% \begin{equation}\label{h:ito}
+% dv(t) = [\delta^2 - 2 \beta v(t)] dt + 2\beta \sqrt{v(t)} dz_2(t),
+% \end{equation}
+
+% The (\ref{h:ito}) equation can be rewritten to the following, square root process
+
+% \begin{equation}\label{h:squareroot}
+% dv(t) = \kappa [\theta - v(t)] dt + \sigma \sqrt{v(t)} d_2 (t),
+% \end{equation}
+
+\section{Metody Monte Carlo}
+
+Poprzendni rozdział zakończono stwierdzeniem, że nie istnieje możliwość znalezienia dokładnego rozwiazania analitycznego
+dla modelu Hestona. Z tego względu stosuje się następujące metody numeryczne:
+\begin{enumerate}
+\item 
+\end{enumerate}
 
 \section{Dyskretyzacja Eulera}
- Jak wynika ze wzorów  
 
+Po
+
+ Jak wynika ze wzorów  
+\begin{equation}\label{h:euler}
+v_{i+1}  = v_i + \kappa (\theta - v_i) \Delta t + \epsilon +  \sqrt{v_i} \Delta W^{v}_{i+1}
+\end{equation}
   
 \section{Generowanie skorelowanych szeregów czasowych}
 W tej sekcji zajmiemy się generowanie skorelowanych szeregów czasowych o zadanym stopniu korelacji $\rho$.
@@ -223,11 +362,151 @@ dW_t^1 dW_t^2  = \rho dt
 
 
 %===========================================================================
+%                       Kalibracja modelu Hestona
+%===========================================================================
+\chapter{Kalibracja modelu}
+
+
+Mając wyznaczony dla którego chcielibyśmy wyznaczyć cenę opcji, wciąż potrzebujemy parametrów dla tego modelu. 
+Problem wyznaczenia parametrów modelu nazywamy \textbf{problemem kalibracji} modelu.  
+
+Cena opcji, która jest wynikiem symulacji w modelu Hestona jest 
+
+Jednym ze sposobem na kalibrację modeli jest technika symulowanego wyżarzania (ang. simulated annealing). Należy od do 
+grona stochastycznych metaheurystyk, które pomagają w rozwiązaniu problemów optymalizacyjnych (a takim właśnie problemem jest
+kalibracja modelu)
+
+
+
+\section{Symulowane Wyżarzanie}
+
+Tematem tego podrozdziału jest algorytm symulowanego wyżarzania  (\textit{ang. simulated annealing}). 
+
+Podstawowym problem podczas rozwiązywania problemów optymalizacyjnych jest istnienie wielu ekstremów lokalnych.
+W tym przypadku większość algorytmów, które są monotoniczne, nigdy nie osiągnie ekstremum globalnego. Jedną z takich technik jest \textit{hill climbing}, która osiąga dobre rezultaty tylko dla funkcji wypukłej powierzchni.
+Aby znaleść rozwiązanie tego problemu odchodzi się od zasady monotoniczność, tzn. algorytm nie zawsze wybiera rozwiązanie bardziej optymalne od poprzedniego. 
+Wśród możliwych podejść należy wymienić np.:
+\begin{enumerate}
+  \item pełny przegląd badanego obszru
+  \item podejście determinstyczne w algorytmie \textit{tabu search}
+  \item podejście randowmizacyjne (\textit{algorytm Metropolisa, symulowane wyżarzanie} \cite{OptimalizationBySimulatedAnnealing} )
+\end{enumerate}
+
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{python}
+{listings/sa.py}
+\caption{Przykład użycia funkcji anonimowejs}
+\label{lst:lambdaSyntax}
+\end{listing}
+%===========================================================================
+%                       Rozszerzenia modelu Hestona
+%===========================================================================
+\chapter{Rozszerzenia modelu Hestona}
+
+Model Hestona, jak opisano w poprzednim rozdziale, odrzuca założenie o stałości zmienności w czasie. Jednak pozostałe parametry wciąż pozostają na nie zmienionym poziomie, 
+co sprawia, że wprowadzono wiele jego rozszerzeń. 
+
+
+
+
+
+% %===========================================================================
+% %                       Model Hestona na przykładznie
+% %===========================================================================
+% \chapter{Optymalne decyzje inwestycyjne}\label{r:sp}
+% Jak wiadomo zmienność nie jest bezpośrednio obserwowalna na rynkach finansowych.
+% Aby wnioskować o zmienności, można:
+% \begin{enumerate}
+% \item wykorzystać technikę filtrowania (ang. filtering)
+% \item ceny opcji z rynku lub indeksy zmienności rynkowej (ang. market volatility indices)
+% \end{enumerate}
+
+% Ustalająć $\mu =\frac{1}{2}$ 
+% Gdzie parametr $\mu$ oznacza wrażliwość współczynnika dyfuzji względem poziomu zmienności.
+
+
+% \begin{enumerate}
+% \item Rozszerzony model Hestona z procesem CEV (ang. constant elasticity variance):
+
+% Model CEV wyraża się przy pomocy następującego wzoru:
+% \begin{equation}
+% dS = \mu S dt  + \sigma_0 S^{\frac{}{}}
+% \end{equation}
+
+% Zmienność jest więc w tym przypadku funkcją ceny akcji (stochastycznej).
+
+
+% \begin{equation}
+
+% dV_t = k_V(\hat{V}-V_t)dt+ \hat{V}^{\frac{1}{2}-\mu} V_t^{\mu} (b_{SV} dB_t^S+ h_VdB_t^V)
+% \end{equation}
+% \item ceny opcji z rynku lub indeksy zmienności rynkowej (ang. market volatility indices)
+
+% \item Rozszerzony model Stein-Steina (ang. extended Stein-Stein model):
+
+% Równanie:
+
+% \begin{equation}
+% \frac{dS_t}{S_t} = (R_t + \lambda_t \sigma_t) dt + \sigma_t + d B_t^S
+% \end{equation}
+
+% \begin{equation}
+% d\lambda_t  = \kappa_{\lambda} (\hat{\lambda} - \sigma_t) dt 
+% + \beta_{\lambda S} dB_t^S + g_{\sigma}dB_t^{\sigma}
+% \end{equation}
+
+
+% \begin{equation}
+% d\sigma_t  = \kappa_{\sigma} (\hat{\sigma} - \sigma_t) dt 
+% + \beta_{\sigma S} dB_t^S + g_{\sigma}dB_t^{\sigma} + g_{\lambda}
+% dV_t^{\lambda}
+% \end{equation}
+
+% gdzie:
+% $(B_t^S, B_t^{\sigma}, B_t^{\lambda})$ - są ortogonalnymi, 
+% wielowymiarowymi procesami Wienera.
+
+% \item Model Hestona 
+
+% \begin{equation}
+% \frac{}{} = (R_t + lV_t)dt + \sqrt{V_t} dB^S_t
+% \end{equation}
+
+% Proces opisujący wariancję $V_t$ ma nastepujący proces pierwiastowy:
+
+
+
+% \end{enumerate}
+
+%===========================================================================
+%                       Wycena opcji walutowych
+%===========================================================================
+\chapter{Wycena opcji walutowych}\label{r:sp}
+
+\section{Model Blacka-Scholesa}
+
+\section{Model Garmana-Kohlhagena}
+
+Model Garmana-Kohlagena jest zaadaptowanym na potrzebu rynku walutowego modelem
+Blacka-Scholesa o znanej stopie dywidendy . 
+
+
+%===========================================================================
 %                       Model Hestona na przykładznie
 %===========================================================================
 \chapter{Wycena opcji na indeks S\&P}\label{r:sp}
 Lorem ipsum
  
+
+\chapter{Inwestycje na rynku FOREX}
+W tym rozdziale zostanie przedstawione metody, którymi możemy się posłużyć
+w trakcie podejmowania decyzji co do inwestycji w aktywa/pary walutowe.
+Po krótkim wprowadzeniu, pokazany zostanie wynik zastosowania opisanych 
+strategii na rzeczywistej platformie rynku handlu walutami 'Oanda'.
+Rozdział kończy krótkie podsumowanie tego jak przedstawione strategie 
+sprawdziły się na rynku FOREX w krótkim, średnim i długim terminie. 
+\begin{quote}
 
 
 %===========================================================================

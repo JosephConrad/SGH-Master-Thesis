@@ -1,0 +1,1 @@
+. ~/venv/qsforex/bin/activate
