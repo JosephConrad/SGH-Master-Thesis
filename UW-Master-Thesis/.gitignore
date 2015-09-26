@@ -104,3 +104,6 @@ target/
 *.tex.org
 *.toc
 *.lof
+
+# folders not included
+

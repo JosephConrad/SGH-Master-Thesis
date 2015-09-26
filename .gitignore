@@ -142,3 +142,6 @@ sympy-plots-for-*.tex/
 # WinEdt
 *.bak
 *.sav
+
+SGH-Master-Thesis/src/qsforex/
+UW-Master-Thesis/SEM1/
