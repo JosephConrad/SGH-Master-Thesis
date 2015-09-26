@@ -5,8 +5,6 @@ def sa():
     x = dec.decode(x_e, dec.decode_norm)
     b = ac.ackley(x)
     stat = []
-    for i in range(10):
-        a = "ala ma kota"
     while True:
         i = 0
         while True:
