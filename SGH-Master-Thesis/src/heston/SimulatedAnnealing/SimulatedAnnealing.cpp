@@ -2,7 +2,6 @@
 // Created by Konrad Lisiecki on 26/09/15.
 //
 
-#include <jmorecfg.h>
 #include <stdlib.h>
 #include <math.h>
 #include "SimulatedAnnealing.h"
@@ -12,47 +11,64 @@ SimulatedAnnealing::SimulatedAnnealing() {
     mcSimulation = new MonteCarloSimulation();
 }
 
-void SimulatedAnnealing::simulation(std::vector<double> &dist_draws) {
+std::vector<double> SimulatedAnnealing::
+calibration(std::vector<double> &bestHestonParams, int iterations, double coolingCoeff) {
 
-    float T = 1;
-    float k = 0;
-    int x = 3;
-    int n1 = 4;
-    int n2 = 3;
-    while (k != n1) {
-        int i = 0;
-        while (i != n2) {
-            i++;
-            int z = mut(x);
-            if (MetropolisRule(x, z, f, T)) {
-                x = z;
-            }
+    double bestHestonPrice = mcSimulation->simulateHeston(bestHestonParams);
+    double newHestonPrice;
+    double temperature = 1.0;
+
+    std::vector<double> newHestonParams;
+    int k = 0;
+
+    while (k < iterations) {
+        newHestonParams = mutateParams(bestHestonParams);
+        newHestonPrice = mcSimulation->simulateHeston(newHestonParams);
+
+        if (metropolisRule(bestHestonPrice, newHestonPrice, temperature)) {
+            bestHestonParams = newHestonParams;
+            bestHestonPrice = newHestonPrice;
         }
-        k = k + n2;
-        T = a * T;
 
+        temperature = coolingSchedule(temperature, coolingCoeff);
+        k++;
     }
-
-}
-
-int SimulatedAnnealing::mut(int x) {
-    return 0;
+    return bestHestonParams;
 }
 
 
-boolean SimulatedAnnealing::MetropolisRule(float bestSolution, float newSolution, int temperature) {
+double SimulatedAnnealing::coolingSchedule(double temperature, double coolingCoeff) {
+    return coolingCoeff * temperature;
+}
+
+
+bool SimulatedAnnealing::metropolisRule(double bestSolution, double newSolution, double temperature) {
     if (newSolution < bestSolution)
         return true;
-    if (activationEnergyAchieved(bestSolution, newSolution, temperature))
-        return true;
-    return false;
+    return activationEnergyAchieved(bestSolution, newSolution, temperature);
 }
 
-bool SimulatedAnnealing::activationEnergyAchieved(float bestSolution, float newSolution, int temperature) {
-    return calcEnergy(bestSolution, newSolution, temperature) > static_cast<double>(rand());
+
+bool SimulatedAnnealing::activationEnergyAchieved(double bestSol, double newSol, double temperature) {
+    return calcEnergy(bestSol, newSol, temperature) > static_cast<double>(rand());
 }
 
-double SimulatedAnnealing::calcEnergy(float bestSolution, float newSolution, int temperature) {
-    return exp((-1) * bestSolution - newSolution / temperature);
+
+double SimulatedAnnealing::calcEnergy(double bestSol, double newSol, double temperature) {
+    return exp((-1) * (bestSol - newSol) / temperature);
 }
 
+std::vector<double> SimulatedAnnealing::mutateParams(const std::vector<double> &hestonParams) {
+    auto newHestonParams = hestonParams;
+    int change = rand() % 4;
+    double mutationParam = hestonParams[change];
+    bool up = (rand() % 2);
+    if (up) {
+        mutationParam += 0.01;
+    } else
+    {
+        mutationParam -= 0.01;
+    }
+    newHestonParams[change] = mutationParam;
+    return newHestonParams;
+}

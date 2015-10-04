@@ -7,29 +7,29 @@
 
 
 #include <vector>
-#include <jmorecfg.h>
 #include "../MonteCarlo/MonteCarloSimulation.h"
 
 class SimulatedAnnealing {
 
 private:
-    float bestSolutionEnergy;
     MonteCarloSimulation *mcSimulation;
 
 
 public:
     SimulatedAnnealing();
 
-    virtual void simulation(std::vector<double> &dist_draws);
+    virtual std::vector<double> calibration(std::vector<double> &bestHestonParams, int iterations, double coolingCoeff);
 
-private:
-    int mut(int x);
+    double calcEnergy(double bestSolution, double newSolution, double temperature);
 
-    double calcEnergy(float bestSolution, float newSolution, int temperature);
+    bool activationEnergyAchieved(double bestSolution, double newSolution, double temperature);
 
-    bool activationEnergyAchieved(float bestSolution, float newSolution, int temperature);
+    bool metropolisRule(double bestSolution, double newSolution, double temperature);
 
-    boolean MetropolisRule(float bestSolution, float newSolution, int temperature);
+    double coolingSchedule(double temperature, double coolingCoeff);
+
+    std::vector<double> mutateParams(const std::vector<double> &vector);
+
 };
 
 

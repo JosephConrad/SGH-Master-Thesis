@@ -97,7 +97,12 @@ We developed what is known a stochastic volatility model. This is a model where 
 %===========================================================================
 %                               Wprowadzenie
 %===========================================================================
-\chapter{Wprowadzenie}\label{r:pojecia}
+\chapter{Wprowadzenie}
+\label{chap:introduction}
+
+\chapter{Wprowadzenie}
+\label{chap:introduction}
+
 \begin{quote}
 
 Never think that lack of variability is stability. Don't confuse lack of volatility with stability, ever.
@@ -106,27 +111,96 @@ Never think that lack of variability is stability. Don't confuse lack of volatil
 \end{quote}
  
 
+Tematyka 
 
-adsafdsdfs
- 
-\section{Definicje}
-dsfdsf
+Rozdział ten stanowi wprowadzenie do tematyki poruszonej w pracy. 
+Zostanie przedstawiony sposób wyceny najprostszej opcji \textit{call} przy pomocy najprostszego 
+algorytmu Monte Carlo. We wstępie po krótce zostanie opisany każdy etap implementacji algorytmu
+obliczającego cenę opcji. 
+Kolejne części pracy będą bazować na metodzie przedstawionej w niniejszym rozdziale. ]]
 
-\section{Systemy handlu algorytmicznego}
+Jako najprostszy przykład zostanie wygenerowany
 
+\section{Generowanie zmiennych losowych o ustalonym rozkładzie}
 
-\section{Modele zmienności stochastycznej}
-dsfdsf
+Pierwszym krokiem jaki należy podjąć podczas przepowadzania symulacji Monte Carlo jest 
+wygenerowanie zmiennych losowych o ustalonym rozkładzie. 
 
-\section{Proces formowania strategii inwestycyjnej}
-Cały proces formowania strategii inwestycyjnej można ująć w 4 krokach:
+\section{Wyznaczenie wartości zmiennych losowych}
 
+Obliczenie ceny aktywa bazowego w momencie wygaśnięcia opcji jest najważeniejszym elementem 
+wyceny opcji. 
+
+Aby wycenić opcję rozważmy nastepujący model przedstawiający ewolucję ceny aktywa
+bazowego w czasie oraz obligacji, jako instrumentu finansowego pozbaiwionego ryzyka:
+\begin{equation}
+  dS_t = \mu S_t dt + \sigma S_t d W_t 
+\end{equation}
+\begin{equation}
+  dB_t = r B_t dt, B_0 = 1
+\end{equation}
+gdzie:
 \begin{enumerate}
-\item 
-\item modelowanie
-\item walidacja modelu (ang. Backtesting)
-\item analiza wyników 
+  \item 
+\end{enumerate}, 
+
+zatem $B_t = E^{rt}$
+
+Model ten znany jest pod nazwą \textbf{modelu Blacka-Scholesa} i jest fundamentalnym narzędziem do wyceny opcji.
+Zgodnie z teorią wyceny opcji wypłata $f$, w momencie wygaśnięcia opcji $T$ jest równa:
+
+\begin{equation}
+  e^{-rT} E(f(S_T))
+\end{equation}
+gdzie dynamikę cen aktywa bazowego opisuje następujący proces w mierze obojętnej na ryzyko (mierze martyngałowej):
+\begin{equation}
+  dS_t = r S_t dt + \sigma S_t d W_t 
+\end{equation}
+
+\section{Kalibracja modelu}
+Kalibracja jest jednym z najważniejszych elementów podczas wyceny opcji przy pomocy jakiegokolwiek
+modelu.  
+
+W przypadku modelu Blacka Scholesa, jedynym niobserwowalnym parametrem zmienność $\sigma$ (współczynnik dyfuzji).
+Można go wyznaczyć na jeden z dwóch sposobów:
+\begin{enumerate}
+  \item zmienność historyczna
+  \item zmienność implikowana
 \end{enumerate}
+
+Szczególnie interesującym jest zmienność implikowana, ponieważ wyraża ona \textit{"przewidywania rynku"} co 
+do wartości zmienności danego aktywa bazowego. 
+Można ja w prosty sposób obliczyć przy użyciu analitycznego \textbf{wzoru Blacka-Scholesa} na wycenę opcji, który 
+możemy przedstawić jako:
+
+\begin{equation}
+  C_{obs} = C(S_0, T, K, \sigma_{imp}, r)
+\end{equation}
+Jak widać, wiedząc jaka jest cena opcji na podstawie danych rynkowych, równanie staje się równaniem z jedną niewiadomą. 
+
+Jednakże, w przypadku bardziej skomplikowanych modeli, nieznanych parametrów może być dużo więcej. Wtedy też 
+stosuje się bardziej zaawansowane techniki kalibracyjne, co będzie tematyką rozdziału \ref{chap:chapterModelCalibration}.
+  % \autoref - ok but it uses the english name of chapter
+
+
+\section{Wyznaczenie wartośći wartości opcji}
+
+ 
+\section{Symulacja Monte Carlo}
+
+
+\section
+
+W nieniejszym wprowadzającym rozdziale została przedstawiona symulacja Monte Carlo 
+
+% Cały proces formowania strategii inwestycyjnej można ująć w 4 krokach:
+
+% \begin{enumerate}
+% \item 
+% \item modelowanie
+% \item walidacja modelu (ang. Backtesting)
+% \item analiza wyników 
+% \end{enumerate}
 
 \section{Backtest}
 Backtestem nazywamy symulację stworzonej strategii na danych. Dane te mogą
@@ -151,7 +225,8 @@ sdfsdf
 %                               Model Hestona
 %
 %===========================================================================
-\chapter{Inwestycje na rynku opcji}
+\chapter{Model Hestona}
+\label{chap:hestonModel}
 \begin{quote}
   Suppose we use the standard deviation ... of possible future returns on
   a stock ... as a measure of its volatility. Is it reasonable to take
@@ -205,7 +280,9 @@ dr_t  = \kappa (\theta  - r_t)dt + \epsilon \sqrt{r_t} dW_t^v
 \end{equation}
 
 Model CIR jest często wykorzystywany przy modelowaniu zmienności stopy procentowej (stąd też oznaczenie $r_t$) ze względu na \textbf{\textit{własość powrotu do średniej długoterminowej}}. 
-(\textit{ang. mean-reversion}). Gdy zamiast $r_t$ podstawimy $v_t$ otrzymamy proces przedstawiający zmienność zmienności w czasie. Tak jak w przypadku stopy procentuwej, tak w przypadku akcji występuje własność powrotu do średniej, gdy cena akcji nie spadnie poniżej 0 \cite{TestingMeanReversion}.
+(\textit{ang. mean-reversion}). Gdy zamiast $r_t$ podstawimy $v_t$ otrzymamy proces przedstawiający zmienność zmienności w czasie. Założenie to jest także prawdziwe w przypadku rynku 
+akcji. Jeżeli byśmy założyli, że zmienniość nie ma własności powrotu do średniej, obserwowalibyśmy znaczną część aktywów z bardzo gwałtownie rosnącą zmiennością lub będącą blisko zeru.
+Ponadto, tak jak w przypadku stopy procentowej, tak w przypadku akcji występuje własność powrotu do średniej, gdy cena akcji nie spadnie poniżej 0 \cite{TestingMeanReversion}.
 Co więcej, gdy proces spełnia warunek Fellera:
 \begin{equation}
 2 \kappa \theta > \epsilon^2
@@ -224,15 +301,18 @@ Mając równanie opisujące proces zmienności można już przedstawić model He
 \begin{equation}
 dS_t  = \mu S_t dt + \sqrt{v_t} S_t dW^S_t
 \end{equation}
+gdzie wariancja $v_t$ jest opisana przez następujące równanie: 
 
 \begin{equation}
 dv_t  = \kappa (\theta - v_t)dt + \epsilon \sqrt{v_t} dW_t^v 
 \end{equation}
+Procesy $dW_t^v$ oraz $dW_s^v$ są standardowymi procesami Wienera i są skorelowane:
 
 \begin{equation}
 Cov[dW^S_t, dW^v_t] = \rho dt 
 \end{equation}
 gdzie:
+
 \begin{enumerate}
 \item $\mu$ oznacza dryft (\textit{ang. drift}). ceny aktywa bazowego 
 \item $\theta$ oznacza długoterminową wartością oczekiwaną $v_t$
@@ -243,6 +323,8 @@ gdzie:
 W dodatku, w przedstawiony modelu występuje równanie $Cov[dW^S_t, dW^v_t] = \rho dt $. Mówi ono o tym, że 
 dwa procesy błędzenia losowego są w rzeczywistości ze sobą skorelowane przy pomocy stałego współczynnika 
 korelacji $\rho$.
+To założenie jest zgodne z rzeczywistością. Często możemy na rynkach finansowych zaobserwować następuącę sekwencę zdarzeń: gdy cena rośnie gwałtownie w górę, zwiększa się zmienność, 
+natomiast w okresach spokoju zmienność jest na relatywnie niskim poziomie.
 
 Niestety, w odróżnieniu od modela Blacka-Scholsa, dla modelu Hestone nie istnieje pełne rozwiązanie analitycznie (istnieje tylko częściowe rozwiązanie analityczne). Wobec tego, aby należy się posłużyć numerycznymi metodami wyznacznia rozwiązania.
 
@@ -258,10 +340,37 @@ Niestety, w odróżnieniu od modela Blacka-Scholsa, dla modelu Hestone nie istni
 
 
 
+\section{Pół-zamknięte równanie opisujące cenę opcji w modelu Hestona}
+
+Analogicznie do modelu Blacka-Scholesa można zdefiniować rozwiązanie częściowego równania różniczkowego jako:
+
+\begin{equation}
+  C(S, v, t) = SP_1 -K P(t,T) P_2
+\end{equation}
+
+gdzie:
+
+\begin{equation}
+  x = ln[S]
+\end{equation}
+
+\begin{equation}
+  P_j (x, v, T; ln[K]) = \frac{1}{2} + \frac{1}{\pi} \int_{0}^{\infty} Re \bigg[] \frac{e^{-i \cdot \phi ln[K]} f_j(x, v, T; \phi) }{i \phi} d \phi \bigg]
+\end{equation}
+
+Gdzie funkcje charakterystyczne, $\phi_1, \phi_2$ mają postać: 
+
+\begin{equation}
+   f_j(x, v, T; \phi) = e^{C(T-t; \phi) + D(T-t; \phi)v + i \phi x}
+\end{equation}
+
+\begin{equation}
+  C (\tau; \phi) = r \phi i \tau + \frac{a}{\sigma^2} \bigg\{ (b_j) - \rho \sigma \phi i + d) \tau - 2 ln (\frac{1 - ge^{dr}}{1-g} \bigg\}
+\end{equation}
 
 
-
-
+Powyższe równania są podstawą do przeprowadzenie procesu kalibracji, to jest, wyznaczenia nieznanych implikowanych współczynników w modelu Hestona. 
+Implikowanych, ponieważ zostaną one określone na podstawie cen opcji kwotowanych na rynku.
 
 % %===========================================================================
 % %                               Model Hestona
@@ -324,12 +433,12 @@ dla modelu Hestona. Z tego względu stosuje się następujące metody numeryczne
 
 W tej pracy zostanie użyta aproksymacja metodą Monte Carlo. Metoda Monte Carlo jest sposobem na wyznaczenie 
 Poniżej jest przedstawiony formalny 
-If $X_1, ..., X_n ~P$ iid  wtedy
+Jeżeli $X_1, ..., X_n ~P$ iid  wtedy
 jest srenia z proby 
 \begin{equation}
   
 \end{equation}
-Wtedy mi jest podstawowym estymatorem Monte Carlo $Ef(x)$. Inaczej mówiąc, aproksymujemy prawdziwą wartość warotści oczekiwanej \textbf{średnią z próby} \textit{ang. sample mean}.
+Wtedy mi jest podstawowym estymatorem Monte Carlo $Ef(x)$, gdzie $X$ (X ma również rozkład P). Inaczej mówiąc, aproksymujemy prawdziwą wartość warotści oczekiwanej \textbf{średnią z próby} \textit{ang. sample mean}.
 
 
 
@@ -372,10 +481,26 @@ dW_t^1 dW_t^2  = \rho dt
 \end{equation}
 
 
+
+\section{Correlated Asset Paths} % (fold)
+\label{sec:CorrelatedAssetPaths}
+
+Jak można zuważyć w równaniu  
+Wg literatury, pełne obcięcie jest najlepsze, dlatego też takie zostanie użyte.
+Stąd też po zdyskretyzowaniu zmienności otrzymuje następującą postać:
+
+\begin{equation}
+  v_{i+1} = v_i + \kappa (\theta - v_i^{+})\Delta t + \Epsilon \sqrt{v_i^{+}} \Delta W_{i+1}^v
+\end{equation}
+
+% section section_name (end)
+
+
 %===========================================================================
 %                       Kalibracja modelu Hestona
 %===========================================================================
 \chapter{Kalibracja modelu}
+\label{chap:chapterModelCalibration}
 
 
 Mając wyznaczony dla którego chcielibyśmy wyznaczyć cenę opcji, wciąż potrzebujemy parametrów dla tego modelu. 
@@ -405,9 +530,9 @@ Wśród możliwych podejść należy wymienić np.:
 
 
 \begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{python}
-{listings/sa.py}
-\caption{Przykład użycia funkcji anonimowejs}
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{listings/sa.cpp}
+\caption{Algorytm symulowanego wyżarzani }
 \label{lst:lambdaSyntax}
 \end{listing}
 %===========================================================================

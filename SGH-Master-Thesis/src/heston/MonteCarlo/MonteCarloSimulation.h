@@ -11,7 +11,7 @@ class MonteCarloSimulation {
 public:
     MonteCarloSimulation();
     virtual ~MonteCarloSimulation();
-    float simulateHeston(std::vector<float> params);
+    float simulateHeston(std::vector<double> params);
 
 private:
     void generate_normal_correlation_paths(double rho, std::vector<double> &spot_normals,

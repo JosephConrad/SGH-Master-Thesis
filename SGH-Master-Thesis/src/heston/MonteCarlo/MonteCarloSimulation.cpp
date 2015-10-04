@@ -14,7 +14,7 @@ MonteCarloSimulation::MonteCarloSimulation() { };
 
 MonteCarloSimulation::~MonteCarloSimulation() { };
 
-float MonteCarloSimulation::simulateHeston(std::vector<float> params) {
+float MonteCarloSimulation::simulateHeston(std::vector<double> params) {
     // First we create the parameter list
     // Note that you could easily modify this code to input the parameters
     // either from the command line or via a file
