@@ -3,7 +3,26 @@ project(heston)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES heston)
-add_executable(${SOURCE_FILES}
-MonteCarlo/MonteCarloSimulation.cpp MonteCarlo/MonteCarloSimulation.h SimulatedAnnealing/SimulatedAnnealing.cpp SimulatedAnnealing/SimulatedAnnealing.h
-Main/main.cpp option.h option.cpp heston_mc.h heston_mc.cpp payoff.h payoff.cpp statistics.h statistics.cpp correlated_snd.h correlated_snd.cpp SimulatedAnnealing/SimulatedAnnealing.cpp SimulatedAnnealing/SimulatedAnnealing.h MonteCarlo/MonteCarloSimulation.cpp MonteCarlo/MonteCarloSimulation.h SimpleMonteCarlo/MCBlackScholes.cpp SimpleMonteCarlo/MCBlackScholes.h SimpleMonteCarlo/BoxMuller.cpp SimpleMonteCarlo/BoxMuller.h)
+find_package(Boost 1.58.0 COMPONENTS system filesystem REQUIRED)
+
+if(Boost_FOUND)
+
+        message(STATUS "Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")
+        message(STATUS "Boost_LIBRARIES: ${Boost_LIBRARIES}")
+        message(STATUS "Boost_VERSION: ${Boost_VERSION}")
+
+        include_directories(${Boost_INCLUDE_DIRS})
+
+endif()
+
+if(Boost_FOUND)
+        include_directories(${Boost_INCLUDE_DIRS})
+        set(SOURCE_FILES heston)
+        add_executable(${SOURCE_FILES}
+                MonteCarlo/MonteCarloSimulation.cpp MonteCarlo/MonteCarloSimulation.h SimulatedAnnealing/SimulatedAnnealing.cpp SimulatedAnnealing/SimulatedAnnealing.h
+                Main/main.cpp option.h option.cpp heston_mc.h heston_mc.cpp payoff.h payoff.cpp statistics.h statistics.cpp correlated_snd.h correlated_snd.cpp
+                SimulatedAnnealing/SimulatedAnnealing.cpp SimulatedAnnealing/SimulatedAnnealing.h MonteCarlo/MonteCarloSimulation.cpp MonteCarlo/MonteCarloSimulation.h
+                SimpleMonteCarlo/MCBlackScholes.cpp SimpleMonteCarlo/MCBlackScholes.h SimpleMonteCarlo/BoxMuller.cpp SimpleMonteCarlo/BoxMuller.h OrderBook/OrderBook.cpp
+                OrderBook/OrderBook.h OrderBook/Order.cpp OrderBook/Order.h OrderBook/Operation.h)
+        target_link_libraries(heston ${Boost_LIBRARIES})
+endif()

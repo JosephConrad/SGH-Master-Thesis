@@ -1,14 +1,12 @@
-//
-// Created by Konrad Lisiecki on 05/10/15.
-//
-
 #include <math.h>
 #include "MCBlackScholes.h"
 #include "BoxMuller.h"
 
-MCBlackScholes::MCBlackScholes(double Expiry, double Strike, double Spot, double Vol, double r,
+MCBlackScholes::MCBlackScholes(double Expiry, double Strike,
+                               double Spot, double Vol, double r,
                                unsigned long NumberOfPaths)
-        : Expiry(Expiry), Strike(Strike), Spot(Spot), Vol(Vol), r(r), NumberOfPaths(NumberOfPaths) { }
+        : Expiry(Expiry), Strike(Strike), Spot(Spot), Vol(Vol),
+          r(r), NumberOfPaths(NumberOfPaths) { }
 
 
 double MCBlackScholes::simulate() {
