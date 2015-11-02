@@ -1,36 +1,32 @@
 #include <math.h>
 #include "MCBlackScholes.h"
-#include "BoxMuller.h"
+#include "PolarGenerator.h"
 
 MCBlackScholes::MCBlackScholes(double Expiry, double Strike,
                                double Spot, double Vol, double r,
                                unsigned long NumberOfPaths)
-        : Expiry(Expiry), Strike(Strike), Spot(Spot), Vol(Vol),
-          r(r), NumberOfPaths(NumberOfPaths) { }
+        : expiry(Expiry), strike(Strike), spot(Spot), vol(Vol),
+          riskFree(r), numberOfPaths(NumberOfPaths) { }
 
 
 double MCBlackScholes::simulate() {
-    double variance = Vol * Vol * Expiry;
+
+    double variance = vol * vol * expiry;
     double rootVariance = sqrt(variance);
     double itoCorrection = -0.5 * variance;
+    double movedSpot = spot * exp(riskFree * expiry * itoCorrection);
 
-    double movedSpot = Spot * exp(r * Expiry * itoCorrection);
-    double thisSpot;
-    double thisPayoff;
-    double thisGaussian;
     double payoffSum = 0.0;
+    double spot, payoff;
 
-    BoxMuller &bm = BoxMuller::getInstance();
+    PolarGenerator &polarGen = PolarGenerator::getInstance();
 
-    for (auto i = 0; i < NumberOfPaths; ++i) {
-        thisGaussian = bm.generateNormal();
-        thisSpot = movedSpot * exp(rootVariance * thisGaussian);
-        thisPayoff = thisSpot - Strike;
-        thisPayoff = thisPayoff > 0 ? thisPayoff : 0;
-        payoffSum += thisPayoff;
+    for (auto i = 0; i < numberOfPaths; ++i) {
+        spot = movedSpot * exp(rootVariance * polarGen.genNorm());
+        payoff = spot - strike;
+        payoffSum += payoff > 0 ? payoff : 0;
     }
-    double payoff = payoffSum / NumberOfPaths;
-    payoff *= exp(-r * Expiry);
-    return payoff;
+    double meanPayoff = payoffSum / numberOfPaths;
+    return meanPayoff * exp(-riskFree * expiry);
 }
 

@@ -7,6 +7,7 @@
 \usepackage{listings}
 % package for hyperinks
 \usepackage{hyperref}
+\usepackage{svg}
 \hypersetup{
     colorlinks,
     citecolor=black,
@@ -80,10 +81,34 @@
 %===========================================================================
 \chapter*{Streszczenie} 
 
-\begin{quote}
-We developed what is known a stochastic volatility model. This is a model where the volatility as well as the underlying asset price moves around in an unpredictable way.
-\raggedleft\slshape John Hull \index{Hull John}
-\end{quote}
+
+Tematem pracy magisterskiej jest wycena opcji przy pomocy modeli zmienności stochastycznej. 
+W standardowych modelach służących do wyceny opcji przyjmuje się (jak np. w modelu 
+Blacka-Scholesa), że zmienność jest wartością stałą, niezależną od czasu. 
+Jednak jak dalekie jest to założenie od rzeczywistości pokazał chociażby ostatni kryzys 
+ekonomiczny, ze względu na znaczne wachania kursu instrumentów finansowych w czasach niepewności 
+ekonomicznej. Dlatego też w modelach służących do wyceny opcji uzmiennia się parametr opisujący 
+zmienność instrumentów finansowych i uzależnia się go od czasu. 
+
+
+W rozdziale pierwszym zostanie przedstawiony schemat budowania symulacji w oparciu o metodę
+Monte Carlo. Będzie się to odbywało na przykładzie wyceny opcji w modelu Blacka-Scholesa, który 
+jest jednym z najprostszych modeli do wyceny opcji.
+
+W drugim rozdziale zostanie opisany model Hestona i sposób w jaki można wyliczyć. 
+Zostanie przedstawione kroki jakie należy poczynić, aby wycenić opcję przy pomocy tego modelu.
+
+Trzeci rozdział z kolei jest poświęcony kalibracji modelu, czyli inaczej ujmując, znalezieniu 
+optymalnej wartości wektora nieznanych parametrów modelu. Optymalna wartość jest w tym przypadku zdefiniowana
+jako taka, dla której wartość opcji wyliczona na podstawie modelu Hestona jest najbliższa wartości 
+obserowowanej na rynku.
+
+W przedostatnim rozdziale z kolei zostane przedstawione możliwości dalszych rozszerzeń modelu Hestona. 
+Polegają one głównie na próbie uzmiennieniu (uzależnienia od czasu) tych wartości parametrów, które dla 
+modelu Hestona są stałe w czasie.
+
+Ostatni rozdział to już próba empirycznego zbadania zachowania modelu Hestona. Zostanie w nim porównana
+wartość.opcji dla opcji na indeks \textit{S&P} stosując odpowiednio model Blacka-Scholesa i model Hestona.
 
 
 
@@ -93,7 +118,7 @@ We developed what is known a stochastic volatility model. This is a model where 
 \tableofcontents
  
 
-\addcontentsline{toc}{chapter}{Introduction} \markboth{INTRODUCTION}{}
+% \addcontentsline{toc}{chapter}{Introduction} \markboth{INTRODUCTION}{}
 
 
 %===========================================================================
@@ -101,6 +126,37 @@ We developed what is known a stochastic volatility model. This is a model where 
 %===========================================================================
 \chapter{Wprowadzenie}
 \label{chap:introduction}
+
+
+\begin{quote}
+We developed what is known a stochastic volatility model. This is a model where the volatility as well as the underlying asset price moves around in an unpredictable way.
+\raggedleft\slshape John Hull \index{Hull John}
+\end{quote}
+Niniejsza praca jest poświęcona modelom zmienności stochastycznej używanych przy wycenie opcji. 
+Jednak za tą dosyć enigmatyczną nazwą, nasuwa się pytanie, czym dokładnie są te modele? 
+Jaka jest ich istota?
+
+Bardzo zwięzłej, a zarazem trafnej odpowiedzi na te pytania udziela John Hull, 
+jeden z pionierów dzisiejszych finansów ilościowych. Stwierdza on, zgodnie z przytoczonym 
+powyżej cytatem, że są to modele, gdzie nie tylko cena aktywa bazowego, ale również jego zmienność, 
+poruszają się w sposób nieprzewidywalny, losowy. 
+
+Jednak do lat 90 XX wieku podstawowym modelem do wyceny opcji był Model Blacka-Scholesa. U jego podstaw 
+leży bardzo istotne założenie mówiące o tym, że zmienność instrumentów finansowych jest stała w czasie. 
+
+Niestety, założenie to jest niezgodne z tym, co możemy obserwować na rynkach finansowych. Można to szczególnie mocno zauważyć w czasie cyklicznie powtarzających się kryzysów finansowych.
+
+Stąd też wysoka, niestała zmienność na rynkach finansowych stała się podstawową motywacją wprowadzenia modeli wyceny
+opcji dla których zmienność nie jest ustalonym parametrem, a zmienną zależną od pewnych innych czynników. 
+Pionierem w tej obszarze okazał się Steven Heston, który w 1993 opublikował pracę, gdzie wprowadza
+nowy model wyceny opcji, w którym nie tylko proces cen instrumentu bazowego, ale również
+proces zmienności jest stochastyczny (losowy) i zależny od czasu \cite{Heston}. Na jego cześć, model ten 
+w literaturze znany jest pod nazwą modelu Hestona.
+
+Nieniejsza praca stanowi próbę przedstawienia tego modelu oraz sposobu jak, używając istniejących narzędzi,
+można przy jego pomocy wyliczyć wartość opcji. Część emiryczna pracy jest z kolei próbą sprawdzenia, jak 
+model, oraz narzędzia do jego stosowania, sprawdzają się w praktyce.
+
 
 \chapter{Metoda Monte Carlo}
 \label{chap:introduction}
@@ -128,6 +184,7 @@ Można wśród nich wyróżnić:
   \item Generowanie zmiennych losowych o ustalonym rozkładzie
   \item Wyznaczenie wartości zmiennych losowych
   \item Kalibracja modelu
+  \item Wyznaczenie wartości opcji
   \item Symulacja Monte Carlo
 \end{enumerate}
 
@@ -162,7 +219,7 @@ Poniższy kod przedstawia implementację tego algorytmu:
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/SimpleMonteCarlo/BoxMuller.cpp}
+{../src/heston/SimpleMonteCarlo/PolarGenerator.cpp}
 \caption{Generowanie zmiennych o rozkładzie normalnym zgodnie z algorytmem Boxa-Mullera }
 \label{lst:lambdaSyntax}
 \end{listing} 
@@ -196,7 +253,6 @@ gdzie dynamikę cen aktywa bazowego opisuje następujący proces w mierze oboję
 \end{equation}
 
 
-
 \section{Kalibracja modelu}
 Kalibracja jest jednym z najważniejszych elementów podczas wyceny opcji przy pomocy jakiegokolwiek
 modelu.  
@@ -223,20 +279,50 @@ stosuje się bardziej zaawansowane techniki kalibracyjne, co będzie tematyką r
   % \autoref - ok but it uses the english name of chapter
 
 
-\section{Wyznaczenie wartości wartości opcji}
+\section{Wyznaczenie wartości opcji}
 
- 
+Będąc uzbrojonym w wartości wszystkich parametrów modelu Blacka-Scholesa, można przystąpić
+do wyliczenia wartości opcji. I tak, jak wiadomo, wartość opcji europejskiej dla strony kupującej 
+wynosi:
+
+\begin{equation}
+  V = max(S-K, 0)
+\end{equation}
+
+W powyższym wzorze $K$, czyli cena wykupu opcji jest parametrem, stąd też,  aby wyliczyć wartość opcji należy obliczyć wartość instrumentu bazowego w momencie wygaśnięcia opcji.
+
+W modelu tym, wartość tą możemy wyznaczyć przy pomocy następującego wzoru analitycznego:
+\begin{equation}
+  haha TODO
+\end{equation}
+
+Aby uzyskać cenę opcji na dany moment, należy zdyskontować wartość opcji obliczonej w momencie wykupu opcji.
+
 \section{Symulacja Monte Carlo}
 
+Ostatnim krokiem, który pozostał jest wyznaczenie prawdziwej wartości opcji, co możemy uzyskać 
+stosując symulację metodą Monte Carlo.
 
-W niniejszym, wprowadzającym rozdziale została przedstawiona symulacja Monte Carlo.
+W tej pracy zostanie użyta aproksymacja metodą Monte Carlo. Metoda Monte Carlo jest sposobem na wyznaczenie 
+Poniżej jest przedstawiony formalny 
+Jeżeli $X_1, ..., X_n ~P$ iid  wtedy
+jest średnia z próby 
+\begin{equation}
+  
+\end{equation}
+Wtedy $\mu$ jest podstawowym estymatorem Monte Carlo $Ef(x)$, gdzie $X$ (X ma również rozkład P). Inaczej mówiąc, aproksymujemy prawdziwą wartość wartością oczekiwaną \textbf{średnią z próby} \textit{ang. sample mean}.
+
+Implementację metody Monte-Carlo, wraz z przedstawionym w tym rozdziale sposobem wyznaczenia 
+ceny opcji w oparciu o model Blacka-Scholesa, przedstawia listing nr \ref{lst:MCBS}:
+
+
 
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/heston/SimpleMonteCarlo/MCBlackScholes.cpp}
-\caption{Symulacja Monte Carlo wyliczająca cenę opcji kupna o zadanym zestawie paramterów}
-\label{lst:lambdaSyntax}
+\caption{Symulacja Monte Carlo wyliczająca cenę opcji kupna (zgodnie z modelem Blacka-Scholesa) o zadanym zestawie paramterów}
+\label{lst:MCBS}
 \end{listing} 
 
 
@@ -253,6 +339,7 @@ W niniejszym, wprowadzającym rozdziale została przedstawiona symulacja Monte C
 \chapter{Model Hestona}
 \label{chap:hestonModel}
 \begin{quote}
+
   Suppose we use the standard deviation ... of possible future returns on
   a stock ... as a measure of its volatility. Is it reasonable to take
   that volatility as a constant over time? I think not.
@@ -281,8 +368,16 @@ Z kolei druga grupa założeń odnosi się do rynku na którym dane aktywa wyst�
 \end{enumerate}
 
 Wszystkie te założenia sprawiają, że model Blacka-Scholesa, mimo, że pozwala na wyznaczenie ceny opcji w postaci analitycznej, może nieprecyzyjnie wycenić wartość takiej opcji.
-Jednym z takich założeń jest to o stałej zmienności instrumentu bazowego. Jednym z pomysłów na obejście tego problemu jest uzmiennienie tej stałej, czyli dopuszczenie, aby dla dowolnego czasu, parametr ten przyjmował różną wartość. Można to zrobić np. poprzez nadanie zmienności cech losowych. W takim przypadku nie tylko proces ceny akcji byłby procesem stochastycznym, ale także aby sama zmienność byłaby definiowana przy użyciu procesu stochastycznego. Takie też podejście zostało wykorzystane przy budowie modelu Hestona. \cite{greenwade93}
+Jednym z takich założeń jest to o stałej zmienności instrumentu bazowego. Świadczy o tym chociażby
+wykres nr \ref{fig:vix}, na którym wyraźnie widać wysoką zmienność indeksu S\&P. Jednym z pomysłów na obejście tego problemu jest uzmiennienie tej stałej, czyli dopuszczenie, aby dla dowolnego czasu, parametr ten przyjmował różną wartość. Można to zrobić np. poprzez nadanie zmienności cech losowych. W takim przypadku nie tylko proces ceny akcji byłby procesem stochastycznym, ale także aby sama zmienność byłaby definiowana przy użyciu procesu stochastycznego. Takie też podejście zostało wykorzystane przy budowie modelu Hestona. \cite{greenwade93}
 
+
+
+\begin{figure}
+  \centering
+  \includegraphics[width=150mm]{corr.png}
+  \caption{Zmieność w czasie indeksu S\&P}\label{fig:vix}
+\end{figure}
 
 % \section{Model Blacka-Scholesa}
 
@@ -351,8 +446,8 @@ korelacji $\rho$.
 To założenie jest zgodne z rzeczywistością. Często możemy na rynkach finansowych zaobserwować następującą sekwencję zdarzeń: gdy cena rośnie gwałtownie w górę, zwiększa się zmienność, 
 natomiast w okresach spokoju zmienność jest na relatywnie niskim poziomie.
 
-Niestety, w odróżnieniu od modela Blacka-Scholsa, dla modelu Hestona nie istnieje pełne rozwiązanie analitycznie (istnieje tylko częściowe rozwiązanie analityczne). Wobec tego, aby należy się posłużyć numerycznymi metodami wyznacznia rozwiązania.
-
+Niestety, w odróżnieniu od modela Blacka-Scholsa, dla modelu Hestona nie istnieje pełne rozwiązanie analitycznie (istnieje tylko częściowe rozwiązanie analityczne). Wobec tego, aby należy się posłużyć numerycznymi metodami wyznacznia rozwiązania i przeprowadzimy symulacje Monte Carlo, aby wyznaczyć 
+cenę opcji zgodną z tym modelem.
 
 
 % Poniższa lista przedstawia podstawowe 
@@ -417,32 +512,41 @@ Niestety, w odróżnieniu od modela Blacka-Scholsa, dla modelu Hestona nie istni
 % dv(t) = \kappa [\theta - v(t)] dt + \sigma \sqrt{v(t)} d_2 (t),
 % \end{equation}
 
-\section{Metody Monte Carlo}
-
-Poprzedni rozdział zakończono stwierdzeniem, że nie istnieje możliwość znalezienia dokładnego rozwiązania analitycznego
-dla modelu Hestona. Z tego względu stosuje się następujące metody numeryczne:
-\begin{enumerate}
-\item 
-\end{enumerate}
-
-W tej pracy zostanie użyta aproksymacja metodą Monte Carlo. Metoda Monte Carlo jest sposobem na wyznaczenie 
-Poniżej jest przedstawiony formalny 
-Jeżeli $X_1, ..., X_n ~P$ iid  wtedy
-jest średnia z próby 
-\begin{equation}
-  
-\end{equation}
-Wtedy mi jest podstawowym estymatorem Monte Carlo $Ef(x)$, gdzie $X$ (X ma również rozkład P). Inaczej mówiąc, aproksymujemy prawdziwą wartość wartością oczekiwaną \textbf{średnią z próby} \textit{ang. sample mean}.
-
-
 
 \section{Dyskretyzacja Eulera}
 
-Po
+Jednak, przeprowadzenie wyceny opcji w oparciu o model Hestona jest zadaniem znacznie trudniejszym
+niż to było chociażby w przypadku modelu BS. Wynika to z tego, że w modelu Hestona trajektoria 
+ceny instrumentu bazowego jest teraz zależna od trajektorii jego zmienności. To pociąga za sobą 
+duże konsekwencje w procesie wyceny opcji, ponieważ teraz należy zasymulować najpierw trejktorię
+zmienności, a dopiero później, na tej podstawie, generować trajektorię cen. 
 
- Jak wynika ze wzorów  
+Stąd też, aby wygenerować trajektorię cen, musimy być w stanie przedstawić równanie opisującą
+zmienność aktywa bazowego w postaci \textit{zdyskretyzowanej}.
+
+Poniższe równanie nr \ref{h:euler} przedstawia \textbf{dyskretyzację Eulera} omawianego równania:
+ 
 \begin{equation}\label{h:euler}
 v_{i+1}  = v_i + \kappa (\theta - v_i) \Delta t + \epsilon +  \sqrt{v_i} \Delta W^{v}_{i+1}
+\end{equation}
+
+Jednakże, teraz jesteśmy w miejscu, gdzie dyskretyzujemy proces ciągły do procesu dyskretnego. 
+W takim przypadku może pojawić się, ze względu na błąd dyskretyzacji, ujamna wartość procesu $v_{i+1}$.
+
+Aby tego uniknąć, zgodnie z literaturą (przypis TODO), wszędzie tam, gdzie możliwa jest ujemna 
+wartość zmienności $v_i$, zastępujemy ją poprzez $v_i^+ = \max(v_i, 0)$. Ostatecznie więc, wzór
+opisujący dynamikę $v_i$ przyjmuje postać:
+
+\begin{equation}\label{h:eulerNonZero}
+v_{i+1}  = v_i + \kappa (\theta - v_i^+) \Delta t + \epsilon +  \sqrt{v_i^+} \Delta W^{v}_{i+1}
+\end{equation}
+
+Mając wygenerowaną trajektorię zmienności, można przystąpić do zdyskretyzowania równania opisującego 
+dynamikę cen aktywa bazowego jednakże pamiętając o tym, aby zmienność zawsze była wartością dodatnią. 
+Mając to na uwadzę, równanie nr \ref{h:eulerAssetPath} opisuję dynamikę cen instrumentu bazowego w postaci dyskretnej:
+
+\begin{equation}\label{h:eulerAssetPath}
+S_{i+1} = S_i e^{\mu - \frad{1}{2} v_i^+} \Delta t + \sqrt{v_i^+ \Delta t}  \Delta W_{i+1}^S
 \end{equation}
   
 \section{Generowanie skorelowanych szeregów czasowych}
@@ -451,11 +555,6 @@ Jednym z ważniejszych zagadnień związanych z użyciem modelu Hestona jest odp
 
 Poniższy wykres przedstawia wygenerowane przykładowe szeregi czasowe z zadanym poziomem korelacji na poziomie $\rho = 0.2$:
 
-\begin{figure}
-  \centering
-  \includegraphics[width=150mm]{corr.png}
-  \caption{Zmieność w czasie indeksu S\&P}\label{fig:vix}
-\end{figure}
 
 Mając w ten sposób wyznaczone szeregi czasowe o zadanym poziomie korelacji teraz przychodzi czas na generowanie szeregu czasowego opisującego zmienność oraz samą cenę instrumentu finansowego. 
 Przypomnijmy, że zgodnie z modelem Hestona wzory te prezentują się następująco:
@@ -488,6 +587,20 @@ Stąd też po zdyskretyzowaniu zmienności otrzymuje następującą postać:
 \end{equation}
 
 % section section_name (end)
+
+
+
+Na poniższym listing nr \ref{lst:MCHeston} znajduje się główna funkcja użyta do wygenerowania ceny 
+opcji w oparciu o model Hestona:
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../src/heston/MonteCarlo/MCHeston.cpp}
+\caption{Generowanie zmiennych o rozkładzie normalnym zgodnie z algorytmem Boxa-Mullera }
+\label{lst:MCHeston}
+\end{listing} 
+
+
 
 
 %===========================================================================
@@ -714,22 +827,70 @@ model Bates czy też model Barndorff-Nielsena i Shepharda.
 %                       Model Hestona na przykładznie
 %===========================================================================
 \chapter{Wycena opcji na indeks S\&P}\label{r:sp}
- 
-W tym rozdziale zostanie przedstawione metody, którymi możemy się posłużyć
-w trakcie podejmowania decyzji co do inwestycji w aktywa/pary walutowe.
-Po krótkim wprowadzeniu, pokazany zostanie wynik zastosowania opisanych 
-strategii na rzeczywistej platformie rynku handlu walutami 'Oanda'.
-Rozdział kończy krótkie podsumowanie tego jak przedstawione strategie 
-sprawdziły się na rynku FOREX w krótkim, średnim i długim terminie. 
-
 
 W tym rozdziale zostanie przedstawione zastosowanie opisanej w poprzednich 
 rozdziałach teorii do wyceny opcji na indeks S\&P. 
 
-Pier
+\section{Wycena opcji przy pomocy modlu Blacka-Scholesa}
+
+Zanim przejdziemy do wyceny opcji  przy pomocy modelu Hestona oraz kalibracji
+parametrów tego modelu, warto, w celach porównawczych zbadać wartość opcji 
+wyznczonej przy pomocy modelu Blacka-Scholesa. 
 
 
-\begin{quote}
+
+
+\section{Kalibracja}
+
+W tym rozdziale skalibrujemy parametry modelu Hestona, tak aby ona ich 
+podstawie model z najmniejszym błędem wyznaczał wartość opcji.
+
+Rysunek \ref{fig:data} przedstawia pokazuje zrzutowane na wykresie dane, które
+zostały użyte do skalibrowania modelu.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.80\textwidth]{../MySavedPlot.png}
+  \caption{Zmieność w czasie indeksu S\&P}
+  \label{fig:data}
+\end{figure}
+
+\begin{figure}
+
+Jak widać z powyższego rysunku, do skalibrowania modelu zostały użyte ceny 
+opcji o 3 różnych terminach wygaśnięcia: 6, 13 oraz 20 dni.
+
+
+\begin{itemize}
+  \item $V(1) = 0.0534 $
+  \item $\kappa = 17.1316$
+  \item $\theta = 0.0000 $
+  \item $\sigma = 0.5000$
+  \item $\rho = -0.9000 $
+\end{itemize}
+
+ 
+Na poniższym rysunku widać wynik symulacji ceny opcji dla 10000 tysięcy przebiegów.
+Z definicji Monte Carlo wynika, ze poprawnym estymatorem dla wartości oczekiwanej ceny
+opcji jest średnia ze wszystkich przebiegów, zatem na rysunku przedstawiono także linię
+oznaczającą średnią wartość ceny opcji. 
+
+
+\centering
+  \includegraphics[width=0.80\textwidth]{../chartHeston.png}
+  \caption{Zmieność w czasie indeksu S\&P}
+  \label{fig:data}
+\end{figure}
+
+
+Z wykomania symulacji dla metody Hestona wynika ze srednia cena opcji z czesem do wygasniecia jednego roku wunisi 
+
+Warronrowniez wykonac porownanie ceny opcji z C na wyznaczona ptzy pomocy mod lu Blacka Scholesa. Opcja o takich samych parametrach zostala wyloczona na podstawie metody przedstawionej w rozdziale pierwszym. Cena takiej opcji wynosi , takze jest bardzo bliska wartosci wyznacznej przy pomocy mod lu Blacka Scholesa.
+
+W tym miejscunwarro rowniez porownac wyznaczona cene z tym jak rynek. Na rynku opcja o bardzo podobnych parametrach (jest wyceniana na ). C na ta nieznacznie rozni od tych wyznaczonych przy pomocy metod wyznaczonej w tej pracy, jednak nalezy wziac pod uwage fakry, z nawet male roznice w przyjetych parametrach moga powodowac roznicw c enia. Np. Stope na wolna od ryzyka w niniejszej pracy oszacowano na poziomi 3 $\%$, zgodnie z rentownoscia 30-letnich obligacji wystawiony przez rzad Stanow Zjednoczonych. Niewykluczone, ze rentownosc dla ktorej cena opcji na rynku przyjmuj taka warosc jest nieznacznie inna,
+
+
+Zaimplementowany oraz Przestawiony ow tym rozdziale wycena opcji kuona europejskiejmodel Hestona mozna z latwoscia zastapic przez opcje innego r
 
 
 %===========================================================================
@@ -836,20 +997,20 @@ model ten jest o wiele cięższy obliczeniwo, niż chociażby model Blacka-Schol
 % \end{center}
 
 \listoffigures
-\addcontentsline{toc}{chapter}{List of figures} \markboth{Figures}{}
+\addcontentsline{toc}{chapter}{Lista rysunków} \markboth{Figures}{}
 \listoftables
-\addcontentsline{toc}{chapter}{List of tables} \markboth{Tables}{}
+\addcontentsline{toc}{chapter}{Lista tabel} \markboth{Tables}{}
 
 
 
-% \chapter*{Bibliografia}
-% \addcontentsline{toc}{chapter}{Bibliography} \markboth{Bibliography}{}
+\chapter*{Bibliografia}
+\addcontentsline{toc}{chapter}{Bibliografia} \markboth{Bibliography}{}
 
-% \begin{quote}
-% "Widziałem dalej dzięki temu, że stałem na barkach gigantów".\\
-% %(If I have seen farther than others, it is because I was standing on the shoulders of giants).
+\begin{quote}
 
-\raggedleft\slshape Isaac Newton
+If I have seen farther than others, it is because I was standing on the shoulders of giants.
+
+\raggedleft\slshape Isaac Newton \index{Isaac Newton}
 \end{quote}
 
 

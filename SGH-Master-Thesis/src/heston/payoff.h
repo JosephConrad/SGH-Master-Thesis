@@ -19,7 +19,7 @@ public:
 
 class PayOffCall : public PayOff {
 private:
-    double K; // Strike price
+    double K; // strike price
 
 public:
     PayOffCall(const double &K_);
@@ -32,7 +32,7 @@ public:
 
 class PayOffPut : public PayOff {
 private:
-    double K; // Strike
+    double K; // strike
 
 public:
     PayOffPut(const double &K_);

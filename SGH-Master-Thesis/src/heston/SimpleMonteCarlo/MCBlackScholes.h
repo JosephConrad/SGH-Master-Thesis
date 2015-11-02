@@ -15,12 +15,12 @@ public:
     double simulate();
 
 private:
-    double Expiry;
-    double Strike;
-    double Spot;
-    double Vol;
-    double r;
-    unsigned long NumberOfPaths;
+    double expiry;
+    double strike;
+    double spot;
+    double vol;
+    double riskFree;
+    unsigned long numberOfPaths;
 
     double GetGaussianBoxMuller();
 };

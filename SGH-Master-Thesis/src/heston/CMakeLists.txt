@@ -19,10 +19,10 @@ if(Boost_FOUND)
         include_directories(${Boost_INCLUDE_DIRS})
         set(SOURCE_FILES heston)
         add_executable(${SOURCE_FILES}
-                MonteCarlo/MonteCarloSimulation.cpp MonteCarlo/MonteCarloSimulation.h SimulatedAnnealing/SimulatedAnnealing.cpp SimulatedAnnealing/SimulatedAnnealing.h
+                MonteCarlo/MCHeston.cpp MonteCarlo/MCHeston.h
                 Main/main.cpp option.h option.cpp heston_mc.h heston_mc.cpp payoff.h payoff.cpp statistics.h statistics.cpp correlated_snd.h correlated_snd.cpp
-                SimulatedAnnealing/SimulatedAnnealing.cpp SimulatedAnnealing/SimulatedAnnealing.h MonteCarlo/MonteCarloSimulation.cpp MonteCarlo/MonteCarloSimulation.h
-                SimpleMonteCarlo/MCBlackScholes.cpp SimpleMonteCarlo/MCBlackScholes.h SimpleMonteCarlo/BoxMuller.cpp SimpleMonteCarlo/BoxMuller.h OrderBook/OrderBook.cpp
+                MonteCarlo/MCHeston.cpp MonteCarlo/MCHeston.h
+                SimpleMonteCarlo/MCBlackScholes.cpp SimpleMonteCarlo/MCBlackScholes.h SimpleMonteCarlo/PolarGenerator.cpp SimpleMonteCarlo/PolarGenerator.h OrderBook/OrderBook.cpp
                 OrderBook/OrderBook.h OrderBook/Order.cpp OrderBook/Order.h OrderBook/Operation.h)
         target_link_libraries(heston ${Boost_LIBRARIES})
 endif()

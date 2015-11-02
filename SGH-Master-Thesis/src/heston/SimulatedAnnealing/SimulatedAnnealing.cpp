@@ -14,7 +14,7 @@ SimulatedAnnealing::SimulatedAnnealing() {
 std::vector<double> SimulatedAnnealing::
 calibration(std::vector<double> &bestHestonParams, int iterations, double coolingCoeff) {
 
-    double bestHestonPrice = mcSimulation->simulateHeston(bestHestonParams);
+    double bestHestonPrice = mcSimulation->simulateHeston(bestHestonParams, (__1::vector<double>()));
     double newHestonPrice;
     double temperature = 1.0;
 
@@ -23,7 +23,7 @@ calibration(std::vector<double> &bestHestonParams, int iterations, double coolin
 
     while (k < iterations) {
         newHestonParams = mutateParams(bestHestonParams);
-        newHestonPrice = mcSimulation->simulateHeston(newHestonParams);
+        newHestonPrice = mcSimulation->simulateHeston(newHestonParams, (__1::vector<double>()));
 
         if (metropolisRule(bestHestonPrice, newHestonPrice, temperature)) {
             bestHestonParams = newHestonParams;

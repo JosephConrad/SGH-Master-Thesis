@@ -7,7 +7,7 @@
 
 
 #include <vector>
-#include "../MonteCarlo/MonteCarloSimulation.h"
+#include "../MonteCarlo/MCHeston.h"
 
 class SimulatedAnnealing {
 

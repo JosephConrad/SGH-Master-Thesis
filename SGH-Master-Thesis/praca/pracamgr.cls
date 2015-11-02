@@ -55,7 +55,7 @@
       \begin{flushright}\large
         \begin{tabular}{l}
           
-          Imi¦ i nazwisko autora \bfseries \@author\par\\
+          Imię i nazwisko autora \bfseries \@author\par\\
           Nr albumu \bfseries \@nralbumu\par\\
         \end{tabular}
       \end{flushright}
@@ -94,7 +94,7 @@
 \def\nralbumu#1{\gdef\@nralbumu{#1}}
 \def\@nralbumu{???\ClassError{pracamgr}{Brak numeru albumu}\@ehc}
 \def\kierunek#1{\gdef\@kierunek{#1}}
-\def\@kierunek{???\ClassError{pracamgr}{Nie podano kierunku studiow}\@ehc}
+\def\@kierunek{???\ClassError{pracamgr}{Nie podano kierunku studiów}\@ehc}
 %----zakres nie konieczny-----
 \def\zakres#1{\gdef\@zakres{w zakresie \MakeUppercase{#1}}}
 \def\@zakres{}
