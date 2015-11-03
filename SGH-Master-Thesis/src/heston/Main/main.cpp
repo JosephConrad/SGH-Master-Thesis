@@ -6,6 +6,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <iostream>
 #include "../OrderBook/OrderBook.h"
 #include "../SimpleMonteCarlo/MCBlackScholes.h"
 #include "../MonteCarlo/MCHeston.h"
@@ -28,14 +29,28 @@ int main(int argc, char **argv) {
     double strike = 207.93;      // strike price
     double riskFreeRate = 0.03;     // Risk-free rate
     double initVol = 0.15; // Initial volatility
-    double expiry = 1.00;       // One year until expiry
-    std::vector<double> initialParams = {initPrice, strike, riskFreeRate, initVol, expiry};
 
-    MCHeston monteCarloSimulation = MCHeston();
-    std::cout << monteCarloSimulation.simulateHeston(calibratedParams, initialParams);
-    std::cout << "haha";
-    MCBlackScholes *mcBlackScholes = new MCBlackScholes(expiry, strike, initPrice, initVol, riskFreeRate, 10000);
-    std::cout << mcBlackScholes->simulate();
+    for (int j = 1; j <= 12; ++j) {
+
+        int i = j * 180;
+
+        std::ofstream output;
+                output.open("/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/outputs/heston" + std::to_string(i));
+        std::cout << "Writing to file " + std::to_string(i) + "\n";
+        double expiry = i / 360.0;       // One year until expiry
+        std::vector<double> initialParams = {initPrice, strike, riskFreeRate, initVol, expiry};
+
+        MCHeston monteCarloSimulation = MCHeston();
+        double result;
+        result = monteCarloSimulation.simulateHeston(calibratedParams, initialParams, output);
+//        MCBlackScholes *mcBlackScholes = new MCBlackScholes(expiry, strike, initPrice, initVol, riskFreeRate, 10000);
+//        output << mcBlackScholes->simulate();
+
+
+    }
+
+
+
 
 
     return 0;
