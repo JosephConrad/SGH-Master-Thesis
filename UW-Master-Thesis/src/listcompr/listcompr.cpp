@@ -1,14 +1,14 @@
 // List comprehension in C++11 in form of SQL-like syntax
 // Example code from http://vitiy.info/cpp11-writing-list-comprehension-in-form-of-sql/
 // Written by Victor Laskin (victor.laskin@gmail.com)
- 
+
 #include <iostream>
 #include <functional>
 #include <vector>
 #include <future>
 #include <algorithm>
 using namespace std;
- 
+
  // This is for converting lambda / pointer into correponding std::function<>
     
     template <typename Fun>
@@ -21,7 +21,7 @@ using namespace std;
     {
         return std::function<ReturnType(Args...)>(fp);
     }
- 
+
     
     template <typename Function>
     struct function_traits : public function_traits<decltype(&Function::operator())>
@@ -69,7 +69,7 @@ using namespace std;
         Iterator begin() const { return { min }; }
         Iterator end()   const { return { max }; }
     };
- 
+
     
     // Additional options
     
@@ -95,10 +95,10 @@ using namespace std;
         template <typename... Args>
         SelectContinuation(Args... args) : indexes{ args... } { }
     };
- 
- 
+
+
     /// Main iterations
- 
+
     template <typename Src, typename... Args>
     inline typename std::enable_if< std::is_object<decltype(std::declval<Src>().begin()) >::value, Src&&>::type
     getSource(Src && src, Args&&... args) {
@@ -239,8 +239,8 @@ using namespace std;
     #define DISTINCT ,SelectOptionDistict()
     #define LIMIT(X) ,SelectOptionLimit(X))
     #define NOLIMIT LIMIT(-1)
- 
- 
+
+
     template <typename R, typename... Args, typename... Sources, typename... Options>
     std::function<vector<R>()> select_lazy(const std::function<R(Args...)>& f,                ///< output expression
                                            const std::tuple<Sources...>& sources,             ///< list of sources
@@ -250,7 +250,7 @@ using namespace std;
     {
         return to_fn([=](){ return select(f, sources, filter, options...); });
     }
- 
+
     
     template <typename R, typename... Args, typename... Sources, typename... Options>
     std::function<vector<R>(const SelectContinuation& job)> select_concurrent(
@@ -266,24 +266,24 @@ using namespace std;
     #define CONCURRENTSELECT(X) select_concurrent(to_fn(X),
     #define LAZYSELECT(X) select_lazy(to_fn(X),
     #define LAZY(X) ,(X)
- 
- 
+
+
     /// Call function for each argument
     template <class F, class... Args>
     void for_each_argument(F f, Args&&... args) {
         (void)(int[]){(f(forward<Args>(args)), 0)...};
     }
- 
+
 int main() {
- 
+
      // EXAMPLES
- 
+
     auto print = [](vector<int>& list){ cout << "List: "; for (int x : list) cout << x << " "; cout << endl;};
- 
+
     cout << "10 naturals" << endl;
     auto result = SELECT([](int x){ return x; }) FROM(Naturals()) LIMIT(10);
     print(result);
- 
+
     cout << "Distinct test" << endl;
     result = SELECT([](int x, int y){ return x+y; }) FROM(Naturals(), Naturals()) 
              WHERE([](int x, int y){ return (x*x + y*y < 25); }) DISTINCT LIMIT(10);
@@ -292,16 +292,12 @@ int main() {
     cout << "Intersection" << endl;
     vector<int> ints = {11,2,1,5,6,7};
     vector<int> ints2 = {3,4,5,7,8,11};
-
-    cout << "Strings" << endl;
-    vector<std::string> str1 = {"ala", "kasia"};
-    vector<std::string> str2 = {"kasia", "zosia"};
         
-    result = SELECT([](std::string x, std::string y){ return x; })
-             FROM(str1, str2)
-             WHERE([](std::string x, std::string y){ return (x == y); }) LIMIT(10);
+    result = SELECT([](int x, int y){ return x; })
+             FROM(ints, ints2)
+             WHERE([](int x, int y){ return (x == y); }) SORT NOLIMIT;
     print(result);
- 
+
     // Simple map operation as list comprehension
     cout << "Map" << endl;
     result = SELECT([](int x){ return x + 5; }) FROM(ints) NOLIMIT;
@@ -309,7 +305,7 @@ int main() {
     
     cout << "Pythagorean Triplets" << endl;
     SelectContinuation state;
- 
+
     auto lazypyth = LAZYSELECT([&](int x, int y, int z){ return make_tuple(z,y,x); })
         FROM(Naturals(1,100000000), 
              [](int x){ return Naturals(1,x); }, 
@@ -323,6 +319,6 @@ int main() {
     pyth = lazypyth();
     cout << "Part2:" << endl;
     for (auto line: pyth) cout << " -> " << get<0>(line) << " " << get<1>(line) << " " << get<2>(line) << endl;
- 
+
     return 0;
 }
