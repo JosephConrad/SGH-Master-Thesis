@@ -20,12 +20,22 @@
 \makeindex
 \linespread{1.5} 
  
+
+\makeatletter
+\def\l@lstlisting#1#2{\@dottedtocline{1}{1.5em}{3em}{#1}{#2}}
+\makeatother
+
+
 \definecolor{grey}{gray}{0.9}
 \definecolor{bg}{HTML}{FAFAFA}
 \definecolor{darkgray}{HTML}{D5D5D5} 
+% \newgeometry{left=25mm,right=0.8in,top=25mm,bottom=25cm}
 
+% \renewcommand\lstlistlistingname{}
+\renewcommand*{\listlistingname}{Lista kodów źródłowych}
 \makeatletter
 \raggedbottom
+% \renewcommand{\lstlistlistingname}{Spis kodów źródłowych}
 \renewenvironment{minted@colorbg}[1]{
 \linespread{1.0} 
 \setlength{\fboxsep}{\z@}
@@ -91,19 +101,19 @@ ekonomiczny, gdzie kursy instrumentów finansowych wahały się o wiele bardziej
 koniunktury gospodarczej. Dlatego też, w modelach służących do wyceny opcji uzmiennia się parametr opisujący zmienność instrumentów finansowych i uzależnia się go od czasu. 
 
 
-Po wstępie, w drugim rozdziale pierwszym zostanie przedstawiony schemat budowania symulacji w oparciu o metodę Monte Carlo. Będzie się to odbywało na przykładzie wyceny opcji w modelu Blacka-Scholesa, który 
+Po wstępie, w drugim rozdziale zostanie przedstawiony schemat budowania symulacji w oparciu o metodę Monte Carlo. Będzie się to odbywało na przykładzie wyceny opcji w modelu Blacka-Scholesa, który 
 jest jednym z najprostszych modeli do wyceny opcji.
 
 W trzecim rozdziale zostanie opisany model Hestona i sposób w jaki można wyliczyć. 
-Zostanie przedstawione kroki jakie należy poczynić, aby wycenić opcję przy pomocy tego modelu.
+Zostaną przedstawione kroki jakie należy poczynić, aby wycenić opcję przy pomocy tego modelu.
 
 Czwarty rozdział z kolei jest poświęcony kalibracji modelu, czyli inaczej ujmując, znalezieniu 
 optymalnej wartości wektora nieznanych parametrów modelu. Optymalna wartość jest w tym przypadku zdefiniowana
-jako taka, dla której wartość opcji wyliczonej na podstawie modelu Hestona jest najbliższa wartości 
+jako taka, dla której wartość opcji, wyliczonej na podstawie modelu Hestona, jest najbliższa wartości 
 obserwowanej na rynku.
 
 W przedostatnim rozdziale z kolei zostaną przedstawione możliwości dalszych rozszerzeń modelu Hestona. 
-Polegają one głównie na próbie uzmiennieniu (uzależnienia od czasu) tych wartości parametrów, które dla 
+Polegają one głównie na próbie uzmiennienia (uzależnienia od czasu) tych wartości parametrów, które w 
 modelu Hestona są stałe w czasie.
 
 Ostatni rozdział to już próba empirycznego zbadania zachowania modelu Hestona. Zostanie w nim porównana
@@ -149,7 +159,7 @@ Niestety, założenie to jest niezgodne z tym, co możemy obserwować na rynkach
 
 Stąd też, wysoka, niestała zmienność na rynkach finansowych stała się podstawową motywacją wprowadzenia modeli wyceny
 opcji dla których zmienność nie jest ustalonym parametrem, a zmienną zależną od pewnych innych czynników. 
-Pionierem w tej obszarze okazał się Steven Heston\index{Heston, Steven}, który w 1993 opublikował pracę, gdzie wprowadza
+Pionierem w tym obszarze okazał się Steven Heston\index{Heston, Steven}, który w 1993 opublikował pracę, gdzie wprowadza
 nowy model wyceny opcji, w którym nie tylko proces cen instrumentu bazowego, ale również
 proces zmienności jest stochastyczny (losowy) i zależny od czasu \cite{Heston}. Na jego cześć, model ten 
 w literaturze znany jest pod nazwą modelu Hestona.
@@ -613,12 +623,12 @@ Do bardziej popularnych metod, jakie wybiera się, aby skalibrować model Heston
 
 \section{Nieliniowa Metoda Najmniejszych Kwadratów}
 
-Tematem tego podrozdziału jest zastosowany w nienjszej pracy oraz zaimplementowany w \textit{Matlabie} funkcji \textit{lsqnonlin}. Jej nagłówek jest widoczny poniżej:
+Tematem tego podrozdziału jest zastosowana w nieniejszej pracy oraz zaimplementowana w \textit{Matlabie} funkcja \textit{lsqnonlin}. Jej nagłówek jest widoczny poniżej:
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{matlab}
 {listings/lsqnonlin.m}
-\caption{Funkcja pomocnicza używana przez metodę kalibrującą parametry modelu Hestona}
+\caption{Nagłówek funkcji \textit{lsqnonlin}}
 \label{lst:lsqnonlin}
 \end{listing}
 
@@ -710,25 +720,80 @@ wartości skalarne:
 %===========================================================================
 \chapter{Rozszerzenia modelu Hestona}
 
-% Model Hestona, jak opisano w poprzednim rozdziale, odrzuca założenie o stałości zmienności w czasie. 
-% Jednak pozostałe parametry wciąż pozostają na nie zmienionym poziomie, co daje możliwość uzmiennienia
-% kolejnych stały w modelu. Jest to jedna z możliwych zmian w modelu Hestona. 
+Model Hestona, jak opisano w poprzednim rozdziale, odrzuca założenie o stałości zmienności w czasie. 
+Jednak pozostałe parametry wciąż pozostają na niezmienionym poziomie, co daje możliwość uzmiennienia
+kolejnych stałych w modelu.
+Ponadto, również wariancję w modelu Hestona można uzależnić nie tylko 
+od jednego, ale od wielu procesów zmienności \textit{ang. Multifactor Heston Models}.
 
-% Druga możliwość to wprowadzenie do modeli zmienności stochastycznej skoków (\textit{ang. stochastic volatility models with jumps})
-% Tego typu modele tworzą odrębną klasę modeli, wsród których można wyróżnić model Hestona ze skokami, 
-% model Bates czy też model Barndorff-Nielsena i Shepharda.
+Kolejna możliwość to wprowadzenie do modeli zmienności stochastycznej ze skokami (\textit{ang. stochastic volatility models with jumps})
+Tego typu modele tworzą odrębną klasę modeli, a procesem, który najczęściej modeluje właściwość
+skoków w tego typu procesach jest proces Poissona.
 
-% \section{Modele uzmiennniające stałe w modelu Hestona} % (fold)
-% \label{sec:modele_uzmiennniajace}
+Celem tego rozdziału jest tylko zasygnalizowanie możliwych rozszerzeń modelu Hestona.
+Mogą być one jednak zaimplementowane przy pomocy zaprojektowanego w tej pracy modułu 
+do wyliczania ceny opcji w oparciu o model Hestona. 
+
+\section{Dwuczynnikowy model Hestona} % (fold)
+\label{sec:modelDwuczynnikowy}
+Jak powiedziano we wstępie do rozdziału, jednym z możliwych rozszerzeń modelu Hestona jest wzbogacenie
+procesu zmienności o dodatkowe zależności. 
+Jeden z takich modeli, model dwuczynnikowy, został w 2009 zaproponowany prze
+Petera Christoffersena \index{Christoffersen, Peter} \cite{Christoffersen}.
+Opsiuje go następujący układ równań:
+
+\begin{equation}
+dS_t  = r S_t dt + \sqrt{V_1} S dW_1 + + \sqrt{V_2} S dW_2
+\end{equation} 
+
+\begin{equation}
+dV_1  = (a_1 - b_1 V_1)dt + \sigma_1 \sqrt{V_1} dW_3 
+\end{equation}
+
+\begin{equation}
+dV_2  = (a_2 - b_2 V_2)dt + \sigma_2 \sqrt{V_2} dW_4 
+\end{equation}
+
+W modelu tym zmienna $W_1$ jest skorelowana z $W_3$ na poziomie korelacji $\rho_1$, natomiast
+zmienna $W_2$ z $W_4$ jest skorelowana na poziomie $\rho_2$. Ponadto, $W_1$ oraz $W_2$ są ze sobą nieskorelowane. Z tego względu (właściwość
+liniowości wariancji dla zmiennych losowych o kowariancji równej $0$) wariancja stopy zwrotu z aktywa
+bazowego jest sumą wariancji:
+
+\begin{equation}
+  Var_t[dS/S] = (V_1 + V_2)dt = Vdt
+\end{equation}
+
+Jak wynika z powyższych wzorów cena akcji intrumentu bazowego zależy teraz nie od jednego, a od 
+dwóch procesów zmienności.
+Jednym z powodów dla którego chcielibyśmy wprowadzać dodatkowe zmienne jest fakt, że model
+Hestona nie zawsze jest w stanie dostosować się do uśmiechu zmienności implikowanej, w szczególności 
+dla krótkich okresów \cite{HestonExtensions}.
 
 
-% \section{Modele zmienności stochastycznej ze skokami} % (fold)
-% \label{sec:modele_zmienno_ci_stochastycznej_ze_skokami}
+\section{Modele zmienności stochastycznej ze skokami} % (fold)
+\label{sec:modele_zmienno_ci_stochastycznej_ze_skokami}
+ 
+Kolejnym modelem, który rozszerza model Hestona jest model zmienności stochastycznej ze skokami.
+Pomimo, że model ten różni się od modelu Hestona tylko składnikiem definiującym skoki, dla
+porządku podajemy jego pełną definincję:
+\begin{equation}
+dS_t  = \mu S_t dt + \sqrt{v_t} S_t dW^S_t + S_{t-} Y_t dN_t^S
+\end{equation}
+wariancję $v_t$ opisuje równanie: 
 
-% section modele_zmienno_ci_stochastycznej_ze_skokami (end)
-% section modele_uzmiennniaj_cd (end)
+\begin{equation}
+dv_t  = \kappa (\theta - v_t)dt + \epsilon \sqrt{v_t} dW_t^v 
+\end{equation}
+Procesy $dW_t^v$ oraz $dW_s^v$ są skorelowane w następujący sposób:
 
+\begin{equation}
+Cov[dW^S_t, dW^v_t] = \rho dt 
+\end{equation}
+W powyższych wzorach $dN_t^S$ jest procesem Poissona, $Y_t$ oznacza wielkość skoku, natomiast $S_{t-}$ oznacza, że jest skok w wartości procesu przed momentem użycia go po lewej stronie równania.
 
+Motywacją stojącą za wprowadzeniem skoków do modelu jest chęć uchwycenia momentów o 
+szczególnej i gwałtownej zmianie ceny instrumentu bazowego. Dla indeksu S\&P, omawianego w tej pracy,
+skoki taki są szczególnie widoczne podczas kryzysów ekonomicznych. 
 
 
 % %===========================================================================
@@ -870,7 +935,7 @@ Kalibracji dokonamy przy pomocy dostępnej w programie \textit{Matlab} funkcji \
 Jednak, aby użyć tej funkcji potrzebujemy giełdowych danych wejściowych.
 
 
-Rysunek \ref{fig:data} przedstawia, zrzutowane na wykresie, dane, które
+Rysunek \ref{fig:calibration} przedstawia, zrzutowane na wykresie, dane, które
 zostały użyte w celu kalibracji modelu (jak widać, zostały użyte ceny 
 opcji i ich zmienności implikowane dla opcji o 3 różnych terminach wygaśnięcia: 
 6, 13 oraz 20 dni.)
@@ -971,7 +1036,7 @@ w krótszym okresie czasu będą będą mniej warte od tych z dłuższym okresem
 %===========================================================================
  \chapter*{Zakończenie}\label{r:ending}
 
-Celem niniejszej pracy było porównanie wydajności modeli służących do wyceny
+Celem niniejszej pracy było porównanie modeli służących do wyceny
 opcji oraz implementacja modelu Hestona, który wylicza wartość opcji biorąc
 pod uwagę brak stałości w czasie zmienności, jednego z podstawowych parametrów
 mającego wpływ na wycenę opcji. 
@@ -984,8 +1049,8 @@ Model Hestona, który jest bardziej zaawansowany koncepcyjnie, jest jednocześni
 bardziej skomplikowany obliczeniowo. Wynika to z faktu, że ma on kilka dodatkowych
 parametrów, które należy wyznaczyć na podstawie informacji z rynku. Proces wyznaczania tych 
 parametrów, nazwany procesem kalibracji, jest o wiele bardziej skomplikowany w przypadku 
-modelu Hestona, ponieważ tutaj jest to zadania optymalizacyjne, natomiast w przypadku modelu
-Blacka-Scholesa jest zadania algebraiczne.
+modelu Hestona, ponieważ tutaj jest to zadanie optymalizacyjne, natomiast w przypadku modelu
+Blacka-Scholesa jest to zadanie algebraiczne.
 
 
 Z badań empirycznych jasno wynika, że założenie o stałości zmienności w czasie nie jest 
@@ -997,18 +1062,18 @@ sprawdzają, jednak większą dokładność osiągnął model Hestona.
 
 Podsumowując, można stwierdzić, że model Hestona jest o bardziej zaawansowanym
 narzędziem do wyceny opcji niż model Blacka-Scholesa. Uwzględniając zróżnicowanie zmienności 
-w czasie sprawia, że cena opcji jest bardziej dokładna. Jednak cena jaką za to płacimy 
+w czasie sprawia, że cena opcji jest bardziej dokładna. Jednak cena jaką za to płacimy,
 jest o wiele większe skomplikowanie modelu, zarówno w sferze koncepcyjnej, jak i 
 implementacyjnej. Ze względu na konieczność wieloparametrowej kalibracji modelu, 
-model ten jest o wiele cięższy obliczeniowo, niż chociażby model Blacka-Scholesa.
+model ten jest o wiele bardziej czasochłonny obliczeniowo, niż chociażby model Blacka-Scholesa.
 
 
 \appendix
 
-\listoffigures
+\listoffigures 
 \addcontentsline{toc}{chapter}{Lista rysunków} \markboth{Figures}{}
-\listoflistings
-\addcontentsline{toc}{chapter}{Lista kodów źródłowych} \markboth{Listings}{}
+% \lstlistoflistings
+% \addcontentsline{toc}{chapter}{Lista kodów źródłowych} \markboth{Listings}{}
 
 % \chapter*{Bibliografia}
 % \addcontentsline{toc}{chapter}{Bibliografia} \markboth{Bibliography}{}
