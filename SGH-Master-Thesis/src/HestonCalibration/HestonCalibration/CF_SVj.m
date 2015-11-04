@@ -1,8 +1,4 @@
-function fj=CF_SVj(xt,vt,tau,mu,a,uj,bj,rho,sig,phi)
-%--------------------------------------------------------------------------
-%PURPOSE: implements the CF fj of Heston. Uses Heston's notations.
-%--------------------------------------------------------------------------
-
+Vfunction fj=CF_SVj(xt,vt,tau,mu,a,uj,bj,rho,sig,phi)
 
 xj = bj - rho.*sig.*phi.*i;
 dj = sqrt( xj.^2 - (sig.^2).*( 2.*uj.*phi.*i - phi.^2 ) );

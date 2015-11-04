@@ -30,10 +30,11 @@ int main(int argc, char **argv) {
     double riskFreeRate = 0.03;     // Risk-free rate
     double initVol = 0.15; // Initial volatility
 
-    for (int j = 1; j <= 12; ++j) {
+//    for (int j = 1; j <= 12; ++j) {
 
-        int i = j * 180;
+//        int i = j * 180;
 
+        int i = 412;
         std::ofstream output;
                 output.open("/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/outputs/heston" + std::to_string(i));
         std::cout << "Writing to file " + std::to_string(i) + "\n";
@@ -41,13 +42,12 @@ int main(int argc, char **argv) {
         std::vector<double> initialParams = {initPrice, strike, riskFreeRate, initVol, expiry};
 
         MCHeston monteCarloSimulation = MCHeston();
-        double result;
-        result = monteCarloSimulation.simulateHeston(calibratedParams, initialParams, output);
-//        MCBlackScholes *mcBlackScholes = new MCBlackScholes(expiry, strike, initPrice, initVol, riskFreeRate, 10000);
-//        output << mcBlackScholes->simulate();
+        std::cout << monteCarloSimulation.simulateHeston(calibratedParams, initialParams, output);
+        MCBlackScholes *mcBlackScholes = new MCBlackScholes(expiry, strike, initPrice, initVol, riskFreeRate, 10000);
+        std::cout << mcBlackScholes->simulate();
 
 
-    }
+//    }
 
 
 

@@ -34,7 +34,7 @@ impvol=optionInputChart(:,2);
 
 %Optimization
 % x=fmincon(@costf2,x0,[],[],[],[],lb,ub,@Feller); 
-x = lsqnonlin(@costf2,initPoint,lowerBound,upperBound);
+x = lsqnonlin(@costfun,initPoint,lowerBound,upperBound);
 
 for k=1:length(T);
 %Initial asset price
