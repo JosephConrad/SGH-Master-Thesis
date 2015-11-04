@@ -182,7 +182,7 @@ model, oraz narzędzia do jego stosowania, sprawdzają się w praktyce.
 
 Rozdział ten stanowi wprowadzenie do tematyki poruszonej w pracy, której jest wycena opcji w oparciu
 o modele stochastycznej zmienności. 
-Jednak zanim przejdziemy do tego przejdziemy przedstawiony zostanie ogólny schemat postępowania, na przykładzie modelu mniej skomplikowanego, \textbf{modelu Blacka-Scholesa}, w którym zmienność jest stała w czasie.
+Jednak zanim do tego przejdziemy, przedstawiony zostanie ogólny schemat postępowania, na przykładzie modelu mniej skomplikowanego, \textbf{modelu Blacka-Scholesa}, w którym zmienność jest stała w czasie.
 Jako przykład wyceniona zostanie najprostsza opcji \textit{call}, a narzędziem do tego służącym 
 będzie \textbf{metoda Monte Carlo}.
 
@@ -206,7 +206,7 @@ Wycena na podstawie modelu Hestona będzie podobna do tej przedstawionej w ninie
 Pierwszym krokiem jaki należy podjąć podczas przeprowadzania symulacji Monte Carlo jest 
 wygenerowanie zmiennych losowych o ustalonym rozkładzie.
 
-I tak, w przypadku wyceny opcji w Modelu Blacka-Scholesa potrzebna jest umiejętność generowania liczb (pseudo)losowych z rozkładu normalnego. Znamy wiele algorytmów generowania liczb o rozkładzie normalnym, wśród których można wyróżnić:
+I tak, w przypadku wyceny opcji w modelu Blacka-Scholesa potrzebna jest umiejętność generowania liczb (pseudo)losowych z rozkładu normalnego. Znamy wiele algorytmów generowania liczb o rozkładzie normalnym, wśród których można wyróżnić:
 \begin{enumerate}
   \item metoda odwrotnej dystrybuanty
   \item meteda Boxa-Mullera
@@ -266,14 +266,14 @@ gdzie dynamikę cen aktywa bazowego opisuje następujący proces w mierze oboję
 \section{Kalibracja modelu}
 Kalibracja jest jednym z najważniejszych elementów podczas wyceny opcji przy pomocy jakiegokolwiek modelu.  
 
-W przypadku modelu Blacka-Scholesa, jedynym niobserwowalnym parametrem zmienność $\sigma$ (współczynnik dyfuzji).
+W przypadku modelu Blacka-Scholesa, jedynym niobserwowalnym parametrem jest zmienność $\sigma$ (współczynnik dyfuzji).
 Można go wyznaczyć na jeden z dwóch sposobów:
 \begin{enumerate}
   \item zmienność historyczna
   \item zmienność implikowana
 \end{enumerate}
 
-Szczególnie interesującym jest zmienność implikowana, ponieważ wyraża ona \textit{"przewidywania rynku"} co 
+Szczególnie interesującym przypadkiem jest zmienność implikowana, ponieważ wyraża ona \textit{"przewidywania rynku"} co 
 do wartości zmienności danego aktywa bazowego. 
 Można ja w prosty sposób obliczyć przy użyciu analitycznego \textbf{wzoru Blacka-Scholesa} na wycenę opcji, który 
 możemy przedstawić jako:
@@ -304,9 +304,9 @@ W modelu tym, wartość ceny aktywa bazowego na moment wygaśnięcia opcji może
 \begin{equation}
   S_T = S_0 e^{(r - \frac{1}{2} \sigma^2)T+\sigma \sqrt{T} N(0,1)}
 \end{equation}
-gdzie fragment wzoru $\frac{1}{2} \sigma^2 T$ znany jest pod nazwą \textit{poprawki Ito} (\textit{ang. Ito correction}).
+gdzie fragment wzoru postaci $\frac{1}{2} \sigma^2 T$ znany jest pod nazwą \textit{poprawki Ito} (\textit{ang. Ito correction}).
 
-W końcu, aby uzyskać cenę opcji na dany moment, należy wziąć wartość oczekiwanę cen instrumentu bazowgo oraz zdyskontować wartość opcji obliczonej w momencie wykupu opcji:
+W końcu, aby uzyskać cenę opcji na dany moment, należy wziąć wartość oczekiwaną cen instrumentu bazowgo, na tej podstawie wyliczyć wartość opcji oraz zdyskontować ją na moment zerowy:
 \begin{equation}
   C = \frac{\mathbf{E}[v(S_T)]}{e^{-rT}}
 \end{equation}
@@ -360,6 +360,8 @@ ceny opcji w oparciu o model Blacka-Scholesa, przedstawia listing nr \ref{lst:MC
 
 
 Obecnie jednym z najpopularniejszych narzędzi do wyceny opcji jest model Blacka-Scholsa. Ceniony jest on ze względu na prostotę oraz wygodę użycia, kosztem jednak wielu upraszczających założeń. 
+Jedno z nich, założenie o stałości zmienności w czasie modyfikuje model Hestona, który jest 
+tematem tego rozdziału.
 
 
 \section{Motywacja} 
@@ -433,19 +435,19 @@ gdzie:
 
 \begin{enumerate}
 \item $\mu$ oznacza dryft (\textit{ang. drift}). ceny aktywa bazowego 
-\item $\theta$ oznacza długoterminową wartością oczekiwaną $v_t$
+\item $\theta$ oznacza długoterminową wartość oczekiwaną $v_t$
 \item $\kappa$ jest współczynnikiem szybkości powrotu do średniej (\textit{ang. rate of mean-reversion})
 \item $\epsilon$ oznacza zmienność zmienności, czyli wariancję $v_t$
 \end{enumerate}
 
-W dodatku, w przedstawiony modelu występuje równanie $Cov[dW^S_t, dW^v_t] = \rho dt $. Mówi ono o tym, że 
+W dodatku, w przedstawionym modelu występuje równanie $Cov[dW^S_t, dW^v_t] = \rho dt $. Mówi ono o tym, że 
 dwa procesy błądzenia losowego są w rzeczywistości ze sobą skorelowane przy pomocy stałego współczynnika 
 korelacji $\rho$.
 To założenie jest zgodne z rzeczywistością. Często możemy na rynkach finansowych zaobserwować następującą sekwencję zdarzeń: gdy cena rośnie gwałtownie w górę, zwiększa się zmienność, 
 natomiast w okresach spokoju zmienność jest na relatywnie niskim poziomie.
 
-Niestety, w odróżnieniu od modela Blacka-Scholsa, dla modelu Hestona nie istnieje pełne rozwiązanie analitycznie (istnieje tylko częściowe rozwiązanie analityczne). Wobec tego, aby należy się posłużyć numerycznymi metodami wyznaczenia rozwiązania i przeprowadzimy symulacje Monte Carlo, aby wyznaczyć 
-cenę opcji zgodną z tym modelem.
+Niestety, w odróżnieniu od modela Blacka-Scholsa, dla modelu Hestona nie istnieje pełne rozwiązanie analitycznie (istnieje tylko częściowe rozwiązanie analityczne). Wobec tego, aby 
+wyliczyć wartość opcji, należy się posłużyć numerycznymi metodami wyznaczenia rozwiązania.
 
 
 % Poniższa lista przedstawia podstawowe 
@@ -539,7 +541,7 @@ v_{i+1}  = v_i + \kappa (\theta - v_i^+) \Delta t + \epsilon +  \sqrt{v_i^+} \De
 \end{equation}
 
 Mając wygenerowaną trajektorię zmienności, można przystąpić do zdyskretyzowania równania opisującego 
-dynamikę cen aktywa bazowego jednakże pamiętając o tym, aby zmienność zawsze była wartością dodatnią. 
+dynamikę cen aktywa bazowego, jednakże pamiętając o tym, aby zmienność zawsze była wartością dodatnią. 
 Mając to na uwadze, równanie nr \ref{h:eulerAssetPath} opisuję dynamikę cen instrumentu bazowego w postaci dyskretnej:
 
 \begin{equation}\label{h:eulerAssetPath}
@@ -589,10 +591,10 @@ opcji w oparciu o model Hestona:
 \chapter{Kalibracja modelu}
 \label{chap:chapterModelCalibration}
 
-Przed przystąpieniem do wyznaczenia ceny opcji zgodnej z modelem Hestona, potrzebujemy uzyskać zetaw parametrów dla tego modelu. 
+Przed przystąpieniem do wyznaczenia ceny opcji zgodnej z modelem Hestona, potrzebujemy uzyskać zestaw parametrów dla tego modelu. 
 Problem wyznaczenia parametrów modelu nazywamy \textbf{problemem kalibracji} modelu.  
 
-Jednym ze sposobem na kalibrację modeli jest technika symulowanego wyżarzania (ang. simulated annealing). Należy od do grona stochastycznych metaheurystyk, które pomagają w rozwiązaniu problemów optymalizacyjnych (a takim właśnie problemem jest kalibracja modelu, chcemy zminimalizować wartość funkcji będącej różnicą wartości funkcji wynikającej z modelu i z rynku).
+Jednym ze sposobów na kalibrację modeli jest technika symulowanego wyżarzania (ang. simulated annealing). Należy od do grona stochastycznych metaheurystyk, które pomagają w rozwiązaniu problemów optymalizacyjnych (a takim właśnie problemem jest kalibracja modelu, chcemy zminimalizować wartość funkcji będącej różnicą wartości funkcji wynikającej z modelu i z rynku).
 
 Kolejnym sposobem jest powszechnie stosowana nielinowa metoda najmniejszych kwadratów. I właśnie ta metoda zostanie użyta w niniejszej pracy w celu wyznaczenia parametrów modelu.
 
@@ -724,9 +726,9 @@ Model Hestona, jak opisano w poprzednim rozdziale, odrzuca założenie o stało�
 Jednak pozostałe parametry wciąż pozostają na niezmienionym poziomie, co daje możliwość uzmiennienia
 kolejnych stałych w modelu.
 Ponadto, również wariancję w modelu Hestona można uzależnić nie tylko 
-od jednego, ale od wielu procesów zmienności \textit{ang. Multifactor Heston Models}.
+od jednego, ale od wielu procesów zmienności (\textit{ang. Multifactor Heston Models}).
 
-Kolejna możliwość to wprowadzenie do modeli zmienności stochastycznej ze skokami (\textit{ang. stochastic volatility models with jumps})
+Kolejna możliwość to wprowadzenie do modeli zmienności stochastycznej \textbf{skoków} (\textit{ang. stochastic volatility models with jumps})
 Tego typu modele tworzą odrębną klasę modeli, a procesem, który najczęściej modeluje właściwość
 skoków w tego typu procesach jest proces Poissona.
 
@@ -743,7 +745,7 @@ Petera Christoffersena \index{Christoffersen, Peter} \cite{Christoffersen}.
 Opsiuje go następujący układ równań:
 
 \begin{equation}
-dS_t  = r S_t dt + \sqrt{V_1} S dW_1 + + \sqrt{V_2} S dW_2
+dS_t  = r S_t dt + \sqrt{V_1} S dW_1 + \sqrt{V_2} S dW_2
 \end{equation} 
 
 \begin{equation}
@@ -920,7 +922,8 @@ opcji na indeks S\&P500:
 Jak wynika z rysunku, dla opcji o bliskim terminie do wygaśnięcia opcji bardzo dobrze jest widoczny
 tak zwany uśmiech zmienności (\textit{ang. volatility smile}). Stwierdzenie uśmiech 
 odnosi się do faktu, że dla opcji \textit{in-the-money} oraz \textit{out-the-money}
-zmienność implikowana jest o wiele wyższa niż dla opcji \textit{at-the-money}.
+zmienność implikowana jest o wiele wyższa niż dla opcji \textit{at-the-money} (dla opcji o krótkim
+terminie do wykupu).
 Jest to zarazem kolejny dowód na to, że założenie o stałości zmienności w modelu Blacka-Scholesa jest rzeczywiście niespełnione.
 
 
@@ -931,7 +934,7 @@ wyliczyć mając dane podstawowe parametry opcji. Jednak, jak opisano w czwartym
 kalibracja (wyznaczenie optymalnych) parametrów modelu Hestona jest skomplikowana i jest
 zadaniem optymalizacyjnym.  
 
-Kalibracji dokonamy przy pomocy dostępnej w programie \textit{Matlab} funkcji \textit{nsqnonlin}.
+Kalibracji dokonamy przy pomocy dostępnej w programie \textit{Matlab} funkcji \textit{lsqnonlin}.
 Jednak, aby użyć tej funkcji potrzebujemy giełdowych danych wejściowych.
 
 
@@ -959,7 +962,7 @@ W wyniku kalibracji otrzymano następujące parametry:
 \end{itemize}
 
 
-Opcja o takich samych parametrach została wyliczona na podstawie metody przedstawionej w rozdziale pierwszym. Cena takiej opcji wynosi, także jest bardzo bliska wartości wyznaczonej przy pomocy modelu Blacka-Scholesa.
+Mając wyznaczone zadane parametry modelu, można przejść do wyceny opcji, stosując metodę Monte Carlo.
 
 
 \section{Symulacja Monte Carlo ceny europejskiej opcji kupna na indeks S\&P500}
@@ -976,10 +979,11 @@ W tym rozdziale wycenimy opcję kupna o następujących właściwościach:
   \item czas do wygaśnięcia opcji = 412 dni
 \end{enumerate}
  
-Na poniższym rysunku widać wynik symulacji ceny opcji dla 10000 tysięcy przebiegów.
+Na poniższym rysunku widać wynik symulacji ceny opcji dla kilkuset losowo wybranych przebiegów.
 Z definicji Monte Carlo wynika, ze poprawnym estymatorem dla wartości oczekiwanej ceny
-opcji jest średnia ze wszystkich przebiegów, zatem na rysunku przedstawiono także linię
-oznaczającą średnią wartość ceny opcji. 
+opcji jest średnia ze wszystkich przebiegów.
+Na rysunku zanaczono również poziomą linią wartość punktu startowego, tzn. wartość 
+aktywa bazowego w momencie zerowym.
 
 \begin{figure}
 \centering
@@ -998,7 +1002,7 @@ Przypomnijmy, że dla modelu Blacka-Scholesa, cena ta wynosiła $14.16$ USD.
 
 Po wycenie opcji, podstawowym krokiem jest sprawdzenie wrażliwości opcji na jednostkowe zmiany
 poszczególnych parametrów opcji.
-Definiuje się więc pięć podstawowych współczynników, zwanych w literaturze pod nazwą \textbf{współczynników greckich}.
+Definiuje się więc pięć podstawowych współczynników, znanych w literaturze pod nazwą \textbf{współczynników greckich}.
 Zaliczamy do nich:
 \begin{enumerate}
   \item $\Delta$ (delta)
