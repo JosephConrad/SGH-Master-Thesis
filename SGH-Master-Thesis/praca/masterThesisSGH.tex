@@ -660,7 +660,7 @@ gdzie:
   P_j (x, v, T; ln[K]) = \frac{1}{2} + \frac{1}{\pi} \int_{0}^{\infty} Re \bigg[ \frac{e^{-i \cdot \phi ln[K]} f_j(x, v, T; \phi) }{i \phi} d \phi \bigg]
 \end{equation}
 
-Natomiast funkcje charakterystyczne, $\phi_1, \phi_2$ mają postać: 
+Natomiast funkcje charakterystyczne mają postać: 
 
 \begin{equation}
    f_j(x, v, T; \phi) = e^{C(T-t; \phi) + D(T-t; \phi)v + i \phi x}
@@ -909,8 +909,8 @@ Ponadto, jak zostało wspomniane w rozdziale dotyczącym wyceny opcji w modelu B
 jedynym nieznanym parametrem w modelu jest zmienność, którą otrzymujemy podstawiając
 dane rynkowe. 
 
-Rysunek nr \ref{fig:volatilitySurface} przedstawia płaszczyznę zmienności dla 
-opcji na indeks S\&P500:
+Na podstawie danych wyliczono również płaszczyznę zmienności dla 
+opcji na indeks S\&P500, co przedstawia rysunek nr \ref{fig:volatilitySurface}. 
 
 \begin{figure}
   \centering
@@ -919,7 +919,7 @@ opcji na indeks S\&P500:
   \label{fig:volatilitySurface}
 \end{figure}
 
-Jak wynika z rysunku, dla opcji o bliskim terminie do wygaśnięcia opcji bardzo dobrze jest widoczny
+Jak z niego wynika, dla opcji o bliskim terminie do wygaśnięcia opcji bardzo dobrze jest widoczny
 tak zwany uśmiech zmienności (\textit{ang. volatility smile}). Stwierdzenie uśmiech 
 odnosi się do faktu, że dla opcji \textit{in-the-money} oraz \textit{out-the-money}
 zmienność implikowana jest o wiele wyższa niż dla opcji \textit{at-the-money} (dla opcji o krótkim
