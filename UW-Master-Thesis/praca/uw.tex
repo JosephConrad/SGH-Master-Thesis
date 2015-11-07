@@ -78,22 +78,22 @@ Jednak w standardzie C++11 wprowadzono wiele mechanizmów funkcyjnych, znanych z
 
 Właśnie o wprowadzonych mechanizmach funkcyjnych do języka C++ traktuje poniższa praca.
 
-Skłąda się ona z~czterech rozdziałów i~dodatków.
-W~rozdziale~\ref{r:Zmiany} opisano najważniejsze zmieny jakie wprowadzono do nowego standardu języka C++.
+Składa się ona z czterech rozdziałów i dodatków.
+W rozdziale~\ref{r:Zmiany} opisano najważniejsze zmiany jakie wprowadzono do nowego standardu języka C++.
 Rozdział~\ref{r:SposobRealizacji} przedstawia sposób wprowadzenia zmian do języka oraz siłę ich wyrazu. 
-Wprowadzone zmiany zostaną dokłanie opisane pod względem generyczności i szybkości rozwiązania.
+Wprowadzone zmiany zostaną dokładnie opisane pod względem generyczności i szybkości rozwiązania.
 
 
 Kolejna część pracy (rozdział \ref{r:Porownanie}) porównuje efektywność i szybkość działania programu.
 Zostanie porównana szybkość działania konstrukcji funkcyjnych z tymi spotykanymi w języku Haskell i Python.
 
 Rozdział \ref{r:Biblioteka} zawiera z kolei krótki opis biblioteki zaimplementowanej przy użyciu technik 
-metaprogramowania. Jest to biblioteka dostarczająca gotowych funkcji do operawania na listach. Jest ona 
+metaprogramowania. Jest to biblioteka dostarczająca gotowych funkcji do operowania na listach. Jest ona 
 zaimplementowana w duchu biblioteki LINQ, obecnej w języku $C\#$. 
 
 
 W ostatnim rozdziale jest zawarte podsumowanie wprowadzonych zmian. 
-W~dodatkach z kolei, umieszczono wybrane fragmenty kodu zaimplementowanej biblioteki z rozdziału \ref{r:Biblioteka}.
+W dodatkach z kolei, umieszczono wybrane fragmenty kodu zaimplementowanej biblioteki z rozdziału \ref{r:Biblioteka}.
 
 
 
@@ -102,7 +102,7 @@ W~dodatkach z kolei, umieszczono wybrane fragmenty kodu zaimplementowanej biblio
 
 \chapter{Opis wprowadzonych zmian do języka C++}\label{r:Zmiany}
 
-W nieniejszym rozdziale zostaną przedstawione najważniejsze zmiany jakie wprowadzono do języka C++ w nowych standarach. 
+W niniejszym rozdziale zostaną przedstawione najważniejsze zmiany jakie wprowadzono do języka C++ w nowych standardach. 
 Szczególna uwaga zostanie jednak zwrócona na mechanizmy, które są charakterystyczne dla programowania w stylu funkcyjnym.
 Należy tutaj wymienić przede wszystkim funkcje lambda oraz automatyczne określanie typu przy pomocy słowa kluczowego \textit{auto}.
 
@@ -184,7 +184,7 @@ potrefił określić typ tej zmiennej. Obrazuje to poniższy listing nr \ref{lst
 
 Pomimo olbrzymiej prostoty, która wiąże się z użyciem deklaracji typu \textit{auto}, 
 należy pamiętać, że w pewnych sytuacjach
-wyzanczony typ może być nieprawidłowy. Taka sytuacja występuje podczas użycia w kodzie programu wzorca 
+wyznaczony typ może być nieprawidłowy. Taka sytuacja występuje podczas użycia w kodzie programu wzorca 
 projektowego pełnomocnik (ang. \textit{proxy}).
 Rozwiązaniem tego problemu jest użycie wprost typowanego inicjalizatora (ang. \textit{explicitly typed initializer idiom}).
 
@@ -209,9 +209,9 @@ zamiast użycia wprost typowanego inicjalizatora:
 \inputminted[numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{cpp}{listings/auto/auto3.cpp}  
 \end{listing}
 
-Argument za tym drugim rozwiązaniem jest związany z czytalnością kodu. Wykorzystując wprost typowny incjalizator 
+Argument za tym drugim rozwiązaniem jest związany z czytelnością kodu. Wykorzystując wprost typowany incjalizator 
 \textit{explicite} mówimy, że zmieniamy typ wyrażenia. Dlatego tak napisany kod jest bardziej przejrzysty: mówimy 
-wprost, że checmy dokonać konwersji typu.
+wprost, że chcemy dokonać konwersji typu.
 
 
 
@@ -243,7 +243,9 @@ Funkcje wyższego rzędu, czyli funkcje, które przyjmują jako argument lub zwr
 podstawowym narzędziem w każdym programie funkcyjnym. 
 Także w C++ mamy do dyspozycji wiele funkcji wyższego rzędu w STL-u.
 
-Jednakże, prowadzenie do standardu C++11 funkcji anonimowych znaczanie ułatwiło korzystanie z STL-owych funkcji, 
+
+\subsection{Funkcje wbudowane}
+Jednakże, prowadzenie do standardu C++11 funkcji anonimowych znaczenie ułatwiło korzystanie z wielu wbudowanych, STL-owych funkcji, 
 takich jak:
 \begin{enumerate}
 \item \textit{trasform}
@@ -252,7 +254,7 @@ takich jak:
 \end{enumerate}
 
 \noindent
-I tak, poniższy listing nr \ref{lst:accumulate} przedstawian przykładową implementację funkcji \textit{accumulate}:
+I tak, poniższy listing nr \ref{lst:accumulate} przedstawia przykładową implementację funkcji \textit{accumulate}:
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{cpp}{accumulate.cpp}
@@ -263,6 +265,8 @@ I tak, poniższy listing nr \ref{lst:accumulate} przedstawian przykładową impl
 
 Jak widzimy w definicji funkcji jako ostatni argument mamy pewną binarną funkcję, którą możemy
 zdefiniować przy pomocy funkcji anonimowej.
+
+\subsection{Programowanie aspektowe}
 
 \section{Funkcje zagnieżdżone}
 \section{Domknięcia}
@@ -283,16 +287,16 @@ zdefiniować przy pomocy funkcji anonimowej.
 
 \chapter{Porównanie z innymi językami}\label{r:Porownanie}
 
-W nieniejszym rozdziale zostanie przedstawione porównanie jak wygląda szybkość funkcji 
-wyższego rzędu w C++11 (z zastosowaniem funkcji anonimowych), w odniesieniud do innych języków.
+W niniejszym rozdziale zostanie przedstawione porównanie jak wygląda szybkość funkcji 
+wyższego rzędu w C++11 (z zastosowaniem funkcji anonimowych), w odniesieniu do innych języków.
 Do celów porównawczych wybrano język Haskell, który jest językiem funkcyjnym bez efektów ubocznych.
-Dokonano również porównania w stosounku do Pythona, który ma zaimplementowane wiele 
+Dokonano również porównania w stosunku do Pythona, który ma zaimplementowane wiele 
 funkcji wyższego rzędu w swojej bibliotece standardowej.
 
 \section{Wydajność funkcji wyższego rzędu w C++11}
 
 
-Na listingu nr \ref{lst:HigherOrderCPP} możemy zobaczyć przykład implementacji 3 funkcji wyżeszgo rzędu 
+Na listingu nr \ref{lst:HigherOrderCPP} możemy zobaczyć przykład implementacji 3 funkcji wyższego rzędu 
 z użycie funkcji lambda. 
 
 \begin{listing}[H]
@@ -383,10 +387,3 @@ Biblioteka LINQ w C++
 \end{thebibliography}
 
 \end{document}
-
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% coding: latin-2
-%%% End:
