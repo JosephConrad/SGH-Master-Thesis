@@ -91,7 +91,6 @@ target/
 
 *.bbl
 *.bcf
-*.bib
 *.blg
 *.dvi
 *.idx
