@@ -399,7 +399,7 @@ oczekiwanej jest średnia z próby:
 Inaczej mówiąc, aproksymujemy prawdziwą wartość wartością oczekiwaną \textbf{średnią z próby} (\textit{ang. sample mean}).
 
 Implementację metody Monte-Carlo, wraz z przedstawionym w tym rozdziale sposobem wyznaczenia 
-ceny opcji w oparciu o model Blacka-Scholesa, przedstawia listing nr \ref{lst:MCBS}:
+ceny opcji w oparciu o model Blacka-Scholesa, przedstawia kod źródłowy nr \ref{lst:MCBS}:
 
 
 \begin{listing}[H]
@@ -646,7 +646,7 @@ następującej postaci:
 \section{Symulacja Monte Carlo}
 
 
-Na poniższym listing nr \ref{lst:MCHeston} znajduje się główna funkcja użyta do wygenerowania ceny 
+Poniższy kod źródłowy nr \ref{lst:MCHeston} znajduje się główna funkcja użyta do wygenerowania ceny 
 opcji w oparciu o model Hestona:
 
 \begin{listing}[H]
@@ -686,7 +686,7 @@ Wśród możliwych podejść należy wymienić np.:
 \end{enumerate}
 
 
-Do bardziej popularnych metod, jakie wybiera się, aby skalibrować model Hestona, jest podejście randomizacyjne. Schemat algorytmu symulowanego wyżarzania można zobaczyć na poniższym listingu
+Do bardziej popularnych metod, jakie wybiera się, aby skalibrować model Hestona, jest podejście randomizacyjne. Schemat algorytmu symulowanego wyżarzania można zobaczyć na poniższym kodzie źródłowym:
 \ref{lst:simulatedAnnealing}:
 
 \begin{listing}[H]
@@ -752,7 +752,7 @@ D (r; \phi)  = \frac{b_j- \rho \sigma \phi i + d}{\sigma^2} \bigg[ \frac{1 - e^{
 g_j= \frac{b_j - \rho \sigma \phi i + d}{b_j - \rho \sigma \phi i - d}
 \end{equation}
 
-Poniższe listingi przedstawią implementację powyższych wzorów wyznaczających cenę opcji w modelu Hestona:
+Poniższe kody źródłowe przedstawią implementację powyższych wzorów wyznaczających cenę opcji w modelu Hestona:
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{matlab}
