@@ -7,6 +7,7 @@
 \usepackage{listings}
 % package for hyperinks
 \usepackage{hyperref}
+\usepackage{svg}
 \hypersetup{
     colorlinks,
     citecolor=black,
@@ -14,13 +15,34 @@
     linkcolor=black,
     urlcolor=black
 }
-   
-\definecolor{grey}{gray}{0.9}
-\definecolor{bg}{HTML}{FAFAFA}
-\definecolor{darkgray}{HTML}{D5D5D5}
+\usepackage{graphicx}  
+
+%===========================================================================
+%             Index
+%=========================================================================== 
+\usepackage{makeidx}
+\makeindex
+ 
 
 \makeatletter
+\def\l@lstlisting#1#2{\@dottedtocline{1}{1.5em}{3em}{#1}{#2}}
+\makeatother
+
+%===========================================================================
+%             Code color
+%=========================================================================== 
+\definecolor{grey}{gray}{0.9}
+\definecolor{bg}{HTML}{FAFAFA}
+\definecolor{darkgray}{HTML}{D5D5D5} 
+% \newgeometry{left=25mm,right=0.8in,top=25mm,bottom=25cm}
+
+% \renewcommand\lstlistlistingname{}
+\renewcommand*{\listlistingname}{Lista kodów źródłowych}
+\makeatletter
+\raggedbottom
+% \renewcommand{\lstlistlistingname}{Spis kodów źródłowych}
 \renewenvironment{minted@colorbg}[1]{
+\linespread{1.0} 
 \setlength{\fboxsep}{\z@}
 \def\minted@bgcol{#1}
 \noindent
@@ -31,8 +53,11 @@
 \colorbox{\minted@bgcol}{\usebox{\minted@bgbox}}}
 \makeatother
 
-% Dane magistranta:
 
+
+%===========================================================================
+%             Name
+%=========================================================================== 
 \author{Konrad Lisiecki}
 \nralbumu{291649}
 \title{Mechanizmy funkcyjne w języku C++}
@@ -52,6 +77,19 @@
 \keywords{C++, functional programming, C++11, funkcja lambda}
 \newtheorem{defi}{Definicja}[section]
 
+
+
+
+%===========================================================================
+%             Bibliogrphy
+%=========================================================================== 
+\usepackage[style=numeric,sorting=ydnt,defernumbers=true, backend=bibtex]{biblatex}
+\addbibresource{bibliography.bib}
+
+
+%===========================================================================
+%             Begin
+%=========================================================================== 
 \begin{document}
 
 \maketitle
@@ -104,7 +142,7 @@ W dodatkach z kolei, umieszczono wybrane fragmenty kodu zaimplementowanej biblio
 
 W niniejszym rozdziale zostaną przedstawione najważniejsze zmiany jakie wprowadzono do języka C++ w nowych standardach. 
 Szczególna uwaga zostanie jednak zwrócona na mechanizmy, które są charakterystyczne dla programowania w stylu funkcyjnym.
-Należy tutaj wymienić przede wszystkim funkcje lambda oraz automatyczne określanie typu przy pomocy słowa kluczowego \textit{auto}.
+Należy tutaj wymienić przede wszystkim funkcje lambda\index{Lambda} oraz automatyczne określanie typu przy pomocy słowa kluczowego \textit{auto}.
 
 
 
@@ -317,42 +355,99 @@ W celach porównawczych zostanie wykonane 3 funkcje:
   \item agregowanie
 \end{enumerate}
 
-Na podstawie tych 3 funkcji (oraz zdefiniowanych przy pomocy lambd funckji przekazanych jako argumenty) postaramy się
+Na podstawie tych 3 funkcji (oraz zdefiniowanych przy pomocy lambd funkcji przekazanych jako argumenty) postaramy się
 zdefiniować jakość wprowadzonych rozwiązań. Jednak określenie jakości wprowadzonych rozwiązań jest ciężkie do zdefiniowania
 w formie, która da się dobrze porównać między językami, w pracy zostaną użyte dwie metryki:
 \begin{enumerate}
-  \item ilość znaków użyta do wygenrowania i wywołania funkcji
+  \item ilość znaków użyta do wygenerowania i wywołania funkcji
   \item szybkość wykonania
 \end{enumerate}
 
-\section{Szybkośc wykonania}
-Szybkość wykonania poszczególnych programów będzie zbadana przy pomocy progrmu \textit{time}. Używając tego programu otrzymujemy 
-3 statystyki: \textit{real}, \textit{user}, \textit{sys}, z których w celach porównawczych użyjemy czsu \textit{user}, który jest 
-rzeczywistym czasem spędzonym w trybie użytkownia (\textit{ang. user mode}), a nie trybie jądra (\textit{ang. kernel mode}).
+\section{Szybkość wykonania}
+Szybkość wykonania poszczególnych programów będzie zbadana przy pomocy programu \textit{time}. Używając tego programu otrzymujemy 
+3 statystyki: \textit{real}, \textit{user}, \textit{sys}, z których w celach porównawczych użyjemy czasu \textit{user}, który jest 
+rzeczywistym czasem spędzonym w trybie użytkownika (\textit{ang. user mode})\cite{ManTime}, a nie trybie jądra (\textit{ang. kernel mode}).
 
 \section{Wydajność funkcji wyższego rzędu w C++11}
 
+Na początku rozważaną funkcją będzie funkcja agregująca. Poniższe listingi nr \ref{lst:AggregateCpp}, \ref{lst:AggregatePy} oraz \ref{lst:AggregateHs}
+przedstawiają implementację funkcji agregujących kolejno w językach \textit{Haskell}, \textit{Python} oraz w \textit{C++11}:
 
 
-Na listingu nr \ref{lst:HigherOrderCPP} możemy zobaczyć przykład implementacji 3 funkcji wyższego rzędu 
-z użycie funkcji lambda. 
+\section{Funkcje agregujące}
+\begin{listing}[ht]
+
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm, firstline=2,lastline=2]{haskell}
+{../src/SEM1/effectivness/sum.hs}  
+\caption{Funkcja agregująca w języku \textit{Haskell}}
+\label{lst:AggregateHs}
+\end{listing}
+
+\begin{listing}[ht]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm, firstline=11,lastline=14]{cpp}
+{../src/SEM1/effectivness/sum.cpp}  
+\caption{Funkcja agregująca w języku \textit{C++}}
+\label{lst:AggregateCpp}
+\end{listing}
+
+\begin{listing}[ht]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm, firstline=3,lastline=3]{python}
+{../src/SEM1/effectivness/sum.py}  
+\caption{Funkcja agregująca w języku \textit{Python}}
+\label{lst:AggregatePy}
+\end{listing} 
+
+\section{Funkcje filtrujące}
+
+Kolejnym rodzajem funkcji, których szybkość zostanie zbadana są funkcje filtrujące. W języku \textit{Haskell} poniżej mamy przykład. 
+Poniższe listing  \ref{lst:FilteringHs} pokazuje definicję funkcji \textit{filter} w języku Haskell
+\begin{listing}[ht]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{haskell}
+{../src/SEM1/effectivness/filterDef.hs}  
+\caption{Funkcja filtrująca w języku \textit{Haskell}}
+\label{lst:FilteringHs}
+\end{listing}
+
+% \begin{listing}[ht]
+% \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm, firstline=11,lastline=14]{cpp}
+% {../src/SEM1/effectivness/rem.cpp}  
+% \caption{Funkcja filtrująca w języku \textit{C++}}
+% \label{lst:FilteringCpp}
+% \end{listing}
+
+\begin{listing}[ht]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{python}
+{../src/SEM1/effectivness/filterDef.py}  
+\caption{Funkcja filtrująca w języku \textit{Python}}
+\label{lst:FilteringPy}
+\end{listing} 
+
+
+Na listingu nr \ref{lst:HigherOrderCPP} możemy zobaczyć przykład implementacji 3 funkcji wyższego rzędu z użyciem funkcji lambda. 
 
 \begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{cpp}{../SEM1/fun.cpp}
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{cpp}{../src/SEM1/fun.cpp}
 \caption{Przykład poprawnego i niepoprawnego użycia capture-list w wyrażeniach lambda}
 \label{lst:HigherOrderCPP}
 \end{listing}
 
 
 
+
+
+
+
+
+
+
 \section{Porównanie z językiem Haskell}
 \section{Porównanie z językiem Python}
 
-W tej sekcji zostanie przedstawione te same funkcje wyższego rzędu, tylko że w języku Python. 
+W tej sekcji zostanie przedstawione te same funkcje wyższego rzędu, tylko że w języku Python..
 Znajdują się one na listingu nr \ref{lst:HigherOrderPython}:
  
 \begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{python}{../SEM1/fun.py}
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, rulecolor=\color{darkgray}, frame=lines, framesep=2mm]{python}{../src/SEM1/fun.py}
 \caption{Przykład funkcji wyższego rzędu w języku Python}
 \label{lst:HigherOrderPython}
 \end{listing}
@@ -373,55 +468,14 @@ Biblioteka LINQ w C++
 \chapter{Podsumowanie}
 
 
+%===========================================================================
+%             Appendix
+%=========================================================================== 
+\appendix
+\listoffigures 
+\addcontentsline{toc}{chapter}{Lista rysunków} \markboth{Figures}{}
+\printbibliography
+\printindex
 
-\listoffigures
-\listoftables
-% \listoflistings
-
-\begin{thebibliography}{99}
-\addcontentsline{toc}{chapter}{Bibliografia}
-
-\bibitem[Bea65]{beaman} Juliusz Beaman, \textit{Morbidity of the Jolly
-    function}, Mathematica Absurdica, 117 (1965) 338--9.
-
-\bibitem[Blar16]{eb1} Elizjusz Blarbarucki, \textit{O pewnych
-    aspektach pewnych aspektów}, Astrolog Polski, Zeszyt 16, Warszawa
-  1916.
-
-\bibitem[Fif00]{ffgg} Filigran Fifak, Gizbert Gryzogrzechotalski,
-  \textit{O blabalii fetorycznej}, Materiały Konferencji Euroblabal
-  2000.
-
-\bibitem[Fif01]{ff-sr} Filigran Fifak, \textit{O fetorach
-    $\sigma$-$\rho$}, Acta Fetorica, 2001.
-
-\bibitem[Głomb04]{grglo} Gryzybór Głombaski, \textit{Parazytonikacja
-    blabiczna fetorów --- nowa teoria wszystkiego}, Warszawa 1904.
-
-\bibitem[Hopp96]{hopp} Claude Hopper, \textit{On some $\Pi$-hedral
-    surfaces in quasi-quasi space}, Omnius University Press, 1996.
-
-\bibitem[Leuk00]{leuk} Lechoslav Leukocyt, \textit{Oval mappings ab ovo},
-  Materiały Białostockiej Konferencji Hodowców Drobiu, 2000.
-
-\bibitem[Rozk93]{JR} Josip A.~Rozkosza, \textit{O pewnych własnościach
-    pewnych funkcji}, Północnopomorski Dziennik Matematyczny 63491
-  (1993).
-
-\bibitem[Spy59]{spyrpt} Mrowclaw Spyrpt, \textit{A matrix is a matrix
-    is a matrix}, Mat. Zburp., 91 (1959) 28--35.
-
-\bibitem[Sri64]{srinis} Rajagopalachari Sriniswamiramanathan,
-  \textit{Some expansions on the Flausgloten Theorem on locally
-    congested lutches}, J. Math.  Soc., North Bombay, 13 (1964) 72--6.
-
-\bibitem[Whi25]{russell} Alfred N. Whitehead, Bertrand Russell,
-  \textit{Principia Mathematica}, Cambridge University Press, 1925.
-
-\bibitem[Zen69]{heu} Zenon Zenon, \textit{Użyteczne heurystyki
-    w~blabalizie}, Młody Technik, nr~11, 1969.
-
-
-\end{thebibliography}
 
 \end{document}

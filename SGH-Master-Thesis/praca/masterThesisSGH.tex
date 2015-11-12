@@ -57,12 +57,11 @@
 
 \author{Konrad Lisiecki}
 \nralbumu{48211}
-\title{Wycena Opcji przy użyciu Modeli Zmienności Stochastycznej} 
+\title{Wycena Opcji przy pomocy Modeli Zmienności Stochastycznej} 
 \kierunek{Finanse i rachunkowość}
 \instytut{Ekonometrii}
 \opiekun{dra hab. Łukasza Delonga} 
 \date{Warszawa 2015}   
-
 % Tu jest dobre miejsce na Twoje własne makra i~środowiska:
 \newtheorem{defi}{Definicja}[section]
 
@@ -72,11 +71,19 @@
 
 
 %===========================================================================
-%             Bibliogrphy
+%                             Bibliogrphy
 %=========================================================================== 
 \usepackage[style=numeric,sorting=ydnt,defernumbers=true, backend=bibtex]{biblatex}
 \addbibresource{biblio.bib}
  
+%===========================================================================
+%                               Listings
+%===========================================================================
+\renewcommand\listoflistingscaption{Spis kodów źródłowych}
+\renewcommand\listingscaption{Kod źródłowy}
+
+\usepackage{chngcntr}% http://ctan.org/pkg/chngcntr
+\counterwithin{listing}{chapter}
 
 %===========================================================================
 %                           Begin of document 
@@ -144,7 +151,7 @@ wartość opcji na indeks \textit{S\&P500} stosując odpowiednio model Blacka-Sc
 \raggedleft\slshape John Hull \index{Hull, John}
 \end{quote}
 Niniejsza praca jest poświęcona modelom zmienności stochastycznej używanych przy wycenie opcji. 
-Jednak za tą dosyć enigmatyczną nazwą, nasuwa się pytanie, czym dokładnie są te modele? 
+Po pierwsze, nasuwa się pytanie, czym dokładnie są te modele? 
 Jaka jest ich istota?
 
 Bardzo zwięzłej, a zarazem trafnej odpowiedzi na te pytania udziela John Hull, 
@@ -152,21 +159,87 @@ jeden z pionierów dzisiejszych finansów ilościowych. Stwierdza on, zgodnie z 
 powyżej cytatem, że są to modele, gdzie nie tylko cena aktywa bazowego, ale również jego zmienność, 
 poruszają się w sposób nieprzewidywalny, losowy. 
 
-Jednak do lat '90 XX wieku podstawowym modelem do wyceny opcji był Model Blacka-Scholesa. U jego podstaw 
+Do lat '90 XX wieku podstawowym modelem do wyceny opcji był Model Blacka-Scholesa. U jego podstaw 
 leży bardzo istotne założenie mówiące o tym, że zmienność instrumentów finansowych jest stała w czasie. 
+Niestety, założenie to jest niezgodne z tym, co możemy obserwować na rynkach finansowych. 
+Można to szczególnie mocno zauważyć w czasie cyklicznie powtarzających się kryzysów finansowych.
 
-Niestety, założenie to jest niezgodne z tym, co możemy obserwować na rynkach finansowych. Można to szczególnie mocno zauważyć w czasie cyklicznie powtarzających się kryzysów finansowych.
-
-Stąd też, wysoka, niestała zmienność na rynkach finansowych stała się podstawową motywacją wprowadzenia modeli wyceny
-opcji dla których zmienność nie jest ustalonym parametrem, a zmienną zależną od pewnych innych czynników. 
+Obserwowalna duża zmienność w czasie parametru zmienności na rynkach finansowych stała się podstawową motywacją wprowadzenia modeli wyceny
+opcji, dla których zmienność nie jest ustalonym parametrem, a zmienną zależną od pewnych innych czynników. 
 Pionierem w tym obszarze okazał się Steven Heston\index{Heston, Steven}, który w 1993 opublikował pracę, gdzie wprowadza
 nowy model wyceny opcji, w którym nie tylko proces cen instrumentu bazowego, ale również
 proces zmienności jest stochastyczny (losowy) i zależny od czasu \cite{Heston}. Na jego cześć, model ten 
 w literaturze znany jest pod nazwą modelu Hestona.
 
-Niniejsza praca stanowi próbę przedstawienia tego modelu oraz sposobu jak, używając istniejących narzędzi,
-można przy jego pomocy wyliczyć wartość opcji. Część empiryczna pracy jest z kolei próbą sprawdzenia, jak 
+W niniejszej pracy przedstawiony zostanie model oraz sposób wyliczenia wartości opcji.
+Część empiryczna pracy jest z kolei próbą sprawdzenia, jak 
 model, oraz narzędzia do jego stosowania, sprawdzają się w praktyce.
+
+W dalszej części tego rozdziału, zostaną przedstawione motywacje rozwoju takich modeli oraz w jaki sposób
+wpływają one na dokładność analizy finansowej i efektywność rynków finansowych.
+
+\section{Wycena opcji na potrzeby rynków finansowych} % (fold)
+
+Instrumenty pochodne, a w szczególności opcje, są dzisiaj bardzo ważną klasą instrumentów finansowych i stanowią znaczną 
+część wartości obrotu na światowych giełdach.
+
+Światowy rynek który dziś jest warty około 450 mld EUR \cite{GlobalDerMarket}, jeszcze około 25 lat temu, rynek opcyjny był bardzo mały. Powstaje więc pytanie co wpłynęło na rozwój tego typu transakcji 
+na globalnym rynku? 
+
+\subsection{Opcje jako element zarządzania ryzykiem} % (fold)
+\label{sub:opcje_na_akcje_i_indeksy_gie_dowe}
+Podstawowym rodzajem kontraktów opcyjnych występujących na rynkach finansowych są opcje na akcje oraz opcje indeksy 
+giełdowe.
+% subsection opcje_na_akcje_i_indeksy_gie_dowe (end)
+
+\subsection{Opcje jako element zarządzania ryzykiem walutowym} % (fold)
+\label{sub:opcje_na_rynku_walutowym}
+Kontrakty opcyjne są także, obok kontraktów terminowych, podstawowym sposobem na redukcję ryzyka kursowego.
+
+
+% subsection opcje_na_rynku_walutowym (end)
+
+\subsection{Market } % (fold)
+\label{sub:produkty_strukturyzowane}
+
+% subsection produkty_strukturyzowane (end)
+
+
+
+
+\section{Wycena opcji na potrzeby rachunkowości}
+\label{sec:aspekty_finansowe}
+
+\subsection{Rachunkowość sprawozdawcza} % (fold)
+\label{sub:rachunkowosc_sprawozdawcza}
+Opcje, jako instrumenty finansowe, są integralnym składnikiem każdego sprawozdania finansowego. Na koniec 
+każdego roku sprawozdawczego istnieje potrzeba określenia ich wartości w celach sprawozdawczych.
+Standard rachunkowości finansowej MSSR 13 określa, że w sprawozdaniu finansowym wartość opcji na dzień 
+bilansowy we wartości godziwej (\textit{ang. fair value}), to znaczy takiej, która odzwierciedla
+rzeczywistą wartość instrumentu finansowego na dany moment. Wśród możliwych metod wyceny instrumentów finansowych, 
+standard określa trzy metody wyceny 
+\begin{enumerate}
+  \item podejście rynkowe 
+\end{enumerate}
+W zależności od profilu działalności, spółka może posiadać spory portfel pochodnych instrumentów finansowych, stanowiących znaczącą
+część sumy bilansowej. Przeważać wśród nich mogą takie instrumenty finansowe jak opcje egzotyczne, który wycena 
+
+przy użyciu modelu Blacka-Scholesa nie jest możliwa. 
+% subsection rachunkowosc_sprawozdawcza (end)
+
+
+\subsection{Rachunkowość zarządcza} % (fold)
+\label{sub:RachunkowoscZarzadcza}
+Kolejnym źródłem zastosowania bardziej zaawansowanych form wyceny opcji jest rachunkowość zarządcza. 
+W przypadku wielu opcji niepłynnych, z wbudowaną możliwości wcześniejszego wykupu, standardy rachunkowości sprawozdawczej dopuszczają
+wycenę wg. kosztu nabycia (\textit{ang. cost approach}). Organy zarządcze 
+przedsiębiorstwa potrzebują jednak znać jak najbardziej dokładną sytuację księgowo-finansową przedsiębiorstwa, aby móc podejmować
+jak najbardziej trafne decyzje bieżące i rozwojowe z punktu widzenia spółki. 
+Wycena opcji przy pomocy metod użytych w tej pracy, może dać bardziej dokładną wycenę instrumentów 
+finansowych, a co za tym idzie, lepszy obraz kondycji spółki dla osób zarządzających.  
+
+
+
 
 
 \chapter{Metoda Monte Carlo}
@@ -311,7 +384,7 @@ W końcu, aby uzyskać cenę opcji na dany moment, należy wziąć wartość ocz
   C = \frac{\mathbf{E}[v(S_T)]}{e^{-rT}}
 \end{equation}
 
-\section{Symulacja Monte Carlo}
+\section{Metoda Monte Carlo}
 
 Ostatnim krokiem, który pozostał jest wyznaczenie prawdziwej wartości opcji, co możemy uzyskać 
 stosując symulację metodą Monte Carlo.
@@ -337,6 +410,7 @@ ceny opcji w oparciu o model Blacka-Scholesa, przedstawia listing nr \ref{lst:MC
 \end{listing} 
 
 
+\section
  
 
 
@@ -1076,12 +1150,8 @@ model ten jest o wiele bardziej czasochłonny obliczeniowo, niż chociażby mode
 
 \listoffigures 
 \addcontentsline{toc}{chapter}{Lista rysunków} \markboth{Figures}{}
-% \lstlistoflistings
-% \addcontentsline{toc}{chapter}{Lista kodów źródłowych} \markboth{Listings}{}
-
-% \chapter*{Bibliografia}
-% \addcontentsline{toc}{chapter}{Bibliografia} \markboth{Bibliography}{}
-
+\addcontentsline{toc}{chapter}{Lista kodów źródłowych} \markboth{Listings}{}
+\listoflistings 
 % \begin{quote}
 
 % If I have seen farther than others, it is because I was standing on the shoulders of giants.
