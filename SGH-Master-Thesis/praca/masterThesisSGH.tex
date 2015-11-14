@@ -132,9 +132,6 @@ wartość opcji na indeks \textit{S\&P500} stosując odpowiednio model Blacka-Sc
 %                               Table of contents
 %===========================================================================
 \tableofcontents
- 
-
-% \addcontentsline{toc}{chapter}{Introduction} \markboth{INTRODUCTION}{}
 
 
 %===========================================================================
@@ -151,16 +148,28 @@ wartość opcji na indeks \textit{S\&P500} stosując odpowiednio model Blacka-Sc
 \raggedleft\slshape John Hull \index{Hull, John}
 \end{quote}
 Niniejsza praca jest poświęcona modelom zmienności stochastycznej używanych przy wycenie opcji. 
-Po pierwsze, nasuwa się pytanie, czym dokładnie są te modele? 
-Jaka jest ich istota?
+Nasuwa się jednak pytanie, czym dokładnie są te modele? 
+Jaka jest ich istota? Jaka motywacja stoi za ich powstaniem?
+
 
 Bardzo zwięzłej, a zarazem trafnej odpowiedzi na te pytania udziela John Hull, 
 jeden z pionierów dzisiejszych finansów ilościowych. Stwierdza on, zgodnie z przytoczonym 
 powyżej cytatem, że są to modele, gdzie nie tylko cena aktywa bazowego, ale również jego zmienność, 
 poruszają się w sposób nieprzewidywalny, losowy. 
 
-Do lat '90 XX wieku podstawowym modelem do wyceny opcji był Model Blacka-Scholesa. U jego podstaw 
-leży bardzo istotne założenie mówiące o tym, że zmienność instrumentów finansowych jest stała w czasie. 
+W niniejszej pracy przedstawiony zostanie model Hestona, w który zmienność nie jest wartością stałą 
+oraz sposób wyliczenia wartości opcji przy pomocy tego modelu
+Część empiryczna pracy jest z kolei próbą sprawdzenia, jak model, oraz narzędzia do jego stosowania, sprawdzają się w praktyce.
+
+W dalszej części tego rozdziału, zostaną przedstawione motywacje rozwoju takich modeli oraz w jaki sposób
+wpływają one na dokładność analizy finansowej i efektywność rynków finansowych. 
+
+
+\section{Rys historyczny} % (fold)
+\label{sec:rys_historyczny}
+
+Do lat '90 XX wieku podstawowym modelem do wyceny opcji był model Blacka-Scholesa. Opublikowany w 1973 \cite{BlackScholes} roku artykuł, którego autorami byli Fischer Black oraz Myron Scholes, był przełomowy dla teorii wyceny opcji.
+U jego podstaw leży bardzo istotne założenie mówiące o tym, że zmienność instrumentów finansowych jest stała w czasie. 
 Niestety, założenie to jest niezgodne z tym, co możemy obserwować na rynkach finansowych. 
 Można to szczególnie mocno zauważyć w czasie cyklicznie powtarzających się kryzysów finansowych.
 
@@ -170,13 +179,7 @@ Pionierem w tym obszarze okazał się Steven Heston\index{Heston, Steven}, któr
 nowy model wyceny opcji, w którym nie tylko proces cen instrumentu bazowego, ale również
 proces zmienności jest stochastyczny (losowy) i zależny od czasu \cite{Heston}. Na jego cześć, model ten 
 w literaturze znany jest pod nazwą modelu Hestona.
-
-W niniejszej pracy przedstawiony zostanie model oraz sposób wyliczenia wartości opcji.
-Część empiryczna pracy jest z kolei próbą sprawdzenia, jak 
-model, oraz narzędzia do jego stosowania, sprawdzają się w praktyce.
-
-W dalszej części tego rozdziału, zostaną przedstawione motywacje rozwoju takich modeli oraz w jaki sposób
-wpływają one na dokładność analizy finansowej i efektywność rynków finansowych.
+ 
 
 \section{Wycena opcji na potrzeby rynków finansowych} % (fold)
 
@@ -184,25 +187,24 @@ Instrumenty pochodne, a w szczególności opcje, są dzisiaj bardzo ważną klas
 część wartości obrotu na światowych giełdach.
 
 Światowy rynek który dziś jest warty około 450 mld EUR \cite{GlobalDerMarket}, jeszcze około 25 lat temu, rynek opcyjny był bardzo mały. Powstaje więc pytanie co wpłynęło na rozwój tego typu transakcji 
-na globalnym rynku? 
+na globalnym rynku? Do najważniejszych z nich możemy zaliczyć:
+
+\begin{enumerate}
+  \item 
+\end{enumerate}
 
 \subsection{Opcje jako element zarządzania ryzykiem} % (fold)
 \label{sub:opcje_na_akcje_i_indeksy_gie_dowe}
 Podstawowym rodzajem kontraktów opcyjnych występujących na rynkach finansowych są opcje na akcje oraz opcje indeksy 
-giełdowe.
-% subsection opcje_na_akcje_i_indeksy_gie_dowe (end)
+giełdowe. 
 
 \subsection{Opcje jako element zarządzania ryzykiem walutowym} % (fold)
 \label{sub:opcje_na_rynku_walutowym}
 Kontrakty opcyjne są także, obok kontraktów terminowych, podstawowym sposobem na redukcję ryzyka kursowego.
 
-
-% subsection opcje_na_rynku_walutowym (end)
-
+ 
 \subsection{Market } % (fold)
-\label{sub:produkty_strukturyzowane}
-
-% subsection produkty_strukturyzowane (end)
+\label{sub:produkty_strukturyzowane} 
 
 
 
@@ -210,29 +212,36 @@ Kontrakty opcyjne są także, obok kontraktów terminowych, podstawowym sposobem
 \section{Wycena opcji na potrzeby rachunkowości}
 \label{sec:aspekty_finansowe}
 
+Jedną z nadrzędnych zasad rachunkowości jest \textbf{zasada prawdziwego i rzetelnego obrazu}. Oznacza ona, że rachunkowość musi pokazywać rzetelny, czyli prawdziwy i wiarygodny
+obraz stanu majątkowego danej spółki. Zewidencjonowana cena instrumentów pochodnych, a w szczególności opcji, powinna więc odzwierciedlać ich \textbf{rzeczywistą 
+(godziwą) wartość} (\textit{ang. fair value}) na moment bilansowy. W praktyce oznacza to, że zaawansowane modele wyceny opcji można zastosować w dwóch działach rachunkowości: rachunkowości sprawozdawczej oraz rachunkowości zarządczej.
+
+
 \subsection{Rachunkowość sprawozdawcza} % (fold)
 \label{sub:rachunkowosc_sprawozdawcza}
-Opcje, jako instrumenty finansowe, są integralnym składnikiem każdego sprawozdania finansowego. Na koniec 
+Pierwszym źródłem zastosowania zaawansowanych form wyceny opcji jest rachunkowość sprawozdawcza.
+Opcje będące w posiadaniu przedsiębiorstwa, jako aktywa finansowe, są integralnym składnikiem każdego sprawozdania finansowego. Na koniec 
 każdego roku sprawozdawczego istnieje potrzeba określenia ich wartości w celach sprawozdawczych.
-Standard rachunkowości finansowej MSSR 13 określa, że w sprawozdaniu finansowym wartość opcji na dzień 
-bilansowy we wartości godziwej (\textit{ang. fair value}), to znaczy takiej, która odzwierciedla
-rzeczywistą wartość instrumentu finansowego na dany moment. Wśród możliwych metod wyceny instrumentów finansowych, 
-standard określa trzy metody wyceny 
+\textbf{Międzynarodowy Standard Sprawozdawczości Finansowej MSSR 13} (\textit{ang. IFRS\index{IFRS}, International Financial Reporting Standard}) 
+nie określa dokładnie w jaki sposób takie opcje mają być wycenione. 
+Określa jednak, że jednostka powinna użyć takiej metody, która odzwierciedla
+rzeczywistą  wartość instrumentu finansowego na dany moment. MSSR 13 wyróżnia podstawowe podejścia ich wyceny \cite{IFRS2013}:
 \begin{enumerate}
-  \item podejście rynkowe 
+  \item podejście dochodowe (\textit{ang. income approach})
+  \item podejście rynkowe (\textit{ang. market approach})
+  \item podejście kosztowe (\textit{ang. cost approach})
 \end{enumerate}
-W zależności od profilu działalności, spółka może posiadać spory portfel pochodnych instrumentów finansowych, stanowiących znaczącą
-część sumy bilansowej. Przeważać wśród nich mogą takie instrumenty finansowe jak opcje egzotyczne, który wycena 
-
-przy użyciu modelu Blacka-Scholesa nie jest możliwa. 
-% subsection rachunkowosc_sprawozdawcza (end)
+Pierwsze z nich, \textbf{podejście dochodowe}, określa wartość godziwą instrumentu finansowego na podstawie bieżących oczekiwań rynkowych co do wartości 
+przyszłych przepływów pieniężnych i zdyskontowania ich na moment bieżący. Najbardziej powszechnym modelami w tym podejściu są modele Blacka-Scholesa 
+oraz model dwumianowy \cite{IFRS2013}. W ostatnich latach jednak, w dobie postępu technologicznego, coraz istotniejszą rolę odgrywają bardziej zaawansowane metody probabilistyczne
+(jak będące tematem tej pracy metody bazujące na modelowaniu zmienności przy pomocy stochastycznych równań różniczkowych) oraz symulacje Monte Carlo \cite{FairValue2010}.  
 
 
 \subsection{Rachunkowość zarządcza} % (fold)
 \label{sub:RachunkowoscZarzadcza}
-Kolejnym źródłem zastosowania bardziej zaawansowanych form wyceny opcji jest rachunkowość zarządcza. 
+Kolejnym źródłem zastosowania bardziej zaawansowanych form wyceny instrumentów finansowych jest rachunkowość zarządcza. 
 W przypadku wielu opcji niepłynnych, z wbudowaną możliwości wcześniejszego wykupu, standardy rachunkowości sprawozdawczej dopuszczają
-wycenę wg. kosztu nabycia (\textit{ang. cost approach}). Organy zarządcze 
+\textbf{wycenę wg. zamortyzowanego kosztu nabycia} (\textit{ang. cost approach}). Organy zarządcze 
 przedsiębiorstwa potrzebują jednak znać jak najbardziej dokładną sytuację księgowo-finansową przedsiębiorstwa, aby móc podejmować
 jak najbardziej trafne decyzje bieżące i rozwojowe z punktu widzenia spółki. 
 Wycena opcji przy pomocy metod użytych w tej pracy, może dać bardziej dokładną wycenę instrumentów 
@@ -240,75 +249,10 @@ finansowych, a co za tym idzie, lepszy obraz kondycji spółki dla osób zarząd
 
 
 
-
-
-\chapter{Metoda Monte Carlo}
-\label{chap:introduction}
-
-% \begin{quote}
-
-% Never think that lack of variability is stability. Don't confuse lack of volatility with stability, ever.
+\section{Model Blacka-Scholesa}
+\subsection{Klasyczny model Blacka-Scholesa} % (fold)
+\label{sub:subsection_name}
  
-% \raggedleft\slshape Nassim Nicholas Taleb \index{Taleb, Nassim Nicholas}
-% \end{quote}
- 
-
-Rozdział ten stanowi wprowadzenie do tematyki poruszonej w pracy, której jest wycena opcji w oparciu
-o modele stochastycznej zmienności. 
-Jednak zanim do tego przejdziemy, przedstawiony zostanie ogólny schemat postępowania, na przykładzie modelu mniej skomplikowanego, \textbf{modelu Blacka-Scholesa}, w którym zmienność jest stała w czasie.
-Jako przykład wyceniona zostanie najprostsza opcji \textit{call}, a narzędziem do tego służącym 
-będzie \textbf{metoda Monte Carlo}.
-
-Niezależnie od rodzaju opcji, czy też modelu opisującego dynamikę cen aktywa bazowego, można 
-wyróżnić takie same etapy symulacji. 
-
-Zaliczamy do nich:
-\begin{enumerate}
-  \item Generowanie zmiennych losowych o ustalonym rozkładzie
-  \item Wyznaczenie wartości zmiennych losowych
-  \item Kalibracja modelu
-  \item Wyznaczenie wartości opcji
-  \item Symulacja Monte Carlo
-\end{enumerate}
-
-W niniejszym rozdziale zostanie przedstawiony po krótce każdy z tych elementów wraz z odpowiednim przykładem opisującym kolejny krok wyceny opcji, zgodnie z modelem Blacka-Scholesa.
-Wycena na podstawie modelu Hestona będzie podobna do tej przedstawionej w niniejszym rozdziale.
-
-\section{Generowanie zmiennych losowych o ustalonym rozkładzie}
-
-Pierwszym krokiem jaki należy podjąć podczas przeprowadzania symulacji Monte Carlo jest 
-wygenerowanie zmiennych losowych o ustalonym rozkładzie.
-
-I tak, w przypadku wyceny opcji w modelu Blacka-Scholesa potrzebna jest umiejętność generowania liczb (pseudo)losowych z rozkładu normalnego. Znamy wiele algorytmów generowania liczb o rozkładzie normalnym, wśród których można wyróżnić:
-\begin{enumerate}
-  \item metoda odwrotnej dystrybuanty
-  \item meteda Boxa-Mullera
-  \item metoda biegunów (\textit{ang. Marsaglia\index{Marsaglia, George} Polar Method})
-  \item algorytm ziggurat
-\end{enumerate}
-
-Mimo że, najbadziej wydajną metodą generowania liczb pseudolosowych o rozkładzie normalnym jest algorytm ziggurat, w tym rozdziale zostanie przedstawiona metoda biegunów.
-
-Jest ona wariantem metody Boxa-Mullera\index{Box, George}\index{Muller, Edgar}, jednak jest od niego znacznie wydajniejsza.
-Polega ona na wybraniu losowego punktu spełniającego warunek:
-\begin{equation}
-  s = x^2 + y^2 < 1
-\end{equation}
-Wtedy, aby otrzymać liczby losowe o standardowym rozkładzie normalnym, należy zastosować następujące przekształcenia:
-\begin{equation}
-  u_1 = x \sqrt{\frac{-2ln(s)}{s}}, u_2 = y \sqrt{\frac{-2ln(s)}{s}}
-\end{equation}
-Poniższy kod przedstawia implementację tego algorytmu:
-
-\begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/SimpleMonteCarlo/PolarGenerator.cpp}
-\caption{Generowanie zmiennych o rozkładzie normalnym zgodnie z metodą biegunów}
-\label{lst:lambdaSyntax}
-\end{listing} 
-
-\section{Wyznaczenie wartości zmiennych losowych}
-
 Obliczenie ceny aktywa bazowego w momencie wygaśnięcia opcji jest najważniejszym elementem 
 wyceny opcji. 
 
@@ -335,8 +279,27 @@ gdzie dynamikę cen aktywa bazowego opisuje następujący proces w mierze oboję
   dS_t = r S_t dt + \sigma S_t d W_t 
 \end{equation}
 
+ 
+\subsection{Założenia modelu Blacka-Scholesa} % (fold)
+\label{sub:zalozenia_modelu_blacka_scholesa}
 
-\section{Kalibracja modelu}
+Model Blacka-Scholesa należy do najbardziej popularnych, a zarazem najprostszych modeli do wyceny opcji. Podczas gdy jego prostota jest jedną z jego największych zalet, to posiada on wiele założeń, które nie przystają do rzeczywistości rynkowej. Pierwsza grupa to założenia dotyczące aktywów:
+\begin{enumerate}
+\item cena aktywów bazowych ma rozkład lognormalny
+\item zmienność aktywów bazowych i jest stała i znana z góry
+\item akcje nie wypłacają dywidend
+\end{enumerate}
+Z kolei druga grupa założeń odnosi się do rynku na którym dane aktywa występują.
+\begin{enumerate}
+\item na rynku nie ma możliwości osiągnięcia ponadnormatywnego zysku bez ryzyka (brak możliwości arbitrażu)
+\item nie ma kosztów transakcyjnych.
+\item stopa procentowa na rynku $r_t$ jest stała i znana z góry 
+\end{enumerate}
+
+Wszystkie te założenia sprawiają, że model Blacka-Scholesa, mimo, że pozwala na wyznaczenie ceny opcji w postaci analitycznej, może nieprecyzyjnie wycenić wartość takiej opcji.
+  
+\subsection{Zmienność implikowana} % (fold)
+\label{sub:zmienno_implikowana} 
 Kalibracja jest jednym z najważniejszych elementów podczas wyceny opcji przy pomocy jakiegokolwiek modelu.  
 
 W przypadku modelu Blacka-Scholesa, jedynym niobserwowalnym parametrem jest zmienność $\sigma$ (współczynnik dyfuzji).
@@ -361,8 +324,9 @@ stosuje się bardziej zaawansowane techniki kalibracyjne, co będzie tematyką r
   % \autoref - ok but it uses the english name of chapter
 
 
-\section{Wyznaczenie wartości opcji}
-
+\subsection{Wycena opcji Europejskiej} % (fold)
+\label{sub:subsection_name}
+ 
 Będąc uzbrojonym w wartości wszystkich parametrów modelu Blacka-Scholesa, można przystąpić
 do wyliczenia wartości opcji. I tak, jak wiadomo, wartość opcji europejskiej dla strony kupującej 
 wynosi:
@@ -384,34 +348,25 @@ W końcu, aby uzyskać cenę opcji na dany moment, należy wziąć wartość ocz
   C = \frac{\mathbf{E}[v(S_T)]}{e^{-rT}}
 \end{equation}
 
-\section{Metoda Monte Carlo}
-
-Ostatnim krokiem, który pozostał jest wyznaczenie prawdziwej wartości opcji, co możemy uzyskać 
-stosując symulację metodą Monte Carlo.
-
-W tej pracy zostanie użyta aproksymacja prostą metodą Monte Carlo (\textit{ang. Crude Monte Carlo}). 
-Poniżej jest przedstawiony jej formalny definicję.
-Jeżeli $X_1, ..., X_n$ są zmiennymi losowymi o takim samym rozkładzie $P$ wtedy estymatorem wartości
-oczekiwanej jest średnia z próby:
-\begin{equation}
-  \hat{\theta}_n = \sum_{i=1}^n f(X_i) 
-\end{equation}
-Inaczej mówiąc, aproksymujemy prawdziwą wartość wartością oczekiwaną \textbf{średnią z próby} (\textit{ang. sample mean}).
-
-Implementację metody Monte-Carlo, wraz z przedstawionym w tym rozdziale sposobem wyznaczenia 
-ceny opcji w oparciu o model Blacka-Scholesa, przedstawia kod źródłowy nr \ref{lst:MCBS}:
 
 
-\begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/SimpleMonteCarlo/MCBlackScholes.cpp}
-\caption{Symulacja Monte Carlo wyliczająca cenę opcji kupna (zgodnie z modelem Blacka-Scholesa) o zadanym zestawie parametrów}
-\label{lst:MCBS}
-\end{listing} 
+\section{Numeryczne wyznaczenie wartości opcji} % (fold)
+\label{sec:}
 
+Niezależnie od rodzaju opcji, czy też modelu opisującego dynamikę cen aktywa bazowego, można 
+wyróżnić takie same etapy symulacji. 
 
-\section
- 
+Zaliczamy do nich:
+\begin{enumerate}
+  \item Generowanie zmiennych losowych o ustalonym rozkładzie
+  \item Wyznaczenie wartości zmiennych losowych
+  \item Kalibracja modelu
+  \item Wyznaczenie wartości opcji
+  \item Symulacja Monte Carlo
+\end{enumerate}
+
+W niniejszym rozdziale zostanie przedstawiony po krótce każdy z tych elementów wraz z odpowiednim przykładem opisującym kolejny krok wyceny opcji, zgodnie z modelem Blacka-Scholesa.
+Wycena na podstawie modelu Hestona będzie podobna do tej przedstawionej w niniejszym rozdziale.
 
 
 
@@ -423,15 +378,6 @@ ceny opcji w oparciu o model Blacka-Scholesa, przedstawia kod źródłowy nr \re
 %===========================================================================
 \chapter{Model Hestona}
 \label{chap:hestonModel}
-% \begin{quote}
-
-%   Suppose we use the standard deviation ... of possible future returns on
-%   a stock ... as a measure of its volatility. Is it reasonable to take
-%   that volatility as a constant over time? I think not.
-
-% \raggedleft\slshape Fisher Black \index{Fisher, Black}
-% \end{quote}
-
 
 Obecnie jednym z najpopularniejszych narzędzi do wyceny opcji jest model Blacka-Scholsa. Ceniony jest on ze względu na prostotę oraz wygodę użycia, kosztem jednak wielu upraszczających założeń. 
 Jedno z nich, założenie o stałości zmienności w czasie modyfikuje model Hestona, który jest 
@@ -440,21 +386,8 @@ tematem tego rozdziału.
 
 \section{Motywacja} 
 Jak zostało powiedziane we wstępie do niniejszego rozdziału, podstawowym modelem do wyceny opcji jest model Blacka-Scholesa.
-Umożliwia on wyprowadzenie wzoru na cenę opcji europejskiej w postaci analitycznej. Jednakże, podczas gdy jego prostota jest jedną z jego największych zalet, to posiada on wiele założeń, które nie przystają do rzeczywistości rynkowej. Pierwsza grupa to założenia dotyczące aktywów:
-\begin{enumerate}
-\item cena aktywów bazowych ma rozkład lognormalny
-\item zmienność aktywów bazowych i jest stała i znana z góry
-\item akcje nie wypłacają dywidend
-\item wyceniane opcje są opcjami Europejskimi, tzn. przy pomocy modelu Blacka-Scholesa nie można wycenić np. opcji Amerykańskich
-\end{enumerate}
-Z kolei druga grupa założeń odnosi się do rynku na którym dane aktywa występują.
-\begin{enumerate}
-\item na rynku nie ma możliwości osiągnięcia ponadnormatywnego zysku bez ryzyka (brak możliwości arbitrażu)
-\item nie ma kosztów transakcyjnych.
-\item stopa procentowa na rynku $r_t$ jest stała i znana z góry 
-\end{enumerate}
+Umożliwia on wyprowadzenie wzoru na cenę opcji europejskiej w postaci analitycznej. 
 
-Wszystkie te założenia sprawiają, że model Blacka-Scholesa, mimo, że pozwala na wyznaczenie ceny opcji w postaci analitycznej, może nieprecyzyjnie wycenić wartość takiej opcji.
 Jednym z takich założeń jest to o stałej zmienności instrumentu bazowego. Świadczy o tym chociażby
 wykres nr \ref{fig:vix}, na którym wyraźnie widać wysoką zmienność indeksu S\&P500. Jednym z pomysłów na obejście tego problemu jest uzmiennienie tej stałej, czyli dopuszczenie, aby dla dowolnego czasu, parametr ten przyjmował różną wartość. Można to zrobić np. poprzez nadanie zmienności cech losowych. W takim przypadku nie tylko proces ceny akcji byłby procesem stochastycznym, ale także aby sama zmienność byłaby definiowana przy użyciu procesu stochastycznego. Takie też podejście zostało wykorzystane przy budowie modelu Hestona. \cite{greenwade93}
 
@@ -524,6 +457,10 @@ Niestety, w odróżnieniu od modela Blacka-Scholsa, dla modelu Hestona nie istni
 wyliczyć wartość opcji, należy się posłużyć numerycznymi metodami wyznaczenia rozwiązania.
 
 
+
+
+
+
 % Poniższa lista przedstawia podstawowe 
 % \begin{enumerate}
 % \item rozkład logarytmów stóp zwrotu nie jest normalny
@@ -587,7 +524,10 @@ wyliczyć wartość opcji, należy się posłużyć numerycznymi metodami wyznac
 % \end{equation}
 
 
-\section{Dyskretyzacja Eulera}
+\section{Schematy dyskretyzacji}
+
+
+\subsection{Dyskretyzacja Eulera}
 
 Jednak, przeprowadzenie wyceny opcji w oparciu o model Hestona jest zadaniem znacznie trudniejszym
 niż to było chociażby w przypadku modelu BS. Wynika to z tego, że w modelu Hestona trajektoria 
@@ -622,6 +562,12 @@ Mając to na uwadze, równanie nr \ref{h:eulerAssetPath} opisuję dynamikę cen 
 S_{i+1} = S_i e^{\mu - \frac{1}{2} v_i^+} \Delta t + \sqrt{v_i^+ \Delta t}  \Delta W_{i+1}^S
 \end{equation}
   
+
+
+\subsection{Algorytm Andersena}
+
+O ile schemat dyskretyzacji Eulera jest najprostszym koncepcyjnie, ma on wiele bra
+
 \section{Generowanie skorelowanych szeregów czasowych}
 
 Kolejnym kwestią, która pojawia się w implementacji modelu Hestona, jest generowanie skorelowanych 
@@ -643,18 +589,6 @@ następującej postaci:
 % stopni korelacji $\rho = 0.2$:
 
 
-\section{Symulacja Monte Carlo}
-
-
-Poniższy kod źródłowy nr \ref{lst:MCHeston} znajduje się główna funkcja użyta do wygenerowania ceny 
-opcji w oparciu o model Hestona:
-
-\begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/listings/MCHeston.cpp}
-\caption{Metoda Monte Carlo dla modelu Hestona}
-\label{lst:MCHeston}
-\end{listing} 
 
 
 
@@ -791,6 +725,114 @@ wartości skalarne:
   \item stopa wolną od ryzyka
 \end{enumerate}
 
+
+
+
+
+
+
+
+
+
+
+%===========================================================================
+%                       Metody Monte Carlo
+%===========================================================================
+\chapter{Metody Monte Carlo}
+\label{chap:introduction}
+
+Rozdział ten stanowi wprowadzenie do tematyki poruszonej w pracy, której jest wycena opcji w oparciu
+o modele stochastycznej zmienności. 
+Jednak zanim do tego przejdziemy, przedstawiony zostanie ogólny schemat postępowania, na przykładzie modelu mniej skomplikowanego, \textbf{modelu Blacka-Scholesa}, w którym zmienność jest stała w czasie.
+Jako przykład wyceniona zostanie najprostsza opcji \textit{call}, a narzędziem do tego służącym 
+będzie \textbf{metoda Monte Carlo}.
+
+
+\section{Prosta metoda Monte Carlo (MC)}
+
+Rozdział zaczynamy od przedstawienia prostej metody Monte Carlo (\textit{ang. Crude Monte Carlo (CMC)}).
+Należy w niej wygenerować $n$ zmiennych losowych $X_1, ..., X_n$ o takim samym rozkładzie, a wtedy estymatorem wartości
+oczekiwanej jest średnia z próby:
+\begin{equation}
+  \hat{\theta}_n = \sum_{i=1}^n \frac{X_i}{n}
+\end{equation}
+Inaczej mówiąc, aproksymujemy prawdziwą wartość wartością oczekiwaną \textbf{średnią z próby} (\textit{ang. sample mean}).
+
+Implementację metody Monte-Carlo, wraz z przedstawionym w tym rozdziale sposobem wyznaczenia 
+ceny opcji w oparciu o model Blacka-Scholesa, przedstawia kod źródłowy nr \ref{lst:MCBS}:
+
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../src/heston/SimpleMonteCarlo/MCBlackScholes.cpp}
+\caption{Symulacja Monte Carlo wyliczająca cenę opcji kupna (zgodnie z modelem Blacka-Scholesa) o zadanym zestawie parametrów}
+\label{lst:MCBS}
+\end{listing} 
+ 
+
+
+\section{Generowanie zmiennych losowych o ustalonym rozkładzie}
+
+Pierwszym krokiem jaki należy podjąć podczas przeprowadzania symulacji Monte Carlo jest 
+wygenerowanie zmiennych losowych o ustalonym rozkładzie.
+
+W przypadku wyceny opcji w modelu Blacka-Scholesa potrzebna jest umiejętność generowania liczb (pseudo)losowych z rozkładu normalnego. Znamy wiele algorytmów generowania liczb o rozkładzie normalnym, wśród których można wyróżnić:
+\begin{enumerate}
+  \item metoda odwrotnej dystrybuanty
+  \item metoda Boxa-Mullera
+  \item metoda biegunów (\textit{ang. Marsaglia\index{Marsaglia, George} Polar Method})
+  \item algorytm ziggurat
+\end{enumerate}
+
+Mimo że, najbardziej wydajną metodą generowania liczb pseudolosowych o rozkładzie normalnym jest algorytm ziggurat, a najbardziej ogólną jest metoda odwrotnej dystrybuanty (pozwala na generowanie liczb o dowolnym rozkładzie pod warunkiem umiejętności wyznaczenia funkcji odwrotnej do dystrybuanty danego rozkładu), w tym rozdziale zostanie przedstawiona metoda biegunów.
+
+Jest ona wariantem metody Boxa-Mullera\index{Box, George}\index{Muller, Edgar}, jednak jest od niego znacznie wydajniejsza.
+Polega ona na wybraniu losowego punktu z rozkładu jednostajnego spełniającego warunek:
+\begin{equation}
+  s = x^2 + y^2 < 1
+\end{equation}
+Wtedy liczby losowe o standardowym rozkładzie normalnym otrzymujemy stosując następujące przekształcenia:
+\begin{equation}
+  u_1 = x \sqrt{\frac{-2ln(s)}{s}}, u_2 = y \sqrt{\frac{-2ln(s)}{s}}
+\end{equation}
+Poniższy kod przedstawia implementację tego algorytmu:
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../src/heston/SimpleMonteCarlo/PolarGenerator.cpp}
+\caption{Generowanie zmiennych o rozkładzie normalnym zgodnie z metodą biegunów}
+\label{lst:lambdaSyntax}
+\end{listing} 
+
+
+
+\section{Symulacja cen opcji w modelu Hestona}
+
+
+Poniższy kod źródłowy nr \ref{lst:MCHeston} znajduje się główna funkcja użyta do wygenerowania ceny 
+opcji w oparciu o model Hestona:
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../src/listings/MCHeston.cpp}
+\caption{Metoda Monte Carlo dla modelu Hestona}
+\label{lst:MCHeston}
+\end{listing} 
+
+
+
+
+\section{Algorytm Andersena} % (fold)
+\label{sec:algorytm_andersena}
+
+% section algorytm_andersena (end)
+
+
+
+
+
+
+
 %===========================================================================
 %                       Rozszerzenia modelu Hestona
 %===========================================================================
@@ -839,7 +881,7 @@ bazowego jest sumą wariancji:
   Var_t[dS/S] = (V_1 + V_2)dt = Vdt
 \end{equation}
 
-Jak wynika z powyższych wzorów cena akcji intrumentu bazowego zależy teraz nie od jednego, a od 
+Jak wynika z powyższych wzorów cena akcji instrumentu bazowego zależy teraz nie od jednego, a od 
 dwóch procesów zmienności.
 Jednym z powodów dla którego chcielibyśmy wprowadzać dodatkowe zmienne jest fakt, że model
 Hestona nie zawsze jest w stanie dostosować się do uśmiechu zmienności implikowanej, w szczególności 
@@ -872,85 +914,13 @@ szczególnej i gwałtownej zmianie ceny instrumentu bazowego. Dla indeksu S\&P, 
 skoki taki są szczególnie widoczne podczas kryzysów ekonomicznych. 
 
 
-% %===========================================================================
-% %                       Model Hestona na przykładznie
-% %===========================================================================
-% \chapter{Optymalne decyzje inwestycyjne}\label{r:sp}
-% Jak wiadomo zmienność nie jest bezpośrednio obserwowalna na rynkach finansowych.
-% Aby wnioskować o zmienności, można:
-% \begin{enumerate}
-% \item wykorzystać technikę filtrowania (ang. filtering)
-% \item ceny opcji z rynku lub indeksy zmienności rynkowej (ang. market volatility indices)
-% \end{enumerate}
-
-% Ustalająć $\mu =\frac{1}{2}$ 
-% Gdzie parametr $\mu$ oznacza wrażliwość współczynnika dyfuzji względem poziomu zmienności.
-
-
-% \begin{enumerate}
-% \item Rozszerzony model Hestona z procesem CEV (ang. constant elasticity variance):
-
-% Model CEV wyraża się przy pomocy następującego wzoru:
-% \begin{equation}
-% dS = \mu S dt  + \sigma_0 S^{\frac{}{}}
-% \end{equation}
-
-% Zmienność jest więc w tym przypadku funkcją ceny akcji (stochastycznej).
-
-
-% \begin{equation}
-
-% dV_t = k_V(\hat{V}-V_t)dt+ \hat{V}^{\frac{1}{2}-\mu} V_t^{\mu} (b_{SV} dB_t^S+ h_VdB_t^V)
-% \end{equation}
-% \item ceny opcji z rynku lub indeksy zmienności rynkowej (ang. market volatility indices)
-
-% \item Rozszerzony model Stein-Steina (ang. extended Stein-Stein model):
-
-% Równanie:
-
-% \begin{equation}
-% \frac{dS_t}{S_t} = (R_t + \lambda_t \sigma_t) dt + \sigma_t + d B_t^S
-% \end{equation}
-
-% \begin{equation}
-% d\lambda_t  = \kappa_{\lambda} (\hat{\lambda} - \sigma_t) dt 
-% + \beta_{\lambda S} dB_t^S + g_{\sigma}dB_t^{\sigma}
-% \end{equation}
-
-
-% \begin{equation}
-% d\sigma_t  = \kappa_{\sigma} (\hat{\sigma} - \sigma_t) dt 
-% + \beta_{\sigma S} dB_t^S + g_{\sigma}dB_t^{\sigma} + g_{\lambda}
-% dV_t^{\lambda}
-% \end{equation}
-
-% gdzie:
-% $(B_t^S, B_t^{\sigma}, B_t^{\lambda})$ - są ortogonalnymi, 
-% wielowymiarowymi procesami Wienera.
-
-% \item Model Hestona 
-
-% \begin{equation}
-% \frac{}{} = (R_t + lV_t)dt + \sqrt{V_t} dB^S_t
-% \end{equation}
-
-% Proces opisujący wariancję $V_t$ ma następujący proces pierwiastkowy:
 
 
 
-% \end{enumerate}
 
-%===========================================================================
-%                       Wycena opcji walutowych
-%===========================================================================
-% \chapter{Wycena opcji walutowych}\label{r:sp}
 
-% \section{Model Blacka-Scholesa}
 
-% \section{Model Garmana-Kohlhagena}
 
-% Model Garmana-Kohlagena jest zaadaptowanym na potrzeby rynku walutowego modelem
-% Blacka-Scholesa o znanej stopie dywidendy . 
 
 
 %===========================================================================
