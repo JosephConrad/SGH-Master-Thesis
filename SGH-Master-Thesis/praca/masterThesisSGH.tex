@@ -7,7 +7,12 @@
 \usepackage{listings}
 % package for hyperinks
 \usepackage{hyperref}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage[ansinew]{inputenc}
 \usepackage{svg}
+\usepackage{eucal}
+\usepackage[mathcal]{eucal}
+\usepackage[mathscr]{eucal}
 \hypersetup{
     colorlinks,
     citecolor=black,
@@ -64,6 +69,7 @@
 \date{Warszawa 2015}   
 % Tu jest dobre miejsce na Twoje własne makra i~środowiska:
 \newtheorem{defi}{Definicja}[section]
+\newtheorem{prop}{Własność}
 
 % koniec definicji 
 
@@ -157,8 +163,8 @@ jeden z pionierów dzisiejszych finansów ilościowych. Stwierdza on, zgodnie z 
 powyżej cytatem, że są to modele, gdzie nie tylko cena aktywa bazowego, ale również jego zmienność, 
 poruszają się w sposób nieprzewidywalny, losowy. 
 
-W niniejszej pracy przedstawiony zostanie model Hestona, w który zmienność nie jest wartością stałą 
-oraz sposób wyliczenia wartości opcji przy pomocy tego modelu
+W niniejszej pracy przedstawiony zostanie model Hestona, w którym zmienność nie jest wartością stałą 
+oraz sposób wyliczenia wartości opcji przy pomocy tego modelu.
 Część empiryczna pracy jest z kolei próbą sprawdzenia, jak model, oraz narzędzia do jego stosowania, sprawdzają się w praktyce.
 
 W dalszej części tego rozdziału, zostaną przedstawione motywacje rozwoju takich modeli oraz w jaki sposób
@@ -168,14 +174,14 @@ wpływają one na dokładność analizy finansowej i efektywność rynków finan
 \section{Rys historyczny} % (fold)
 \label{sec:rys_historyczny}
 
-Do lat '90 XX wieku podstawowym modelem do wyceny opcji był model Blacka-Scholesa. Opublikowany w 1973 \cite{BlackScholes} roku artykuł, którego autorami byli Fischer Black oraz Myron Scholes, był przełomowy dla teorii wyceny opcji.
+Do lat '90 XX wieku podstawowym modelem do wyceny opcji był model Blacka-Scholesa. Opublikowany w 1973 \cite{BlackScholes} roku artykuł, którego autorami byli \textbf{Fischer Black} oraz \textbf{Myron Scholes}, był przełomowy dla teorii wyceny opcji.
 U jego podstaw leży bardzo istotne założenie mówiące o tym, że zmienność instrumentów finansowych jest stała w czasie. 
 Niestety, założenie to jest niezgodne z tym, co możemy obserwować na rynkach finansowych. 
 Można to szczególnie mocno zauważyć w czasie cyklicznie powtarzających się kryzysów finansowych.
 
 Obserwowalna duża zmienność w czasie parametru zmienności na rynkach finansowych stała się podstawową motywacją wprowadzenia modeli wyceny
 opcji, dla których zmienność nie jest ustalonym parametrem, a zmienną zależną od pewnych innych czynników. 
-Pionierem w tym obszarze okazał się Steven Heston\index{Heston, Steven}, który w 1993 opublikował pracę, gdzie wprowadza
+Pionierem w tym obszarze okazał się \textbf{Steven Heston}\index{Heston, Steven}, który w 1993 opublikował pracę, gdzie wprowadza
 nowy model wyceny opcji, w którym nie tylko proces cen instrumentu bazowego, ale również
 proces zmienności jest stochastyczny (losowy) i zależny od czasu \cite{Heston}. Na jego cześć, model ten 
 w literaturze znany jest pod nazwą modelu Hestona.
@@ -186,27 +192,35 @@ w literaturze znany jest pod nazwą modelu Hestona.
 Instrumenty pochodne, a w szczególności opcje, są dzisiaj bardzo ważną klasą instrumentów finansowych i stanowią znaczną 
 część wartości obrotu na światowych giełdach.
 
-Światowy rynek który dziś jest warty około 450 mld EUR \cite{GlobalDerMarket}, jeszcze około 25 lat temu, rynek opcyjny był bardzo mały. Powstaje więc pytanie co wpłynęło na rozwój tego typu transakcji 
-na globalnym rynku? Do najważniejszych z nich możemy zaliczyć:
+Światowy rynek derywatów, który dziś jest warty około 450 mld EUR \cite{GlobalDerMarket}, jeszcze około 25 lat temu był bardzo mały. Powstaje więc pytanie co wpłynęło na rozwój tego typu transakcji na globalnym rynku? Z punktu widzenia rynku finansowego jest jedno wytłumaczenie tego zjawiska:
+instrumenty pochodne, a szczególnie opcje, pozwalają na handel przyszłym ryzykiem związanym z ruchem cen instrumentów bazowych. W związku z tym można wyróżnić dwa podstawowe 
+zastosowania opcji: 
 
 \begin{enumerate}
-  \item 
+  \item jako element zarządzania ryzykiem (\textit{ang. hedging})
+  \item jako inwestycja 
 \end{enumerate}
 
-\subsection{Opcje jako element zarządzania ryzykiem} % (fold)
-\label{sub:opcje_na_akcje_i_indeksy_gie_dowe}
-Podstawowym rodzajem kontraktów opcyjnych występujących na rynkach finansowych są opcje na akcje oraz opcje indeksy 
-giełdowe. 
+Pierwsze zastosowanie odnosi się do wymiany lub ograniczenia ryzyka rynkowego. Przedsiębiorstwa i instytucje finansowe używają opcji do 
+ochrony przed niechcianymi, gwałtownymi ruchami instrumentów bazowych takich jak surowce, stopy procentowe czy kursy akcji. Wpływa to na 
+\textbf{wygładzenie przepływów pieniężnych} (\textit{ang. cash flows}} w obrębie przedsiębiorstwa, co wpływa na stabilność działalności 
+podmiotu gospodarczego. Dla przykładu, 92\% spośród 500 największych przedsiębiorstw świata ogranicza ryzyko przy pomocy derywatów \cite{GlobalDerMarket}.
 
-\subsection{Opcje jako element zarządzania ryzykiem walutowym} % (fold)
-\label{sub:opcje_na_rynku_walutowym}
-Kontrakty opcyjne są także, obok kontraktów terminowych, podstawowym sposobem na redukcję ryzyka kursowego.
 
+Transakcje na runku instrumentów pochodnych są szczególnie ważne z punktu widzenia ograniczenia \textbf{ryzyka walutowego}. Na rysunku \ref{fig:currencyRisk} przedstawiono kurs dolara amerykańskiego w stosunku do rosyjskiego rubla na przestrzeni ostatnich 20 lat.
+
+\begin{figure}
+  \centering  
+  \includegraphics[width=0.80\textwidth]{../figures/currencyUSDRUB.pdf}
+  \caption{Kurs walutowy rosyjskiego Rubla w stosunku do Dolara amerykańskiego.}\label{fig:currencyRisk}
+\end{figure} 
+Można na nim odnotować gwałtowne wahania kursu, które dla wielu przedsiębiorstw, nie stosujących instrumentów pochodnych w celu ograniczenia ryzyka walutowego, może oznaczać bardzo szybkie bankructwo. 
  
-\subsection{Market } % (fold)
-\label{sub:produkty_strukturyzowane} 
-
-
+Instrumenty pochodne mogą być również postrzegane przez uczestników rynku jako inwestycja. 
+Różnią się one od inwestycji w instrumenty bazowe w tym sensie, że można w nie inwestować bez ich fizycznego zakupu.
+Ponadto stwarzają one możliwość inwestycji w instrumenty, których po prostu nie można kupić bezpośrednio. Dobrym na to przykładem są derywaty pogodowe, które umożliwiają ubezpieczenie przed spadkiem temperatury poniżej określonego poziomu.
+Pozwalają one również inwestorom na zajęcie pozycji w danym instrumencie finansowym nawet wtedy, gdy spodziewają
+się spadku ich wartości. W żargonie inwestycyjnym zajęcie takiej pozycji jest znane pod nazwą zajęcia \textbf{pozycji krótkiej} (\textit{ang. short position}).
 
 
 \section{Wycena opcji na potrzeby rachunkowości}
@@ -250,36 +264,54 @@ finansowych, a co za tym idzie, lepszy obraz kondycji spółki dla osób zarząd
 
 
 \section{Model Blacka-Scholesa}
+
+Poprzednie podrozdziały opisywały elementy rzeczywistości ekonomicznej na który istotny wpływ może mieć przyjęta 
+metodologia wyceny opcji. W tym pokażemy najbardziej powszechny model do wyceny opcji, 
+model Blacka-Scholesa. 
 \subsection{Klasyczny model Blacka-Scholesa} % (fold)
 \label{sub:subsection_name}
- 
-Obliczenie ceny aktywa bazowego w momencie wygaśnięcia opcji jest najważniejszym elementem 
-wyceny opcji. 
 
 Aby wycenić opcję rozważmy następujący model przedstawiający ewolucję ceny aktywa
 bazowego w czasie oraz obligacji, jako instrumentu finansowego pozbawionego ryzyka:
 \begin{equation}
+  \label{eq:asset}
   dS_t = \mu S_t dt + \sigma S_t d W_t 
 \end{equation}
+
 \begin{equation}
+  \label{eq:nonRiskAsset}
   dB_t = r B_t dt, B_0 = 1
 \end{equation}
 gdzie:
-zatem $B_t = E^{rt}$
+\begin{enumerate}
+  \item $S_t$ - cena aktywa bazowego
+  \item $B_t$ - cena aktywa pozbawionego ryzyka
+  \item $\mu$ - dryft ceny aktywa bazowego
+  \item $\sigma$ - zmienność aktywa bazowego
+  \item $W_t$ - proces Wienera
+\end{enumerate}
+
 
 Model ten znany jest pod nazwą \textbf{modelu Blacka-Scholesa} i jest fundamentalnym narzędziem do wyceny opcji.
-Zgodnie z teorią wyceny opcji wypłata $f$, w momencie $t = 0$ jest równa:
+Równanie \ref{eq:nonRiskAsset}  jest istotną częścią modelu, ponieważ określa miarę w jakiej wyceniamy daną opcję.
+W zdecydowanej większości przypadków jest to miara obojętna na ryzyko (miera martyngałowa). 
+Rozwiązując to równanie można wyznaczyć:
+\begin{equation}
+B_t = e^{rt}
+\end{equation}
+co odpowiada procesowi dyskontowania stopą równej stopie oprocentowania aktywa wolnego od ryzyka.
+
+Zgodnie z teorią wyceny opcji, jej wypłata $v$ w mierze obojętnej na ryzyko (na moment $t = 0$) jest równa:
 
 \begin{equation}
-  e^{-rT} E(f(S_T))
+\label{eq:discounting}
+ \frac{\mathbf{E}[v(S_T)]}{e^{-rT}}
 \end{equation}
-gdzie dynamikę cen aktywa bazowego opisuje następujący proces w mierze obojętnej na ryzyko (mierze martyngałowej):
+gdzie dynamikę cen aktywa bazowego opisuje następujący proces opisany w równaniu \ref{eq:asset}.
 
-\begin{equation}
-  dS_t = r S_t dt + \sigma S_t d W_t 
-\end{equation}
+Jak więc wynika z tego równania cenę opcji określamy jako zdyskontowaną na moment zerowy wartość oczekiwaną z wypłat
+opcji w momencie jej wygaśnięcia. 
 
- 
 \subsection{Założenia modelu Blacka-Scholesa} % (fold)
 \label{sub:zalozenia_modelu_blacka_scholesa}
 
@@ -309,6 +341,8 @@ Można go wyznaczyć na jeden z dwóch sposobów:
   \item zmienność implikowana
 \end{enumerate}
 
+Zmienność historyczna jest średnią (ważoną) zmienności zaobserwowanej na rynku w czasie poprzedzającym moment wyceny.
+
 Szczególnie interesującym przypadkiem jest zmienność implikowana, ponieważ wyraża ona \textit{"przewidywania rynku"} co 
 do wartości zmienności danego aktywa bazowego. 
 Można ja w prosty sposób obliczyć przy użyciu analitycznego \textbf{wzoru Blacka-Scholesa} na wycenę opcji, który 
@@ -319,7 +353,7 @@ możemy przedstawić jako:
 \end{equation}
 Jak widać, wiedząc jaka jest cena opcji na podstawie danych rynkowych, równanie staje się równaniem z jedną niewiadomą. 
 
-Jednakże, w przypadku bardziej skomplikowanych modeli, nieznanych parametrów może być dużo więcej. Wtedy też 
+W przypadku bardziej skomplikowanych modeli, nieznanych parametrów może być dużo więcej. Wtedy też 
 stosuje się bardziej zaawansowane techniki kalibracyjne, co będzie tematyką rozdziału \ref{chap:chapterModelCalibration}.
   % \autoref - ok but it uses the english name of chapter
 
@@ -327,46 +361,52 @@ stosuje się bardziej zaawansowane techniki kalibracyjne, co będzie tematyką r
 \subsection{Wycena opcji Europejskiej} % (fold)
 \label{sub:subsection_name}
  
-Będąc uzbrojonym w wartości wszystkich parametrów modelu Blacka-Scholesa, można przystąpić
-do wyliczenia wartości opcji. I tak, jak wiadomo, wartość opcji europejskiej dla strony kupującej 
-wynosi:
+Mając wartości wszystkich parametrów modelu Blacka-Scholesa, można przystąpić
+do wyliczenia wartości opcji. I tak, dla przykładu, można wyznaczyć wartość opcji europejskiej dla strony kupującej 
+(\textit{and. long call option}). Wynosi ona:
 
 \begin{equation}
   v(S_T) = max(S_T-K, 0)
 \end{equation}
 
-W powyższym wzorze $K$, czyli cena wykupu opcji jest parametrem, stąd też,  aby wyliczyć wartość opcji należy obliczyć wartość instrumentu bazowego w momencie wygaśnięcia opcji.
+W powyższym wzorze $K$, czyli cena wykupu opcji jest parametrem, stąd też, aby wyliczyć wartość opcji należy obliczyć wartość instrumentu bazowego w momencie wygaśnięcia opcji.
 
-W modelu tym, wartość ceny aktywa bazowego na moment wygaśnięcia opcji możemy wyznaczyć przy pomocy następującego wzoru:
+W tym celu należy rozwiązać stochastyczne równanie różniczkowe \ref{eq:asset}. W modelu Blacka-Scholesa rozwiązanie to ma
+postać zamkniętą i można pokazać, że wartość ceny aktywa bazowego na moment wygaśnięcia opcji możemy wyznaczyć przy 
+pomocy następującego wzoru:
 \begin{equation}
+\label{eq:closedFormBlack} 
   S_T = S_0 e^{(r - \frac{1}{2} \sigma^2)T+\sigma \sqrt{T} N(0,1)}
 \end{equation}
 gdzie fragment wzoru postaci $\frac{1}{2} \sigma^2 T$ znany jest pod nazwą \textit{poprawki Ito} (\textit{ang. Ito correction}).
 
-W końcu, aby uzyskać cenę opcji na dany moment, należy wziąć wartość oczekiwaną cen instrumentu bazowgo, na tej podstawie wyliczyć wartość opcji oraz zdyskontować ją na moment zerowy:
+W końcu, aby uzyskać cenę opcji na dany moment, należy wziąć wartość oczekiwaną cen instrumentu bazowgo, na tej podstawie wyliczyć wartość opcji oraz zdyskontować ją na moment zerowy. Stosując wzór \ref{eq:closedFormBlack} do wzoru \ref{eq:discounting} otrzymujemy
 \begin{equation}
-  C = \frac{\mathbf{E}[v(S_T)]}{e^{-rT}}
+  C = \frac{\mathbf{E}[v(S_0 e^{(r - \frac{1}{2} \sigma^2)T+\sigma \sqrt{T} N(0,1)})]}{e^{-rT}}
 \end{equation}
+gdzie $C$ oznacza wartość opcji na moment zerowy $t = 0$.
 
 
 
-\section{Numeryczne wyznaczenie wartości opcji} % (fold)
+\section{Stosowane podejścia w procesie wyceny opcji} % (fold)
 \label{sec:}
 
-Niezależnie od rodzaju opcji, czy też modelu opisującego dynamikę cen aktywa bazowego, można 
-wyróżnić takie same etapy symulacji. 
+Istnieją dwa główne sposoby używane podczas wyceny opcji: skorzystanie ze wzorów analitycznych lub przeprowadzenie symulacji. O ile dla modelu Blacka-Scholesa rozwiązanie analityczne istnieje, to dla modeli o bardziej złożonych formułach, takich jak model Hestona, takich rozwiązań nie ma. 
+
+Dlatego też o wiele bardziej generycznym rozwiązaniem jest podejście symulacyjne.
+Niezależnie jednak od rodzaju opcji, czy też modelu opisującego dynamikę cen aktywa bazowego, można wyróżnić podobne etapy symulacji. 
 
 Zaliczamy do nich:
 \begin{enumerate}
-  \item Generowanie zmiennych losowych o ustalonym rozkładzie
-  \item Wyznaczenie wartości zmiennych losowych
   \item Kalibracja modelu
-  \item Wyznaczenie wartości opcji
+  \item Generowanie zmiennych losowych o ustalonym rozkładzie
+  \item Wyznaczenie wartości zmiennych losowych danego procesu stochastycznego
   \item Symulacja Monte Carlo
 \end{enumerate}
 
-W niniejszym rozdziale zostanie przedstawiony po krótce każdy z tych elementów wraz z odpowiednim przykładem opisującym kolejny krok wyceny opcji, zgodnie z modelem Blacka-Scholesa.
-Wycena na podstawie modelu Hestona będzie podobna do tej przedstawionej w niniejszym rozdziale.
+Kalibracja modelu jest tematem rozdziału 
+\ref{chap:chapterModelCalibration}, natomiast pozostałe elementy będą przedstawione w rozdziale nr \ref{chap:monteCarlo}, poświęconym metodzie Monte Carlo.
+
 
 
 
@@ -389,14 +429,14 @@ Jak zostało powiedziane we wstępie do niniejszego rozdziału, podstawowym mode
 Umożliwia on wyprowadzenie wzoru na cenę opcji europejskiej w postaci analitycznej. 
 
 Jednym z takich założeń jest to o stałej zmienności instrumentu bazowego. Świadczy o tym chociażby
-wykres nr \ref{fig:vix}, na którym wyraźnie widać wysoką zmienność indeksu S\&P500. Jednym z pomysłów na obejście tego problemu jest uzmiennienie tej stałej, czyli dopuszczenie, aby dla dowolnego czasu, parametr ten przyjmował różną wartość. Można to zrobić np. poprzez nadanie zmienności cech losowych. W takim przypadku nie tylko proces ceny akcji byłby procesem stochastycznym, ale także aby sama zmienność byłaby definiowana przy użyciu procesu stochastycznego. Takie też podejście zostało wykorzystane przy budowie modelu Hestona. \cite{greenwade93}
+wykres nr \ref{fig:vix}, na którym wyraźnie widać wysoką zmienność indeksu S\&P. Jednym z pomysłów na obejście tego problemu jest uzmiennienie tej stałej, czyli dopuszczenie, aby dla dowolnego czasu, parametr ten przyjmował różną wartość. Można to zrobić np. poprzez nadanie zmienności cech losowych. W takim przypadku nie tylko proces ceny akcji byłby procesem stochastycznym, ale także aby sama zmienność byłaby definiowana przy użyciu procesu stochastycznego. Takie też podejście zostało wykorzystane przy budowie modelu Hestona. \cite{greenwade93}
 
 
 
 \begin{figure}
-  \centering
-  \includegraphics[width=0.80\textwidth]{corr.png}
-  \caption{Zmieność w czasie indeksu S\&P500}\label{fig:vix}
+  \centering  
+  \includegraphics[width=0.80\textwidth]{../figures/volatilitySANDP.pdf}
+  \caption{Zmieność w czasie indeksu S\&P}\label{fig:vix}
 \end{figure} 
 
 \section{Model Hestona}
@@ -456,389 +496,62 @@ natomiast w okresach spokoju zmienność jest na relatywnie niskim poziomie.
 Niestety, w odróżnieniu od modela Blacka-Scholsa, dla modelu Hestona nie istnieje pełne rozwiązanie analitycznie (istnieje tylko częściowe rozwiązanie analityczne). Wobec tego, aby 
 wyliczyć wartość opcji, należy się posłużyć numerycznymi metodami wyznaczenia rozwiązania.
 
-
-
-
-
-
-% Poniższa lista przedstawia podstawowe 
-% \begin{enumerate}
-% \item rozkład logarytmów stóp zwrotu nie jest normalny
-% \item zmienność jest zmienna w czasie
-% \item autokorelacja kolejnych stóp zwrotu
-% \item trajektorie mają skoki
-% \end{enumerate}
-
-% W kolejnych rozdziała 
-
-
-% %===========================================================================
-% %                               Model Hestona
-% %===========================================================================
-% \section{Model Hestona}
-
-% Na początek załóżmy, że cena aktywa bazowego w momencie $t$ spełnia następujący proces dyfuzji:
-% \begin{equation}
-% dS(t)= \mu S dt + \sqrt{v(t)} S d z_1 (t),
-% \end{equation}
-% gdzie $z_1(t)$  jest standardowym procesem Wienera. 
-
-% Jeżeli natomiast zmienność jest procesem Ornsteina-Uhlenbecka:
-
-% \begin{equation}
-% d \sqrt{v(t)} = - \beta \sqrt{v(t)} dt + \delta d z_2 (t)
-% \end{equation}
-
-% wtedy na podstawie lematu Ito można wykazać, że wariancja $v(t)$ ma następującą postać:
-% \begin{equation}
-% dv(t)= \kappa  [\theta -v(t)]dt+2\delta \sqrt{v(t)} d z_2 (t)
-% \end{equation}
-% gdzie proces $z_2(t)$ ma korelację z procesem $z_1(t)$ równą $\rho$.
-
-% Gdy przyjmiemy stałą stopę procentową, cena w momencie $t$ obligacji, która wygasa w chwili $t+\tau$ wynosi:
-% \begin{equation}
-% P(t, t+\tau) = e^{-r\tau}
-% \end{equation}
-
-
-
-% \begin{figure}
-%   \centering
-%   \includegraphics[width=150mm]{vix.jpg}
-%   \caption{Zmieność w czasie indeksu S\&P}\label{fig:vix}
-% \end{figure}
-
-
-% gdzie parametr $\sigma$ jest stały. Założenie to jednak okazuję się być zbyt upraszczające dla szerokiej gamy szeregów czasowych. Spójrzmy np. na szereg czasowy  (\ref{fig:vix}) 
-
-
-
-% \begin{equation}\label{h:ito}
-% dv(t) = [\delta^2 - 2 \beta v(t)] dt + 2\beta \sqrt{v(t)} dz_2(t),
-% \end{equation}
-
-% The (\ref{h:ito}) equation can be rewritten to the following, square root process
-
-% \begin{equation}\label{h:squareroot}
-% dv(t) = \kappa [\theta - v(t)] dt + \sigma \sqrt{v(t)} d_2 (t),
-% \end{equation}
-
-
-\section{Schematy dyskretyzacji}
-
-
-\subsection{Dyskretyzacja Eulera}
-
-Jednak, przeprowadzenie wyceny opcji w oparciu o model Hestona jest zadaniem znacznie trudniejszym
-niż to było chociażby w przypadku modelu BS. Wynika to z tego, że w modelu Hestona trajektoria 
-ceny instrumentu bazowego jest teraz zależna od trajektorii jego zmienności. To pociąga za sobą 
-duże konsekwencje w procesie wyceny opcji, ponieważ teraz należy zasymulować najpierw trajektorię zmienności, a dopiero później, na tej podstawie, generować trajektorię cen. 
-
-Stąd też, aby wygenerować trajektorię cen, musimy być w stanie przedstawić równanie opisującą
-zmienność aktywa bazowego w postaci \textit{zdyskretyzowanej}.
-
-Poniższe równanie nr \ref{h:euler} przedstawia \textbf{dyskretyzację Eulera} omawianego równania:
- 
-\begin{equation}\label{h:euler}
-v_{i+1}  = v_i + \kappa (\theta - v_i) \Delta t + \epsilon +  \sqrt{v_i} \Delta W^{v}_{i+1}
-\end{equation}
-
-Jednakże, teraz jesteśmy w miejscu, gdzie dyskretyzujemy proces ciągły do procesu dyskretnego. 
-W takim przypadku może pojawić się, ze względu na błąd dyskretyzacji, ujemna wartość procesu $v_{i+1}$.
-
-Aby tego uniknąć, zgodnie z literaturą, wszędzie tam, gdzie możliwa jest ujemna 
-wartość zmienności $v_i$, zastępujemy ją poprzez $v_i^+ = \max(v_i, 0)$. Ostatecznie więc, wzór
-opisujący dynamikę $v_i$ przyjmuje postać:
-
-\begin{equation}\label{h:eulerNonZero}
-v_{i+1}  = v_i + \kappa (\theta - v_i^+) \Delta t + \epsilon +  \sqrt{v_i^+} \Delta W^{v}_{i+1}
-\end{equation}
-
-Mając wygenerowaną trajektorię zmienności, można przystąpić do zdyskretyzowania równania opisującego 
-dynamikę cen aktywa bazowego, jednakże pamiętając o tym, aby zmienność zawsze była wartością dodatnią. 
-Mając to na uwadze, równanie nr \ref{h:eulerAssetPath} opisuję dynamikę cen instrumentu bazowego w postaci dyskretnej:
-
-\begin{equation}\label{h:eulerAssetPath}
-S_{i+1} = S_i e^{\mu - \frac{1}{2} v_i^+} \Delta t + \sqrt{v_i^+ \Delta t}  \Delta W_{i+1}^S
-\end{equation}
-  
-
-
-\subsection{Algorytm Andersena}
-
-O ile schemat dyskretyzacji Eulera jest najprostszym koncepcyjnie, ma on wiele bra
-
-\section{Generowanie skorelowanych szeregów czasowych}
-
-Kolejnym kwestią, która pojawia się w implementacji modelu Hestona, jest generowanie skorelowanych 
-szeregów czasowych (wygenerowanie zmiennych losowych $dW^S_t$ oraz $dW^v_t$). 
-
-
-O ile jednak dla przypadku wielowymiarowego, generowanie skorelowanych szeregów czasowych jest dosyć
-skomplikowane i czasochłonne obliczeniowo, to dla przypadku dwuwymiarowego problem redukuje się do 
-następującej postaci:
+\section{Właściwości modelu Hestona} % (fold)
+\label{sec:wlasciwosci_modelu_hestona}
+Pierwszą własnością jest warunkowa wartość oczekiwana i wariancja procesu wariancji. 
+\begin{prop}
+Pod warunkiem $\hat{V}(t)$, średnia $m$ oraz wariancja $s^2$ zmiennej $\hat{V}(t + \Delta)$ przyjmuje postać:
 
 \begin{equation}
-  \epsilon_1 = x_1
-\end{equation}
-\begin{equation}
-  \epsilon_2 = \rho x_1 + x_2 \sqrt{1-\rho^2}
+  \label{eq:m}
+  m= \theta + (\hat{V}(t) - \theta) e^{-\kappa \Delta}
 \end{equation}
 
-% Poniższy wykres nr \ref{} TODO przedstawia przykład skorelowanych szeregów czasowych o zadanym
-% stopni korelacji $\rho = 0.2$:
-
-
-
-
-
-
-%===========================================================================
-%                       Kalibracja modelu Hestona
-%===========================================================================
-\chapter{Kalibracja modelu}
-\label{chap:chapterModelCalibration}
-
-Przed przystąpieniem do wyznaczenia ceny opcji zgodnej z modelem Hestona, potrzebujemy uzyskać zestaw parametrów dla tego modelu. 
-Problem wyznaczenia parametrów modelu nazywamy \textbf{problemem kalibracji} modelu.  
-
-Jednym ze sposobów na kalibrację modeli jest technika symulowanego wyżarzania (ang. simulated annealing). Należy od do grona stochastycznych metaheurystyk, które pomagają w rozwiązaniu problemów optymalizacyjnych (a takim właśnie problemem jest kalibracja modelu, chcemy zminimalizować wartość funkcji będącej różnicą wartości funkcji wynikającej z modelu i z rynku).
-
-Kolejnym sposobem jest powszechnie stosowana nielinowa metoda najmniejszych kwadratów. I właśnie ta metoda zostanie użyta w niniejszej pracy w celu wyznaczenia parametrów modelu.
-
-Aby jednak efektywnie zastosować powyższe metody, należy znaleść równie efektywny sposób wyznaczania wartości opcji w modelu Hestona. Ponieważ podejście symulacyjne jest zbyt czasochłonne w procesie kalibracji, w tym przypadku stosuje się pół zamknięte równanie opisujące cenę opcji.
-
-\section{Symulowane wyżarzanie}
-
-Jednym ze sposobów skalibrowania modelu stochastycznego jest algorytm symulowanego wyżarzania  (\textit{ang. simulated annealing}). Rozwiązuje on szereg problemów podczas rozwiązywania problemów optymalizacyjnych, a najważniejszym z nich jest potencjalne istnienie wielu ekstremów lokalnych.
-W tym przypadku większość algorytmów, które są monotoniczne, nigdy nie osiągnie ekstremum globalnego. Jedną z takich technik jest \textit{hill climbing}, która osiąga dobre rezultaty tylko dla funkcji o wypukłej powierzchni. Aby znaleść rozwiązanie tego problemu odchodzi się od zasady monotoniczności, tzn. algorytm nie zawsze wybiera rozwiązanie bardziej optymalne od poprzedniego. 
-Wśród możliwych podejść należy wymienić np.:
-\begin{enumerate}
-  \item pełny przegląd badanego obszaru
-  \item podejście deterministyczne w algorytmie \textit{tabu search}
-  \item podejście randomizacyjne (\textit{algorytm Metropolisa\index{Metropolis, Nicholas}, symulowane wyżarzanie} \cite{OptimalizationBySimulatedAnnealing} )
-\end{enumerate}
-
-
-Do bardziej popularnych metod, jakie wybiera się, aby skalibrować model Hestona, jest podejście randomizacyjne. Schemat algorytmu symulowanego wyżarzania można zobaczyć na poniższym kodzie źródłowym:
-\ref{lst:simulatedAnnealing}:
-
-\begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{listings/sa.cpp}
-\caption{Algorytm symulowanego wyżarzania}
-\label{lst:simulatedAnnealing}
-\end{listing}
-
-
-\section{Nieliniowa Metoda Najmniejszych Kwadratów}
-
-Tematem tego podrozdziału jest zastosowana w nieniejszej pracy oraz zaimplementowana w \textit{Matlabie} funkcja \textit{lsqnonlin}. Jej nagłówek jest widoczny poniżej:
-
-\begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{matlab}
-{listings/lsqnonlin.m}
-\caption{Nagłówek funkcji \textit{lsqnonlin}}
-\label{lst:lsqnonlin}
-\end{listing}
-
-Funkcja ta szuka najbardziej optymalnego rozwiązania przy pomocy metody \textit{NMNK} (nieliniowej metody najmniejszych kwadratów \textit{ang. nonlinear least squares}) minimalizując funkcję celu:
-
 \begin{equation}
-  min_x \norm{f(x)}^2_2 = min_x(f_1(x)^2 + f_2(x)^2 + \cdots + f_n(x)^2)
+  \label{eq:s2}
+  s^2 = \frac{\hat{V}(t)\epsilon^2 e^{-\kappa \Delta}}{\kappa} (1 - e^{-\kappa \Delta}) + \frac{\theta \epsilon^2}{2 \kappa}(1 - e^{-\kappa \Delta})^2
 \end{equation}
+\end{prop}
 
-Postać funkcji celu, niezbędnej do obliczenia żądanych parametrów modelu Hestona, jest tematach kolejnego podrozdziału.
+Równania dla $m$ oraz $s^2$ będą wykorzystane w części pracy poświęconej dyskretyzacji procesu zmienności.
 
-\section{Pół-zamknięte równanie opisujące cenę opcji w modelu Hestona}
+\section{Zamknięte równanie opisujące cenę opcji w modelu Hestona}
 
-Jak wspomniano we wstępie, model Hestona ma częściowe rozwiązanie zamknięte. Można je zdefiniować, analogicznie do modelu Blacka-Scholesa, jako:
+Jak wspomniano we wstępie w modelu Hestona można wyznaczyć cenę opcji \textit{call} na moment t, gdzie $t \in [0, T]$. Można ją zdefiniować, analogicznie do modelu Blacka-Scholesa, jako \cite{Heston}:
 
 \begin{equation}
-  C(S, v, t) = SP_1 -K P(t,T) P_2
+  C(S, v, t) = SP_1 -K e^{-r(T-t)} P_2
 \end{equation}
 
 gdzie:
 
-% \begin{equation}
-%   x = ln[S]
-% \end{equation}
+\begin{equation}
+\label{eq:HestonProb}
+  P_j (x, v, T; ln[K]) = \frac{1}{2} + \frac{1}{\pi} \int_{0}^{\infty} Re \bigg[ \frac{e^{-i \cdot \phi ln[K]} f_j(x, v, T; \phi) }{i \phi} d \phi \bigg]
+\end{equation}
 
 \begin{equation}
-  P_j (x, v, T; ln[K]) = \frac{1}{2} + \frac{1}{\pi} \int_{0}^{\infty} Re \bigg[ \frac{e^{-i \cdot \phi ln[K]} f_j(x, v, T; \phi) }{i \phi} d \phi \bigg]
+  x = ln(S_t)
 \end{equation}
 
 Natomiast funkcje charakterystyczne mają postać: 
 
 \begin{equation}
-   f_j(x, v, T; \phi) = e^{C(T-t; \phi) + D(T-t; \phi)v + i \phi x}
+  \begin{aligned}
+f_j(x, v, T; \phi) &= e^{C(T-t; \phi) + D(T-t; \phi)v + i \phi x} \\
+C (\tau; \phi)     &= r \phi i \tau + \frac{a}{\sigma^2} \bigg\{ (b_j - \rho \sigma \phi i + d) \tau - 2 \cdot ln \bigg[ \frac{1 - ge^{dr}}{1-g} \bigg] \bigg\} \\
+D (r; \phi)        &= \frac{b_j- \rho \sigma \phi i + d}{\sigma^2} \bigg[ \frac{1 - e^{d\tau}}{1 - ge^{d\tau}} \bigg]   \\
+g_j                &= \frac{b_j - \rho \sigma \phi i + d}{b_j - \rho \sigma \phi i - d} \\
+d_j                &= \sqrt{(\rho \sigma \phi i  - b_j)^2 - \sigma^2(2 u_j \phi  i  - \phi^2)}.
+  \end{aligned}
 \end{equation}
 
-\begin{equation}
-  C (\tau; \phi) = r \phi i \tau + \frac{a}{\sigma^2} \bigg\{ (b_j) - \rho \sigma \phi i + d) \tau - 2 ln (\frac{1 - ge^{dr}}{1-g} \bigg\}
-\end{equation}
-
-\begin{equation}
-D (r; \phi)  = \frac{b_j- \rho \sigma \phi i + d}{\sigma^2} \bigg[ \frac{1 - e^{d\tau}}{1 - ge^{d\tau}} \bigg]  
-\end{equation}
-
-\begin{equation}
-g_j= \frac{b_j - \rho \sigma \phi i + d}{b_j - \rho \sigma \phi i - d}
-\end{equation}
-
-Poniższe kody źródłowe przedstawią implementację powyższych wzorów wyznaczających cenę opcji w modelu Hestona:
-
-\begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{matlab}
-{../src/HestonCalibration/HestonCalibration/HestonCall.m}
-\caption{Obliczanie ceny opcji z półzamkniętego wzoru na model Hestona}
-\label{lst:lambdaSyntax}
-\end{listing}
-
-\begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{matlab}
-{../src/HestonCalibration/HestonCalibration/CF_SVj.m}
-\caption{Funkcja pomocnicza używana przez metodę kalibrującą parametry modelu Hestona}
-\label{lst:lambdaSyntax}
-\end{listing}
+Całka w równaniu \ref{eq:HestonProb} jest funkcją gładką 
 
 
-% \begin{listing}[H]
-% \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{matlab}
-% {../src/HestonCalibration/HestonCalibration/hestoncalibrationexample.m}
-% \caption{Obliczanie ceny opcji z półzamkniętego wzoru na model Hestona}
-% \label{lst:lambdaSyntax}
-% \end{listing}
+\section{Rozszerzenia modelu Hestona}
 
-
-Aby obliczyć parametry modelu, jako dane wejściowe podajemy następujące dane dostępne na rynku:
-\begin{enumerate}
-  \item cenę wykonania opcji (ang. strike)
-  \item czas wygaśnięcia opcji (ang. maturity)
-  \item zmienność implikowaną (ang. implied volatility)
-\end{enumerate}
-Są to dane wejściowe jakie należy podać w formie wektorów o jednakowej długości.
-Ponadto, do metody kalibrującej parametry modelu Hestona należy podać następujące 
-wartości skalarne:
-\begin{enumerate}
-  \item wartość aktywa bazowego w momencie $t=0$
-  \item stopa wolną od ryzyka
-\end{enumerate}
-
-
-
-
-
-
-
-
-
-
-
-%===========================================================================
-%                       Metody Monte Carlo
-%===========================================================================
-\chapter{Metody Monte Carlo}
-\label{chap:introduction}
-
-Rozdział ten stanowi wprowadzenie do tematyki poruszonej w pracy, której jest wycena opcji w oparciu
-o modele stochastycznej zmienności. 
-Jednak zanim do tego przejdziemy, przedstawiony zostanie ogólny schemat postępowania, na przykładzie modelu mniej skomplikowanego, \textbf{modelu Blacka-Scholesa}, w którym zmienność jest stała w czasie.
-Jako przykład wyceniona zostanie najprostsza opcji \textit{call}, a narzędziem do tego służącym 
-będzie \textbf{metoda Monte Carlo}.
-
-
-\section{Prosta metoda Monte Carlo (MC)}
-
-Rozdział zaczynamy od przedstawienia prostej metody Monte Carlo (\textit{ang. Crude Monte Carlo (CMC)}).
-Należy w niej wygenerować $n$ zmiennych losowych $X_1, ..., X_n$ o takim samym rozkładzie, a wtedy estymatorem wartości
-oczekiwanej jest średnia z próby:
-\begin{equation}
-  \hat{\theta}_n = \sum_{i=1}^n \frac{X_i}{n}
-\end{equation}
-Inaczej mówiąc, aproksymujemy prawdziwą wartość wartością oczekiwaną \textbf{średnią z próby} (\textit{ang. sample mean}).
-
-Implementację metody Monte-Carlo, wraz z przedstawionym w tym rozdziale sposobem wyznaczenia 
-ceny opcji w oparciu o model Blacka-Scholesa, przedstawia kod źródłowy nr \ref{lst:MCBS}:
-
-
-\begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/SimpleMonteCarlo/MCBlackScholes.cpp}
-\caption{Symulacja Monte Carlo wyliczająca cenę opcji kupna (zgodnie z modelem Blacka-Scholesa) o zadanym zestawie parametrów}
-\label{lst:MCBS}
-\end{listing} 
- 
-
-
-\section{Generowanie zmiennych losowych o ustalonym rozkładzie}
-
-Pierwszym krokiem jaki należy podjąć podczas przeprowadzania symulacji Monte Carlo jest 
-wygenerowanie zmiennych losowych o ustalonym rozkładzie.
-
-W przypadku wyceny opcji w modelu Blacka-Scholesa potrzebna jest umiejętność generowania liczb (pseudo)losowych z rozkładu normalnego. Znamy wiele algorytmów generowania liczb o rozkładzie normalnym, wśród których można wyróżnić:
-\begin{enumerate}
-  \item metoda odwrotnej dystrybuanty
-  \item metoda Boxa-Mullera
-  \item metoda biegunów (\textit{ang. Marsaglia\index{Marsaglia, George} Polar Method})
-  \item algorytm ziggurat
-\end{enumerate}
-
-Mimo że, najbardziej wydajną metodą generowania liczb pseudolosowych o rozkładzie normalnym jest algorytm ziggurat, a najbardziej ogólną jest metoda odwrotnej dystrybuanty (pozwala na generowanie liczb o dowolnym rozkładzie pod warunkiem umiejętności wyznaczenia funkcji odwrotnej do dystrybuanty danego rozkładu), w tym rozdziale zostanie przedstawiona metoda biegunów.
-
-Jest ona wariantem metody Boxa-Mullera\index{Box, George}\index{Muller, Edgar}, jednak jest od niego znacznie wydajniejsza.
-Polega ona na wybraniu losowego punktu z rozkładu jednostajnego spełniającego warunek:
-\begin{equation}
-  s = x^2 + y^2 < 1
-\end{equation}
-Wtedy liczby losowe o standardowym rozkładzie normalnym otrzymujemy stosując następujące przekształcenia:
-\begin{equation}
-  u_1 = x \sqrt{\frac{-2ln(s)}{s}}, u_2 = y \sqrt{\frac{-2ln(s)}{s}}
-\end{equation}
-Poniższy kod przedstawia implementację tego algorytmu:
-
-\begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/SimpleMonteCarlo/PolarGenerator.cpp}
-\caption{Generowanie zmiennych o rozkładzie normalnym zgodnie z metodą biegunów}
-\label{lst:lambdaSyntax}
-\end{listing} 
-
-
-
-\section{Symulacja cen opcji w modelu Hestona}
-
-
-Poniższy kod źródłowy nr \ref{lst:MCHeston} znajduje się główna funkcja użyta do wygenerowania ceny 
-opcji w oparciu o model Hestona:
-
-\begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/listings/MCHeston.cpp}
-\caption{Metoda Monte Carlo dla modelu Hestona}
-\label{lst:MCHeston}
-\end{listing} 
-
-
-
-
-\section{Algorytm Andersena} % (fold)
-\label{sec:algorytm_andersena}
-
-% section algorytm_andersena (end)
-
-
-
-
-
-
-
-%===========================================================================
-%                       Rozszerzenia modelu Hestona
-%===========================================================================
-\chapter{Rozszerzenia modelu Hestona}
-
-Model Hestona, jak opisano w poprzednim rozdziale, odrzuca założenie o stałości zmienności w czasie. 
+Jak opisano w poprzednich podrozdziałach, model Hestona odrzuca założenie o stałości zmienności w czasie. 
 Jednak pozostałe parametry wciąż pozostają na niezmienionym poziomie, co daje możliwość uzmiennienia
 kolejnych stałych w modelu.
 Ponadto, również wariancję w modelu Hestona można uzależnić nie tylko 
@@ -852,7 +565,7 @@ Celem tego rozdziału jest tylko zasygnalizowanie możliwych rozszerzeń modelu 
 Mogą być one jednak zaimplementowane przy pomocy zaprojektowanego w tej pracy modułu 
 do wyliczania ceny opcji w oparciu o model Hestona. 
 
-\section{Dwuczynnikowy model Hestona} % (fold)
+\subsection{Dwuczynnikowy model Hestona} % (fold)
 \label{sec:modelDwuczynnikowy}
 Jak powiedziano we wstępie do rozdziału, jednym z możliwych rozszerzeń modelu Hestona jest wzbogacenie
 procesu zmienności o dodatkowe zależności. 
@@ -888,7 +601,7 @@ Hestona nie zawsze jest w stanie dostosować się do uśmiechu zmienności impli
 dla krótkich okresów \cite{HestonExtensions}.
 
 
-\section{Modele zmienności stochastycznej ze skokami} % (fold)
+\subsection{Modele zmienności stochastycznej ze skokami} % (fold)
 \label{sec:modele_zmienno_ci_stochastycznej_ze_skokami}
  
 Kolejnym modelem, który rozszerza model Hestona jest model zmienności stochastycznej ze skokami.
@@ -907,11 +620,556 @@ Procesy $dW_t^v$ oraz $dW_s^v$ są skorelowane w następujący sposób:
 \begin{equation}
 Cov[dW^S_t, dW^v_t] = \rho dt 
 \end{equation}
-W powyższych wzorach $dN_t^S$ jest procesem Poissona, $Y_t$ oznacza wielkość skoku, natomiast $S_{t-}$ oznacza, że jest skok w wartości procesu przed momentem użycia go po lewej stronie równania.
+W powyższych wzorach $dN_t^S$ jest procesem Poissona, $Y_t$ oznacza wielkość skoku, natomiast $S_{t-}$ oznacza, że jest 
+skok w wartości procesu przed momentem użycia go po lewej stronie równania.
 
 Motywacją stojącą za wprowadzeniem skoków do modelu jest chęć uchwycenia momentów o 
 szczególnej i gwałtownej zmianie ceny instrumentu bazowego. Dla indeksu S\&P, omawianego w tej pracy,
 skoki taki są szczególnie widoczne podczas kryzysów ekonomicznych. 
+
+
+
+ 
+
+
+%===========================================================================
+%                       Kalibracja modelu Hestona
+%===========================================================================
+\chapter{Kalibracja modelu}
+\label{chap:chapterModelCalibration}
+
+
+
+Przed przystąpieniem do wyznaczenia ceny opcji zgodnej z modelem Hestona, potrzebujemy uzyskać zestaw parametrów dla 
+tego modelu. Problem wyznaczenia parametrów modelu nazywamy \textbf{problemem kalibracji} modelu.  
+
+Jak widzieliśmy w rozdziale nr \ref{chap:introduction} zadanie kalibracji dla modelu Blacka-Scholesa nie jest 
+zadaniem skomplikowanym. Do oszacowania mamy tylko jeden parametr, który należy wyznaczyć na podstawie aplikacji 
+danych giełdowych do wzoru na cenę opcji w modelu Blacka-Scholesa.
+
+Dla modelu Hestona sytuacja wygląda nieco bardziej skomplikowanie. Zamiast jednego mamy do oszacowania pięć parametrów:
+$V(1),\kappa, \theta, \sigma, \rho$.  
+
+
+
+Jednym ze sposobów na kalibrację modeli jest technika symulowanego wyżarzania (ang. simulated annealing). Należy od do 
+grona stochastycznych metaheurystyk, które pomagają w rozwiązaniu problemów optymalizacyjnych (a takim właśnie problemem 
+jest kalibracja modelu, chcemy zminimalizować wartość funkcji będącej różnicą wartości funkcji wynikającej z 
+modelu i z rynku).
+
+Kolejnym sposobem jest powszechnie stosowana nielinowa metoda najmniejszych kwadratów. I właśnie ta metoda zostanie 
+użyta w niniejszej pracy w celu wyznaczenia parametrów modelu.
+
+Aby jednak efektywnie zastosować powyższe metody, należy znaleść równie efektywny sposób wyznaczania wartości opcji w 
+modelu Hestona. Ponieważ podejście symulacyjne jest zbyt czasochłonne w procesie kalibracji, w tym przypadku stosuje 
+się pół zamknięte równanie opisujące cenę opcji.
+
+
+\section{Deterministyczne sposoby kalibracji modelu} 
+Pierwszą grupą metod używanych w celu skalibrowania modelu Hestona należy to algorytmy deterministyczne, tzn. nie mające w sobie czynnika losowego. W
+
+
+\subsection{Nieliniowa Metoda Najmniejszych Kwadratów}
+
+Tematem tego podrozdziału jest zastosowana w nieniejszej pracy oraz zaimplementowana w \textit{Matlabie} 
+funkcja \textit{lsqnonlin}. Jej nagłówek jest widoczny poniżej:
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{matlab}
+{listings/lsqnonlin.m}
+\caption{Nagłówek funkcji \textit{lsqnonlin}}
+\label{lst:lsqnonlin}
+\end{listing}
+
+Funkcja ta szuka najbardziej optymalnego rozwiązania przy pomocy metody \textit{NMNK} (nieliniowej metody najmniejszych 
+kwadratów \textit{ang. nonlinear least squares}) minimalizując funkcję celu:
+
+\begin{equation}
+  min_x \norm{f(x)}^2_2 = min_x(f_1(x)^2 + f_2(x)^2 + \cdots + f_n(x)^2)
+\end{equation}
+
+
+Wynik funkcji \textit{lsqnonlin} jest zależny od punktu początkowego podanego w parametrach metody. Oznacza to, że 
+metoda ta jest raczej. Postać funkcji celu, niezbędnej do obliczenia żądanych parametrów modelu Hestona, 
+jest tematach kolejnego podrozdziału.
+
+\subsction{Funkcja celu}
+
+
+Poniższe kody źródłowe nr \ref{lst:hestonMatlabListing} \cite{HestonMatlab} przedstawią implementację powyższych wzorów wyznaczających cenę opcji w modelu Hestona:
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{matlab}
+{../src/HestonCalibration/HestonCalibration/HestonCall.m}
+\caption{Obliczanie ceny opcji z półzamkniętego wzoru na model Hestona}
+\label{lst:hestonMatlabListing}
+\end{listing}
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{matlab}
+{../src/HestonCalibration/HestonCalibration/CF_SVj.m}
+\caption{Funkcja pomocnicza używana przez metodę kalibrującą parametry modelu Hestona}
+\label{lst:lambdaSyntax}
+\end{listing}
+
+
+% \begin{listing}[H]
+% \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{matlab}
+% {../src/HestonCalibration/HestonCalibration/hestoncalibrationexample.m}
+% \caption{Obliczanie ceny opcji z półzamkniętego wzoru na model Hestona}
+% \label{lst:lambdaSyntax}
+% \end{listing}
+
+
+Aby obliczyć parametry modelu, jako dane wejściowe podajemy następujące dane dostępne na rynku:
+\begin{enumerate}
+  \item cenę wykonania opcji (ang. strike)
+  \item czas wygaśnięcia opcji (ang. maturity)
+  \item zmienność implikowaną (ang. implied volatility)
+\end{enumerate}
+Są to dane wejściowe jakie należy podać w formie wektorów o jednakowej długości.
+Ponadto, do metody kalibrującej parametry modelu Hestona należy podać następujące 
+wartości skalarne:
+\begin{enumerate}
+  \item wartość aktywa bazowego w momencie $t=0$
+  \item stopa wolną od ryzyka
+\end{enumerate}
+
+
+Jedną z metod jest całkowanie funkcji występującej we wzorze na funkcję charakterystyczną (ang. \textit{ang. Direct Integration}). Polega ona na wyznaczeniu całki przy pomocy numerycznej kwadratury, jak np. kwadratury Gaussa. W tym celu można zastosować inną postać funkcji charakterystycznej, wyznaczoną przez Attariego, która jest bardziej efektywną metodą do jej obliczenia:
+\begin{equation}
+\begin{aligned}
+  C(S_0, T, K) = S_0 &- \frac{1}{2} e^{-rT}K  \\ 
+  &- e^{-rT} K 
+  \left( 
+  \frac{1}{\pi} \int_0^{+\infty} Z d\omega 
+  \ritht)
+    \end{aligned}
+\end{equation}
+gdzie:
+\begin{equation}
+  Z = \frac{
+(Re(\phi (\omega) )
++\frac{Im(\phi (\omega)}{\omega}
+cos(\omega l (K)) +
+(Im(\phi (\omega) - \frac{Re(\phi (\omega)}{\omega}
+sin(\omega l (K))
+}{1 + \omega^2}
+\end{equation}
+Powyższa formuła ma dwie przewagi nad tą przedstawionoą przez Hestona:
+\begin{enumerate}
+  \item Formuła zawiera tylko jedną funkcję podcałkową do obliczenia
+  \item Funkcja podcałkowa ma wyrażenie kwadratowe w mianowniku, co daje szybszą zbieżność
+\end{enumerate}
+
+\section{Stochastyczne sposoby kalibracji modelu}
+Przedstawione jak do tej pory algorytmy optymalizacyjne są algorytmami deterministycznymi.
+Często jednak wprowadzenie czynnika losowego może poprawić ich efektywność lub dokładność. Jednym z nim jest algorytm symulowanego wyżarzania, którego nadają się szczególnie dobrze do 
+
+\subsection{Symulowane wyżarzanie}
+
+Kolejnym ze sposobów skalibrowania modelu stochastycznego, przedstawionym w 1983 roku przez Kirkpatricka \cite{Kirkpatrick}, jest algorytm symulowanego wyżarzania  (\textit{ang. simulated annealing}). Motywacją dla jego powstania jest szeroko stosowany w metalurgii proces wychładzania ciała stałego (\textit{ang. cooling process}). Składa on się z następujących etapów \cite{ChenBin}:
+
+\begin{enumerate}
+  \item Podnoszenia temperatury, tak że substancja stała się topi
+  \item Powolnego wychładzania substancji tak, że poruszające się tam cząsteczki gromadzą się w stanie o najmniejszej energii
+\end{enumerate}
+
+Dobrym przykładem obrazującym działanie algorytmu jest wyobrażenie skaczącej piłki na terenie 
+o nierównej powierzchni.
+W warunkach niskiej siły grawitacji, piłka odbijając się od powierzchni leci wysoko w górę i może przeskoczyć z jednej doliny do drugiej, natomiast odwrotnie się dzieje w przypadku wysokiej siły grawitacji. Wtedy piłce trudniej jest się oderwać od powierzchni i wydostać się z doliny. Podobnie sprawa ma się w przypadku cząsteczek umieszczonych w metalu: przy wysokiej 
+temperaturze mogą się one swobodnie przemieszczać w ciele, natomiast wraz ze spadającą temperaturą 
+stają się one uwięzione w jednym punkcie.
+
+Przedstawiony schemat rozwiązuje szereg problemów podczas rozwiązywania problemów optymalizacyjnych, a najważniejszym z nich jest potencjalne istnienie wielu ekstremów lokalnych.
+W tym przypadku większość algorytmów, które są monotoniczne, nigdy nie osiągną ekstremum globalnego. Jedną z takich technik jest \textit{hill climbing}, która osiąga dobre rezultaty tylko dla funkcji o wypukłej powierzchni. Aby znaleść rozwiązanie tego problemu odchodzi się od zasady monotoniczności, tzn. algorytm nie zawsze wybiera rozwiązanie bardziej optymalne od poprzedniego. 
+Wśród możliwych podejść należy wymienić np.:
+\begin{enumerate}
+  \item pełny przegląd badanego obszaru
+  \item podejście deterministyczne w algorytmie \textit{tabu search}
+  \item podejście randomizacyjne (\textit{algorytm Metropolisa\index{Metropolis, Nicholas}, symulowane wyżarzanie} \cite{OptimalizationBySimulatedAnnealing} )
+\end{enumerate}
+
+
+Do bardziej popularnych metod, jakie wybiera się, aby skalibrować model Hestona, jest podejście randomizacyjne. Schemat algorytmu symulowanego wyżarzania można zobaczyć na poniższym kodzie źródłowym:
+\ref{lst:simulatedAnnealing}:
+
+Poniżej pokrótce omówimy działanie algorytmu przedstawionego na kodzie źródłowym.
+Funkcja ma dwa argumenty: pierwszy argument mówi ile iteracji algorytmu chcielibyśmy przeprowadzić, natomiast
+drugi algorytm określa \textbf{współczynnik chłodzenia} (ang. cooling coefficient).
+Najważniejszą częścią algorytmu jest pętla 10-21. 
+Centralną rolą w schemacie odgrywa regułą Metropolisa, która mówi czy bierzące rozwiącanie powinno być 
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{listings/sa.cpp}
+\caption{Algorytm symulowanego wyżarzania}
+\label{lst:simulatedAnnealing}
+\end{listing}
+
+\subsection{Adaptowane symulowane wyżarzanie}
+
+W literaturze zostało podjęte wiele prób jeszcze znalezienia jeszcze lepszego algorytmu dla problemu kalibracji modelu Hestona. 
+
+
+
+
+
+%===========================================================================
+%                       Metody Monte Carlo
+%===========================================================================
+\chapter{Metody Monte Carlo}
+\label{chap:monteCarlo}
+
+Przeprowadzenie wyceny opcji w oparciu o model Hestona jest zadaniem znacznie trudniejszym
+niż to było chociażby w przypadku modelu BS. Wynika to z tego, że w modelu Hestona trajektoria 
+ceny instrumentu bazowego jest teraz zależna od trajektorii jego zmienności. To pociąga za sobą 
+duże konsekwencje w procesie wyceny opcji, ponieważ teraz należy najpierw zasymulować trajektorię zmienności, a dopiero później, na tej podstawie, generować trajektorię cen instrumentu bazowego.
+
+Stąd też, aby wygenerować trajektorię cen, musimy być w stanie przedstawić równanie opisujące
+zmienność aktywa bazowego w postaci \textit{zdyskretyzowanej}.
+
+W tym rozdziale pokażemy jak efektywnie, przy pomocy schematów dyskretyzacji i symulacji Monte Carlo wyznaczyć, 
+najpierw trajektorie procesu zmienności i aktywa bazowego, a następnie wyliczyć wartość opcji o zadanym schemacie
+wypłaty.
+
+\section{Prosta metoda Monte Carlo (MC)}
+\label{sec:mc}
+
+Rozdział zaczynamy od przedstawienia prostej metody Monte Carlo (\textit{ang. Crude Monte Carlo (CMC)}).
+Należy w niej wygenerować $n$ zmiennych losowych $X_1, ..., X_n$ o takim samym rozkładzie, a wtedy estymatorem wartości
+oczekiwanej jest średnia z próby:
+\begin{equation}
+  \hat{\theta}_n = \sum_{i=1}^n \frac{X_i}{n}
+\end{equation}
+Inaczej mówiąc, aproksymujemy prawdziwą wartość wartością oczekiwaną \textbf{średnią z próby} (\textit{ang. sample mean}).
+
+Zgodnie z Mocnym Prawem Wielkich Liczb mamy pewność, że estymator $\hat{\theta}_n \rightarrow \theta_n$ prawie na pewno, wtedy gdy $n \rightarrow \infty$. Oznacza to, że estymator $\hat{\theta}_n $ jest \textbf{mocno zgodnym} estymatorem $\theta_n$.
+
+
+
+\section{Generowanie zmiennych losowych o ustalonym rozkładzie}
+\label{sec:genRV}
+
+Pierwszym krokiem jaki należy podjąć podczas przeprowadzania symulacji Monte Carlo jest 
+wygenerowanie zmiennych losowych o ustalonym rozkładzie.
+
+W przypadku wyceny opcji w modelu Blacka-Scholesa potrzebna jest umiejętność generowania liczb (pseudo)losowych z rozkładu normalnego. Znamy wiele algorytmów generowania liczb o rozkładzie normalnym, wśród których można wyróżnić:
+\begin{enumerate}
+  \item metoda odwrotnej dystrybuanty
+  \item metoda Boxa-Mullera
+  \item metoda biegunów (\textit{ang. Marsaglia\index{Marsaglia, George} Polar Method}) \cite{Marsaglia}
+  \item algorytm ziggurat
+\end{enumerate}
+
+Mimo że, najbardziej wydajną metodą generowania liczb pseudolosowych o rozkładzie normalnym jest algorytm ziggurat, a najbardziej ogólną jest metoda odwrotnej dystrybuanty (pozwala na generowanie liczb o dowolnym rozkładzie pod warunkiem umiejętności wyznaczenia funkcji odwrotnej do dystrybuanty danego rozkładu), w tym rozdziale zostanie przedstawiona metoda biegunów.
+
+Jest ona wariantem metody Boxa-Mullera\index{Box, George}\index{Muller, Edgar}. W przeciwieństwie do metody 
+Boxa-Mullera nie zawiera ona funkcji $sin$ oraz $cos$, dlatego też jest znacznie wydajniejsza obliczeniowo\cite{Korn}.
+Polega ona na wybraniu losowego punktu z rozkładu jednostajnego spełniającego warunek:
+\begin{equation}
+  s = x^2 + y^2 < 1
+\end{equation}
+Wtedy liczby losowe o standardowym rozkładzie normalnym otrzymujemy stosując następujące przekształcenia:
+\begin{equation}
+  u_1 = x \sqrt{\frac{-2ln(s)}{s}}, u_2 = y \sqrt{\frac{-2ln(s)}{s}}
+\end{equation}
+Poniższy kod przedstawia implementację tego algorytmu:
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../src/heston/SimpleMonteCarlo/PolarGenerator.cpp}
+\caption{Generowanie zmiennych o rozkładzie normalnym zgodnie z metodą biegunów}
+\label{lst:lambdaSyntax}
+\end{listing} 
+
+
+
+\section{Symulacja cen opcji w modelu Blacka-Scholesa}
+
+Wiedząc jak generować zmienne losowe o ustalonym rozkładzie, w szczególności o rozkładzie normalnym, można 
+przystąpić do symulacji ceny opcji zgodnej z modelem Blacka-Scholesa.
+Implementacja metody Monte-Carlo została przedstawiona na kodzie źródłowym nr \ref{lst:MCBS}.
+
+Głównym elementem funkcji \textit{MCBlackScholes::simulate()} jest pętla w liniach 24-27. Najpierw w każdym 
+obrocie pętli generujemy cenę aktywa bazowego na moment wygaśnięcia opcji, kolejno obliczamy wypłatę z konkretnej
+realizacji i w przypadku gdy jest ona większa od zera dodajemy ją do globalnego licznika sumującego wszystkie 
+wypłaty z poszczególnych symulacji. Jak zostało pokazane w podrozdziale \ref{sec:mc}, po podzieleniu przez liczbę symulacji i zdyskontowaniu na moment zerowy, otrzymamy mocno zgodny estymator ceny opcji.
+
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../src/heston/SimpleMonteCarlo/MCBlackScholes.cpp}
+\caption{Symulacja Monte Carlo wyliczająca cenę opcji kupna (zgodnie z modelem Blacka-Scholesa) o zadanym zestawie parametrów}
+\label{lst:MCBS}
+\end{listing} 
+ 
+
+
+
+\section{Generowanie skorelowanych szeregów czasowych}
+
+Ważną kwestią, która pojawia się w implementacji modelu Hestona, jest generowanie skorelowanych 
+szeregów czasowych (wygenerowanie zmiennych losowych $dW^S_t$ oraz $dW^v_t$). 
+
+
+O ile jednak dla przypadku wielowymiarowego, generowanie skorelowanych szeregów czasowych jest dosyć
+skomplikowane i czasochłonne obliczeniowo, to dla przypadku dwuwymiarowego problem redukuje się do 
+następującej postaci:
+
+\begin{equation}
+  \epsilon_1 = x_1
+\end{equation}
+\begin{equation}
+  \epsilon_2 = \rho x_1 + x_2 \sqrt{1-\rho^2}
+\end{equation}
+
+
+
+\section{Schematy dyskretyzacji}
+
+
+Model Hestona, opisany w \ref{chap:hestonModel} rozdziale, opisuje dynamikę procesów cen aktywa 
+bazowego oraz jego zmienności w postaci ciągłej.
+Jednak chcąc symulować działanie modelu przy pomocy metody Monte Carlo, należy mieć sposób na generowanie trajektorii procesów w nim występujących w postaci nieciągłej, dyskretnej. 
+
+Podrozdział ten będzie poświęcony metodom dyskretyzacji występującymi w literaturze oraz są ich konsekwencje podczas wykonywania symulacji Monte Carlo.
+
+
+\subsection{Generacja trajektorii procesu stochastycznego}
+Generacja trajektorii procesów stochastycznych występujących w modelu Hestona jest zadaniem wygenerowania pary wektorów 
+losowych o elementach $(X(t), V(t))$, dla każdego $t \in \mathcr{T}$, gdzie $\mathcr{T}$ jest danym zbiorem dyskretnych punktów w czasie $\mathcr{T}  = {t_i}^N_{t=1}$. Aby wygenerować taką parę wektorów losowych wystarczy znać odpowiedź na inne fundamentalne pytanie: jak można wygenerować punkty wektorów losowych $(X(t+ \Delta), V(t+ \Delta))$
+mając dany punkty $(X(t), V(t))$? Mając taki schemat, można go iteracyjnie lub rekurencyjnie aplikować dla każdego kolejnego punku począwszy od zadanego elementu $(X(0), V(0))$, aż do otrzymania punktu $(X(T), V(T))$.
+Kolejne podrozdziały będą odpowiedzią na pytanie jakie schematy można zastosować w celu efektywnego przejścia od $(X(t), V(t))$ do $(X(t+ \Delta), V(t+ \Delta))$.
+
+Używamy w nich notacji $\hat{X}, \hat{V}$ dla oznaczenia dyskretnych trajektorii procesów stochastycznych $X, V$ .
+
+\subsection{Dyskretyzacja Eulera}
+
+Poniższe równanie nr \ref{h:euler} przedstawia \textbf{dyskretyzację Eulera} równania zmienności:
+ 
+\begin{equation}\label{h:euler}
+v_{i+1}  = v_i + \kappa (\theta - v_i) \Delta t + \epsilon +  \sqrt{v_i} \Delta W^{v}_{i+1}
+\end{equation}
+
+Powyższe równanie jest wynikiem dyskretyzacji procesu ciągły do procesu dyskretnego, które jest
+podatne na numeryczne błędy zaokrągleń. Niestety, pomimo faktu, że proces zmienności $v_{i+1}$ w postaci ciągłej nie może osiągnąć wartości ujemnej, po dyskretyzacji okazuje się, że wartość ta może być ujemna. 
+
+Aby tego uniknąć, zgodnie z literaturą, wszędzie tam, gdzie możliwe jest wystąpienie ujemnej 
+wartości zmienności $v_i$, zastępujemy ją poprzez $v_i^+ = \max(v_i, 0)$. Ostatecznie więc, wzór
+opisujący dynamikę $v_i$ przyjmuje postać:
+
+\begin{equation}\label{h:eulerNonZero}
+v_{i+1}  = v_i + \kappa (\theta - v_i^+) \Delta t + \epsilon +  \sqrt{v_i^+} \Delta W^{v}_{i+1}
+\end{equation}
+
+Mając wygenerowaną trajektorię zmienności, można przystąpić do zdyskretyzowania równania opisującego 
+dynamikę cen aktywa bazowego, jednakże pamiętając o tym, aby zmienność zawsze była wartością dodatnią. 
+Mając to na uwadze, równanie nr \ref{h:eulerAssetPath} opisuję dynamikę cen instrumentu bazowego w postaci dyskretnej:
+
+\begin{equation}\label{h:eulerAssetPath}
+S_{i+1} = S_i e^{\mu - \frac{1}{2} v_i^+} \Delta t + \sqrt{v_i^+ \Delta t}  \Delta W_{i+1}^S
+\end{equation}
+  
+Aby zasymulować przyrosty procesu Wienera wykorzystujemy fakt, że $W_{i+1}  - W_{i}$ są niezależne względem pozostałych przyrostów. 
+Każdy taki przyrost ma rozkład normalny o średniej równej $0$  oraz odchyleniem standardowym równym $\sqrt{\Delta t}$. 
+Dlatego do wygenerowania przyrostów procesu Wienera można zastosować metody przedstawione w podrozdziale (\ref{sec:genRV}). Chcąc zastosować metodę odwrotnej dystrybuanty rozkładu normalnego najlepiej skorzystać z efektywnego algorytmu \textbf{Beasley-Springer-Moro}.
+
+
+\subsection{Schemat Andersena - proces zmienności}
+\label{sec:algorytm_andersena}
+O ile schemat dyskretyzacji Eulera jest najprostszym do implementacji schematem dyskretyzacji, to ma on wiele wad, które zostały pokazane w poprzednim podrozdziale.
+Algorytm Andersena, zwany również pod nazwą schematu kwadratowo-wykładniczego (\textit{ang. Quadratic Expotential (QE) scheme}),
+znacząco niweluje to wady, czyniąc proces dyskretyzacji bardziej dokładnym przy niewielkie wolniejszym tempie wykonania algorytmu. 
+
+
+
+Aplikując schemat Andersena, będziemy chcieli zaproksymować wartość  $\hat{V}(t + \Delta)$ w zależności od wartości zmiennej $\hat{V}(t)$. Wpływa ona na parametr $\Psi$ zdefiniowany jako:
+
+
+
+\begin{equation}
+ \label{eq:ksi}
+ \Psi = \frac{s^2}{m^2} = \frac{\frac{\hat{V}(t)\epsilon^2 e^{-\kappa \Delta}}{\kappa} (1 - e^{-\kappa \Delta}) + \frac{\theta \epsilon^2}{2 \kappa}(1 - e^{-\kappa \Delta})^2}{(\theta + (\hat{V}(t) - \theta) e^{-\kappa \Delta})^2} 
+\end{equation}
+gdzie $m$ i $s^2$ zdefiniowane są przy pomocy równań \ref{eq:m} oraz \ref{eq:s2}.
+Dla wartości parametru $\Psi \leq 2.0$, definiuje się wartość zmiennej  $\hat{V}(t + \Delta)$  pod warunkiem  $\hat{V}(t)$ jako:
+\begin{equation}
+ \label{eq:vtbig}
+\hat{V}(t + \Delta)  = a (b + Z_V)^2
+\end{equation}
+gdzie $Z_V$ jest zmienną o standardowym rozkładzie normalnym. Zmienne $a$ i $b$ zdefiniowane są natomiast przy pomocy dopasowania pierwszego i drugiego momentu (\textit{ang. moments matching}) procesu wariancji i mają wartość:
+
+
+\begin{equation}
+\label{eq:b}
+b^2 = 2 \Psi^{-1} - 1 + \sqrt{2 \Psi^{-1}} \sqrt{2 \Psi^{-1} - 1}
+\end{equation}
+
+\begin{equation}
+\label{eq:a}
+a = \frac{m}{1 + b^2}
+\end{equation}
+Aproksymacja zdefiniowana w powyższy sposób znana jest pod nazwą \textbf{aproksymacji gaussowsko-kwadratowej} (\textit{ang. quadratic Gaussian approximation}).
+
+
+Jednakże, schemat \ref{eq:vtbig} nie działa dobrze dla małych wartości $\hat{V}(t)$. Zawodzi metoda dopasowania momentów, dlatego w tym przypadku 
+zostanie zastosowany inny schemat. Polega on na tym, że dla $\Psi geq 1$, wartość $\hat{V}(t + \Delta)$ pod warunkiem znanej wartości $\hat{V}(t)$ można utrzamać stosując następujące przekształcenie:
+
+\begin{equation}
+\label{eq:psi}
+\Psi^{-1}(u) = \Psi^{-1}(u;p,\beta) = \begin{cases}
+               0, \qquad \qquad \qquad  0 \le u \leq p,\\
+               \beta^{-1} \ln (\frac{1-p}{1-U}), \qquad  p \le u \leq 1, \\
+            \end{cases} 
+\end{equation} 
+gdzie $U_V$ jest zmienną losową z rozkładu jednostajnego, natomiast $p$ oraz $\beta$ mają postać:
+
+
+% \begin{equation}
+% \label{eq:mu}
+% \mu = f_{\mu}(\Psi) \cdot m,\quad  f_{\mu}(\Psi) = \frac{r(\Psi)}{\phi(r(\Psi)) + r(\Psi) \Phi(r(\Psi))}
+% \end{equation}
+
+% \begin{equation}
+% \label{eq:sigma}
+% \mu = f_{\sigma}(\Psi) \cdot s,\quad  f_{\sigma}(\Psi) = \frac{\Psi^{-1/2}}{\phi(r(\Psi)) + r(\Psi) \Phi(r(\Psi))}
+% \end{equation}
+
+\begin{equation}
+\label{eq:beta}
+\beta = \frac{1-p}{m} = \frac{2}{m(\Psi + 1)}
+\end{equation}
+
+\begin{equation}
+\label{eq:p}
+p = \frac{\Psi - 1}{\Psi + 1}
+\end{equation}
+
+Schemat ten znany jest pod nazwą aproksymacji przy pomocy zero-zmodyfikowanego rozkładu wykładniczego (ang. zero-modified exponential approximation). Jest to rozkład, który w części niezerowej ma rozkład normalny, natomiast dla zera przyjmuje inną wartość, spoza rozkładu. 
+
+
+Obydwa schematy można złączyć w jedno równanie o postaci:
+\begin{equation}
+\label{eq:andersen}
+\hat{V}(t + \Delta)  = \mathbb{1}_{\Phi \geq \Phi_c} a (b + Z_V)^2
+ + \mathbb{1}_{\Phi \le \Phi_c} \beta^{-1} \ln (\frac{1-p}{1-U})
+\end{equation}
+gdzie $Z$ jest standardowym rozkładem normalnym, natomiast $U$ jest rozkładem jednostajnym na przedziale $[0;1]$.
+
+
+Jedynym nieprecyzyjnym punktem jest wybór wartość krytycznej $\Psi_c$, czyli granicznej wartości dla której przychodzimy z jednego schematu aproksymacji w drugi. 
+Jak wynika z poprzednich równań, obszar niekonkluzywności jest zawarty w przedziale $\Psi \in [1;2]$.
+Jednak jak podaje w swojej pracy autor algorytmu, wybór konkretnej metody w tym przedziale ma niewielki wpływ na jakość całego schematu aproksymacji, dlatego można wartość tę ustalić na arbitralnym poziomie $\Psi_c = 1.5$,
+ 
+
+
+W pracy \textbf{Leifa Andersena}\index{Andersen, Leif} został przedstawiony algorytm wyznaczenia 
+wartości $\hat{V}(t + \Delta)$ na podstawie $\hat{V}(t)$. Przy założeniu, 
+że w sposób arbitralny wyznaczono parametr $\Psi_c \in [1,2]$, algorytm 
+ma następującą postać:
+
+\begin{enumerate}
+  \item oblicz $m$ oraz $s^2$ na podstawie równań $\hat{V}(t)$ oraz równań (\ref{eq:s2}) i (\ref{eq:ksi}) odpowiednio
+  \item wyznacz $\Psi = \frac{s^2}{m^2}$ i wyznacz $f_{\mu}(\Psi)$ oraz $f_{\sigma}(\Psi)$ 
+  \item wylosuj liczbę $U_V$ z rozkładu jednostajnego
+%   \item wylicz $\mu$ oraz $\sigma$ na podstawie równań(\ref{eq:mu}) i (\ref{eq:sigma})
+  \item jeżeli $\Psi \leq \Psi_c$:
+  \begin{itemize} 
+  \item wyznacz $a$ i $b$ na podstawie (\ref{eq:b}) oraz (\ref{eq:a})
+  \item oblicz $Z_V = \Psi^{-1}(U_V)$
+  \item oblicz $\hat{V}(t + \Delta)  = a(b+ Z_V)^2$
+  \end{itemize}
+  \item w przeciwnym przypadku:
+    \begin{itemize} 
+  \item wyznacz $\beta$ oraz $p$ zgodnie z równaniami (\ref{eq:beta}) i (\ref{eq:p})
+  \item oblicz $\hat{V}(t + \Delta)  =\Psi^{-1}(U_V;p,\beta$, gdzie $\Psi^{-1}$ jest dane w równaniu (\ref{eq:psi})
+  \end{itemize}
+  
+\end{enumerate}
+
+
+W celu poprawy wydajności algorytmu, wartości parametrów $m$ i $s^2$ powinny zostać obliczone poza główną pętlą schematu Monte Carlo.
+
+
+
+\subsection{Schemat Andersena - proces aktywa bazowego}
+
+Po wygenerowaniu trajektorii wariancji pozostaje do wygenerowania trajektoria aktywa bazowego $X(t)$. Wydawać by się mogło, że dobry sposobem jest wygenerowanie tej trajektorii przy pomocy schematu Eulera. Niestety, w schemacie Eulera możemy wygenerować skorelowane zmienne losowe
+przy pomocy metody podanej chociażby w punkcie ref.
+W schemacie Andersena, do wygenerowania elementów procesu losowego $V(t)$ używamy albo zmiennej losowej o rozkładzie normalnym albo zmiennej losowej z rozkładu jednostajnego. Dlatego, też nie jest jasne jak dobrze skorelować proces $X(t)$ z $V(t)$. Próba skorelowania $W^S$ ze zmienną spowodowałoby, że korelacja pomiędzy procesami byłaby zbyt mała. Zjawisko takie jest znane w literaturze pod nazwą \textbf{wycieku korelacji} (ang. \textit{leaking correlation}). 
+
+Andersen proponuje więc użyć dokładnej reprezentacji wartości procesu $\ln X(t + \Delta)$:
+
+\begin{equation}
+\begin{aligned}
+\label{eq:xt}
+\ln X(t + \Delta) = & \ln X(t)  + \frac{\rho}{\epsilon} (V(t + \Delta)  - V(t) - \kappa \theta \Delta) + \\
+& (\frac{\kappa \rho}{\epsilon} - \frac{1}{2})
+\int_t^{t+\Delta} V(u) du + \sqrt{1-\rho^2} \int_t^{t+\Delta} \sqrt{V(u)}dW(u)
+\end{aligned}
+\end{equation}
+
+Składnik $\frac{\rho}{\epsilon} (V(t + \Delta)$ jest składnikiem, który odpowiada za korelację między 
+procesami $V(t + \Delta)$ oraz $X(t + \Delta)$.
+
+Istotną kwestią pozostaje znalezienie sposobu na oszacowanie całki występującej we wzorze \ref{eq:xt}:
+\begin{equation}
+  \int_t^{t+\Delta}  V(u) du \approx \Delta [\gamma_1 V(t) \gamma_2 V(t + \Delta)]
+\end{equation}
+
+Jak widać, równanie to aproksymuje całkę na przedziale $[t; t + \Delta$ 
+jako przyrost argumentów pomnożony przez średnią ważoną wartości w punktach brzegowych, gdzie wagami 
+są pewne stałe $\gamma_1$ oraz $\gamma_2$. Na podstawie tego można wyznaczyć następujący schemat aproksymacji
+dla zlogarytmowanego procesu aktywa bazowego:
+\begin{equation}
+\begin{aligned}
+\label{eq:xhatt}
+\ln X(t + \Delta) = & \ln X(t)  + \frac{\rho}{\epsilon} (V(t + \Delta)  - V(t) - \kappa \theta \Delta) + \\
+& \Delta (\frac{\kappa \rho}{\epsilon} - \frac{1}{2}) (\gamma_1 \hat{V}(t) \gamma_2 \hat{V}(t + \Delta))
+ +  \sqrt{1-\rho^2} \sqrt{\gamma_1 \hat{V}(t) \gamma_2 \hat{V}(t + \Delta)} \cdot Z
+\end{aligned}
+\end{equation}
+
+Wartość parametrów $\gamma_1$ oraz $\gamma_2$ można ustalić na wiele sposobów tak, aby $\gamma_1 + \gamma_2 = 1$. 
+Jednym z nich jest podstawienie pod $\gamma_1 = 1$ oraz $\gamma_2 = 0$. Otrzymany w ten sposób schemat dyskretyzacji jest  dyskretyzację Eulera. 
+
+Można więc przedstawić następujący algorytm przedstawiający wyznaczenia punktów $(\hat{X}(t+ \Delta), \hat{V}(t+ \Delta))$ na podstawie $(\hat{X}(t), \hat{V}(t))$.
+
+\begin{enumerate}
+  \item mając $\hat{V}$ wyznacz $\hat{V + \Delta}$ na podstawie schematu z poprzedniego podrozdziału \ref{sec:algorytm_andersena}
+  \item wylosuj liczbę z rozkładu jednostajnego $U$, niezależnej od wszystkich liczb losowych z równania dla $\hat{V + \Delta}$
+  \item wyznacz $Z = \Phi^{-1}(U)$
+  \item mając $\ln \hat{X}(t), \hat{V}(t)$ oraz wartość dla $\hat{V}(t + \Delta)$ wyznacz $\ln \hat{X} (t+\Delta)$ używając równania \ref{eq:xhatt}.
+\end{enumerate}
+
+
+
+
+
+\section{Symulacja cen opcji w modelu Hestona}
+
+Wprowadzając w poprzednim podrozdziale metody dyskretyzacji procesu stochastycznego mamy niezbędne narzędzia
+do przeprowadzenia symulacji Monte Carlo do wygenerowania ceny opcji w oparciu o model Hestona.
+Kod źródłowy nr \ref{lst:MCHeston} przedstawia główną funkcję użytą w tym celu. 
+Zastosowano w niej prostą metodę Monte Carlo wraz ze schematem dyskretyzacji Eulera. 
+Parametrami dla funkcji \textit{simulateHeston} są dwa wektory, pierwszy zawierający
+parametry modelu Hestona, natomiast drugi parametry opcji, której cenę chcemy wyznaczyć. 
+Główną częścią pokazanego algorytmu jest pętla w liniach 20-24, która stanowi faktyczną symulację
+Monte-Carlo. Najpierw generujemy w niej skorelowane ciągi losowe mające rozkład normalny, a następnie na ich
+podstawie generujemy kolejno trajektorię zmienności oraz trajektorię aktywa bazowego. W linii 24 bierzemy 
+wartość aktywa bazowego w momencie $T$ i na tej podstawie obliczamy dla tej wartości kwotę wypłaty opcji. 
+Aby otrzymać wartość opcji, musimy wziąć średnią z wypłat i zdyskontować ją na moment zerowy, co jest 
+widoczne w liniach 27-28.
+
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../src/listings/MCHeston.cpp}
+\caption{Metoda Monte Carlo dla modelu Hestona}
+\label{lst:MCHeston}
+\end{listing} 
+
 
 
 
@@ -989,7 +1247,7 @@ opcji i ich zmienności implikowane dla opcji o 3 różnych terminach wygaśnię
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.80\textwidth]{../MySavedPlot.png}
+  \includegraphics[width=0.80\textwidth]{../figures/calibrationInput.pdf}
   \caption{Dane wejściowe do funkcji kalibrującej model Hestona do danych giełdowych}
   \label{fig:calibration}
 \end{figure}
@@ -1100,6 +1358,11 @@ parametrów, nazwany procesem kalibracji, jest o wiele bardziej skomplikowany w 
 modelu Hestona, ponieważ tutaj jest to zadanie optymalizacyjne, natomiast w przypadku modelu
 Blacka-Scholesa jest to zadanie algebraiczne.
 
+Szczegółowo opisano również w jaki sposób należy zastosować symulację Monte Carlo do 
+wygenerowania ceny opcji zgodnej z modelem Hestona. Krytycznym punktem okazał się być
+proces dyskretyzacji procesu losowego. Przedstawiono dwa schematy: pierwsze naiwny, nazwany
+dyskretyzacją Eulera oraz drugi bardziej dokładnego, którego wynikiem było powstanie 
+algorytmu Andersena. 
 
 Z badań empirycznych jasno wynika, że założenie o stałości zmienności w czasie nie jest 
 prawdziwe dla danych rzeczywistych. Ponadto, przeprowadzono wycenę opcji na indeks 
@@ -1121,24 +1384,9 @@ model ten jest o wiele bardziej czasochłonny obliczeniowo, niż chociażby mode
 \listoffigures 
 \addcontentsline{toc}{chapter}{Lista rysunków} \markboth{Figures}{}
 \addcontentsline{toc}{chapter}{Lista kodów źródłowych} \markboth{Listings}{}
-\listoflistings 
-% \begin{quote}
-
-% If I have seen farther than others, it is because I was standing on the shoulders of giants.
-
-% \raggedleft\slshape Isaac Newton \index{Isaac Newton}
-% \end{quote}
-
+\listoflistings
 \printbibliography
-\printindex
- 
+\printindex 
 
 
-\end{document}
-
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% coding: latin-2
-%%% End:
+\end{document} 
