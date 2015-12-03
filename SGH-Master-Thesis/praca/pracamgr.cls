@@ -19,9 +19,9 @@
 \LoadClass{\@baseclass}
 
 \textwidth\paperwidth
-\advance\textwidth -55mm
+\advance\textwidth -60mm
 \oddsidemargin-1in
-\advance\oddsidemargin 30mm
+\advance\oddsidemargin 35mm
 \evensidemargin-1in
 \advance\evensidemargin 25mm
 \topmargin -1in
