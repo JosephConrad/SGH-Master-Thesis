@@ -13,7 +13,7 @@
 \def\@rodzajpracy{magisterska}
 \DeclareOption{licencjacka}{\def\@rodzajpracy{licencjacka}}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{\@baseclass}}
-\PassOptionsToClass{a4paper,twoside,openright,11pt}{\@baseclass}
+\PassOptionsToClass{a4paper,twoside,openright,12pt}{\@baseclass}
 \ProcessOptions
 
 \LoadClass{\@baseclass}
@@ -26,7 +26,7 @@
 \advance\evensidemargin 25mm
 \topmargin -1in
 \advance\topmargin 2cm
-\setlength\textheight{48\baselineskip}
+\setlength\textheight{44\baselineskip}
 \addtolength\textheight{\topskip}
 \marginparwidth15mm
 
@@ -44,7 +44,7 @@
       {\Large\bf Studium Magisterskie}
       \vspace{0.2cm}
       \vspace{8mm plus 1fill}
-      \begin{flushleft}\large
+      \begin{flushleft}\normalsize
         \begin{tabular}{l}
           
           Kierunek \bfseries \@kierunek\par\\
@@ -52,7 +52,7 @@
       \end{flushleft}
       
       \vspace{8mm plus 1fill}
-      \begin{flushright}\large
+      \begin{flushright}\normalsize
         \begin{tabular}{l}
           
           Imię i nazwisko autora \bfseries \@author\par\\
@@ -64,7 +64,7 @@
       \vspace{8mm plus 1fill}
       \vspace{1cm plus .1fill}
 %----zakres---
-      \begin{flushright}\large
+      \begin{flushright}\normalsize
         \begin{tabular}{l}
           Praca magisterska\\
           napisana w Instytucie\\
@@ -73,7 +73,7 @@
           \bfseries \@opiekun
         \end{tabular}
       \end{flushright}
-      \vspace{5mm plus 1fill}
+      \vspace{8mm plus 1fill}
       {\large \@date\par}
     \end{center}
     \@thanks
