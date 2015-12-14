@@ -518,7 +518,7 @@ korelacji $\rho$.
 To założenie jest zgodne z rzeczywistością. Często możemy na rynkach finansowych zaobserwować następującą sekwencję zdarzeń: gdy cena rośnie gwałtownie w górę, zwiększa się zmienność, 
 natomiast w okresach spokoju zmienność jest na relatywnie niskim poziomie.
 
-Niestety, w odróżnieniu od modela Blacka-Scholsa, dla modelu Hestona nie istnieje pełne rozwiązanie analitycznie (istnieje tylko częściowe rozwiązanie analityczne). Wobec tego, aby 
+Niestety, w odróżnieniu od modelu Blacka-Scholsa, dla modelu Hestona nie istnieje pełne rozwiązanie analitycznie (istnieje tylko częściowe rozwiązanie analityczne). Wobec tego, aby 
 wyliczyć wartość opcji, należy się posłużyć numerycznymi metodami wyznaczenia rozwiązania.
 
 
@@ -559,7 +559,7 @@ Przedstawione powyżej równania nr \ref{eq:HestonProb} oraz
 \ref{eq:HestonCharacteristic} będą użyte podczas kalibracji modelu. Należy jednak zaznaczyć, że 
 w literaturze istnieją inne postacie analityczne ceny $C(S, v, t)$, które są bardziej wydajne obliczeniowo. 
 Wiąże się to z faktem, że np. w wyrażeniu \ref{eq:HestonProb} występują dwie funkcje podcałkowe. 
-Można pokazać, że równanie da się przedstawić  potrzeba wyliczenia tylko jednej całki.
+Można pokazać, że równanie to da się przedstawić przy pomocy tylko jednej całki.
 
 \section{Współczynniki greckie\index{Współczynniki greckie}}
 
@@ -597,7 +597,7 @@ skoków w tego typu procesach jest proces Poissona.
 
 Celem tego rozdziału jest tylko zasygnalizowanie możliwych rozszerzeń modelu Hestona.
 Mogą być one jednak zaimplementowane przy pomocy zaprojektowanego w tej pracy modułu 
-do wyliczania ceny opcji w oparciu o model Hestona. 
+do wyliczenia ceny opcji w oparciu o model Hestona. 
 
 \subsection{Dwuczynnikowy model Hestona} % (fold)
 \label{sec:modelDwuczynnikowy}
@@ -605,7 +605,7 @@ Jak powiedziano we wstępie do rozdziału, jednym z możliwych rozszerzeń model
 procesu zmienności o dodatkowe zależności. 
 Jeden z takich modeli, model dwuczynnikowy, został w 2009 zaproponowany prze
 Petera Christoffersena \index{Christoffersen, Peter}  \cite{Christoffersen}.
-Opsiuje go następujący układ równań:
+Opisuje go następujący układ równań:
 
 \begin{equation}
 dS_t  = r S_t dt + \sqrt{V_1} S dW_1 + \sqrt{V_2} S dW_2
@@ -667,7 +667,7 @@ skok w wartości procesu przed momentem użycia go po lewej stronie równania.
 
 Motywacją stojącą za wprowadzeniem skoków do modelu jest chęć uchwycenia momentów o 
 szczególnej i gwałtownej zmianie ceny instrumentu bazowego. Dla indeksu S\&P, omawianego w tej pracy,
-skoki taki są szczególnie widoczne podczas kryzysów ekonomicznych. 
+skoki takie są szczególnie widoczne podczas kryzysów ekonomicznych. 
 
 
 
@@ -708,9 +708,9 @@ się zamknięte równanie opisujące cenę opcji.
 
 
 \section{Deterministyczne sposoby kalibracji modelu} 
-Pierwszą grupą algorytmów używanych w celu skalibrowania modelu Hestona należy do grupy metod deterministycznych.
+Pierwsza grupa algorytmów używanych w celu skalibrowania modelu Hestona należy do grupy metod deterministycznych.
 Polegają one na tym, że algorytm, mając zadany punkt startowy, wyszukuje najbardziej optymalnego punktu w sposób nielosowy.
-Najważniejszym przedstawicielem tej klasy jest Nieliniowa Metoda Najmniejsza Kwadratów (\textit{ang. Nonlinear Least Squares}).
+Najważniejszym przedstawicielem tej klasy jest Nieliniowa Metoda Najmniejszych Kwadratów (\textit{ang. Nonlinear Least Squares}).
 
 
 \subsection{Nieliniowa Metoda Najmniejszych Kwadratów \index{Nieliniowa Metoda Najmniejszych Kwadratów}}
@@ -824,7 +824,7 @@ Podobnie jak dla metody najszybszego spadku definiujemy krok algorytmu jako:
 gdzie: $J_k$ oznacza macierz Jakobiego, czyli macierz pochodnych cząstkowych.
 
 Obie te metody są wydajnymi sposobami obliczania ekstremów lokalnych, jednak mają swoje wady.
-Zgodnie z literaturą \cite{LM}, pierwsza metoda dobrze się zachowuje dla punktów początkowych znajdujących daleko od ekstremum, natomiast druga metoda zachowuje się dobrze w punktach położonych blisko ekstremum. 
+Zgodnie z literaturą \cite{LM}, pierwsza metoda dobrze się zachowuje dla punktów początkowych znajdujących się daleko od ekstremum, natomiast druga metoda zachowuje się dobrze w punktach położonych blisko ekstremum. 
 
 Z połączenia tych dwóch metod powstał \textbf{algorytm Levenberga–Marquardta} (\textit{ang. Levenberg–Marquardt algorithm}). Został on zaimplementowany w pakiecie \textit{Matlab} jako
 funkcja \textit{lsqnonlin} \cite{NonLinear}\index{lsqnonlin}. Jej nagłówek jest widoczny poniżej:
@@ -852,9 +852,12 @@ z wartością współczynnika $\alpha_k$:
   \alpha_k = \frac{1}{\lambda}
 \end{equation}
 Tak jak pozostałe algorytmy z rodziny metod gradientowych, metoda Levenberga–Marquardta zachowuje się
-bardzo dobrze dla funkcji z jednym ekstremum. Gdy jednak funkcja ma wiele ekstremów bardzo ważną rolę odgrywa punkt początkowy. Maksimum globalne możemy znaleźć tylko w przypadku jego bliskiego położenia.
+bardzo dobrze dla funkcji z jednym ekstremum. Gdy jednak funkcja ma wiele ekstremów, bardzo ważną
+rolę odgrywa punkt początkowy. Maksimum globalne możemy znaleźć tylko w przypadku jego bliskiego
+położenia.
 
-Poniższe kody źródłowe nr \ref{lst:hestonMatlabListing}  \cite{HestonMatlab} przedstawią implementację wzorów wyznaczających cenę opcji w modelu Hestona:
+Poniższe kody źródłowe nr \ref{lst:hestonMatlabListing}\cite{HestonMatlab} przedstawią
+implementację wzorów wyznaczających cenę opcji w modelu Hestona:
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{matlab}
@@ -902,8 +905,13 @@ w modelu oraz spamiętywanie powtarzających się wartości funkcji charakteryst
 \subsection{Uproszczona forma ceny opcji w modelu Hestona} % (fold)
 \label{sec:numeryczne_wyznaczenie_warto_ci_funkcji_charakterystycznej}
 
-Ważnym elementem podczas kalibracji modelu jest jak najszybsze wyznaczenie ceny opcji dla danego zestawu parametrów. 
-Jedną z metod używanych w tym celu jest całkowanie funkcji występującej we wzorze na funkcję charakterystyczną (\textit{ang. Direct Integration}). Polega ona na wyznaczeniu całki przy pomocy numerycznej kwadratury, jak np. kwadratury Gaussa\index{Kwadratura Gaussa}. Można także zastosować inną postać funkcji charakterystycznej, wyznaczoną przez Attariego  \cite{Attari}\index{Attari, Mukarram}, która jest bardziej efektywną metodą do jej obliczenia:
+Ważnym elementem podczas kalibracji modelu jest jak najszybsze wyznaczenie ceny opcji dla danego
+zestawu parametrów. 
+Jedną z metod używanych w tym celu jest całkowanie funkcji występującej we wzorze na funkcję
+charakterystyczną (\textit{ang. Direct Integration}). Polega ona na wyznaczeniu całki przy pomocy
+numerycznej kwadratury, jak np. kwadratury Gaussa\index{Kwadratura Gaussa}. Można także zastosować
+inną postać funkcji charakterystycznej, wyznaczoną przez Attariego  \cite{Attari}\index{Attari,
+Mukarram}, która jest bardziej efektywną metodą do jej obliczenia:
 \begin{equation}
 \begin{aligned}
   C(S_0, T, K) = S_0 &- \frac{1}{2} e^{-rT}K  \\ 
@@ -979,26 +987,36 @@ Natomiast tak po jej zastosowaniu:
 
 
 
-Na podstawie powyżej przedstawionych pseudokodu algorytmów widać, że obliczamy funkcję charakterystyczną tylko raz.
+Na podstawie powyżej przedstawionych pseudokodu algorytmów widać, że obliczamy funkcję 
+charakterystyczną tylko raz.
 
 
 
 \section{Stochastyczne sposoby kalibracji modelu}
 Przedstawione jak do tej pory algorytmy optymalizacyjne są algorytmami deterministycznymi.
-Często jednak wprowadzenie czynnika losowego może poprawić ich efektywność lub dokładność. Jednym z nim jest algorytm symulowanego wyżarzania, którego nadają się szczególnie dobrze do efektywnego przeglądu tych klas funkcji, które mają 
-nieregularną powierzchnię, tzn. takich, w których występuje wiele ekstremów lokalnych.
+Często jednak wprowadzenie czynnika losowego może poprawić ich efektywność lub dokładność. Jednym z
+nich jest algorytm symulowanego wyżarzania, który nadaje się szczególnie dobrze do efektywnego
+przeglądu tych klas funkcji, które mają nieregularną powierzchnię, tzn. takich, w których występuje
+wiele ekstremów lokalnych.
 
 \subsection{Symulowane wyżarzanie}
 
-Jak opisano we wstępie, większość algorytmów, które są monotoniczne, nigdy nie osiągną ekstremum globalnego. Jedną z takich technik jest \textit{hill climbing}\index{Hill climbing}, która jednak osiąga dobre rezultaty tylko dla funkcji o wypukłej powierzchni. W tym algorytmie możemy poruszać się 
+Jak opisano we wstępie, większość algorytmów, które są monotoniczne, nigdy nie osiągną ekstremum
+globalnego. Jedną z takich technik jest \textit{hill climbing}\index{Hill climbing}, która jednak 
+osiąga dobre rezultaty tylko dla funkcji o wypukłej powierzchni. W tym algorytmie możemy poruszać się
 tylko w kierunku maksimum lokalnego, co skutecznie uniemożliwia przeszukiwanie przestrzeni o wielu
 ekstremach.
 
-Wprowadza się zatem odstępstwo od tej reguły. Pod pewnym zadanym warunkiem można przeskoczyć od 
+Wprowadza się zatem odstępstwo od tej reguły. Pod pewnym warunkiem można przeskoczyć od 
 jednego wzgórza do drugiego, co pomaga algorytmowi poruszać się w obrębie wielu ekstremów lokalnych.
 Można to osiągnąć poprzez wprowadzenie losowości do algorytmu. 
 
-Otrzymujemy w ten sposób stochastyczne metody optymalizacji, a jednym z ich najwżniejszych reprezntantów tej klasy metod jest przedstawiony w 1983 roku przez Kirkpatricka  \cite{Kirkpatrick},  algorytm symulowanego wyżarzania  (\textit{ang. simulated annealing}). Motywacją dla jego powstania jest szeroko stosowany w metalurgii \textbf{proces chłodzenia}\index{Proces chłodzenia} ciała stałego (\textit{ang. cooling process}). Składa on się z następujących etapów  \cite{ChenBin}:
+Otrzymujemy w ten sposób stochastyczne metody optymalizacji, a jednym z najważniejszych 
+reprezentantów tej klasy metod jest przedstawiony w 1983 roku przez Kirkpatricka 
+\cite{Kirkpatrick,  algorytm symulowanego wyżarzania  (\textit{ang. simulated annealing}). 
+Motywacją dla jego powstania jest szeroko stosowany w metalurgii \textbf{proces chłodzenia}
+\index{Proces chłodzenia} ciała stałego (\textit{ang. cooling process}). Składa on się z
+następujących etapów  \cite{ChenBin}:
 
 \begin{enumerate}
   \item Podnoszenia temperatury, tak, że substancja stała się topi
@@ -1007,21 +1025,15 @@ Otrzymujemy w ten sposób stochastyczne metody optymalizacji, a jednym z ich naj
 
 Dobrym przykładem obrazującym działanie algorytmu jest wyobrażenie skaczącej piłki na terenie 
 o nierównej powierzchni.
-W warunkach niskiej siły grawitacji, piłka odbijając się od powierzchni leci wysoko w górę i może przeskoczyć z jednej doliny do drugiej, natomiast odwrotnie się dzieje w przypadku wysokiej siły grawitacji. Wtedy piłce trudniej jest się oderwać od powierzchni i wydostać się z doliny. Podobnie sprawa ma się w przypadku cząsteczek umieszczonych w metalu: przy wysokiej 
+W warunkach niskiej siły grawitacji, piłka odbijając się od powierzchni leci wysoko w górę i może
+przeskoczyć z jednej doliny do drugiej, natomiast odwrotnie się dzieje w przypadku wysokiej siły
+grawitacji. Wtedy piłce trudniej jest się oderwać od powierzchni i wydostać się z doliny. Podobnie
+sprawa ma się w przypadku cząsteczek umieszczonych w metalu: przy wysokiej 
 temperaturze mogą się one swobodnie przemieszczać w ciele, natomiast wraz ze spadającą temperaturą 
 stają się one uwięzione w jednym punkcie.
 
-Przedstawiona idea rozwiązuje szereg problemów podczas rozwiązywania problemów optymalizacyjnych, a najważniejszym z nich jest potencjalne istnienie wielu ekstremów lokalnych.
-
-%  Aby znaleźć rozwiązanie tego problemu odchodzi się od zasady monotoniczności, tzn. algorytm nie zawsze wybiera rozwiązanie bardziej optymalne od poprzedniego. 
-% Wśród możliwych podejść należy wymienić np.:
-% \begin{enumerate}
-%   \item pełny przegląd badanego obszaru
-%   \item podejście deterministyczne w algorytmie \textit{tabu search}
-%   \item podejście randomizacyjne (\textit{algorytm Metropolisa\index{Metropolis, Nicholas}, symulowane wyżarzanie}  \cite{OptimalizationBySimulatedAnnealing} )
-% \end{enumerate}
-
-
+Przedstawiona idea rozwiązuje szereg problemów podczas rozwiązywania problemów optymalizacyjnych, a 
+najważniejszym z nich jest potencjalne istnienie wielu ekstremów lokalnych.
 
 
 Działanie algorytmu symulowanego wyżarzania można zobaczyć na schemacie nr 
@@ -1057,16 +1069,13 @@ Działanie algorytmu symulowanego wyżarzania można zobaczyć na schemacie nr
 
 
 Poniżej pokrótce omówimy działanie algorytmu.
-Funkcja ma dwa argumenty: pierwszy argument dotyczy wysokości temperatury początkowej (i ewentualnie szybkości chłodzenia systemu), natomiast drugi rozwiązanie początkowe.
+Funkcja ma dwa argumenty: pierwszy argument dotyczy wysokości temperatury początkowej (i ewentualnie
+szybkości chłodzenia systemu), natomiast drugi rozwiązanie początkowe.
 Najważniejszą częścią algorytmu jest pętla 4-6. 
 Centralną rolę odgrywa tam regułą Metropolisa, która mówi czy bieżące rozwiązanie powinno być 
 zaakceptowane czy nie (najważniejszym parametrem jest bieżąca temperatura systemu). 
 Linie 7-10 to już tylko sprawdzenie warunku końcowego: jeżeli temperatura jest dostatecznie 
 niska to kończymy algorytm, ponieważ wiemy, że i tak nie znajdziemy bardziej optymalnego rozwiązania.
-
-% W literaturze zostało podjęte wiele prób jeszcze znalezienia jeszcze lepszego algorytmu dla problemu kalibracji modelu Hestona. 
-
-
 
 
 
@@ -1079,18 +1088,21 @@ niska to kończymy algorytm, ponieważ wiemy, że i tak nie znajdziemy bardziej 
 Przeprowadzenie wyceny opcji w oparciu o model Hestona jest zadaniem znacznie trudniejszym
 niż w przypadku modelu BS. Wynika to z tego, że w modelu Hestona trajektoria 
 ceny instrumentu bazowego jest zależna od trajektorii jego zmienności. To pociąga za sobą 
-duże konsekwencje w procesie wyceny opcji, ponieważ teraz należy najpierw wygenerować trajektorię zmienności, a dopiero później, na tej podstawie, generować trajektorię cen instrumentu bazowego.
+duże konsekwencje w procesie wyceny opcji, ponieważ teraz należy najpierw wygenerować trajektorię
+zmienności, a dopiero później, na tej podstawie, generować trajektorię cen instrumentu bazowego.
 
 Stąd też, aby wygenerować trajektorię cen, musimy być w stanie przedstawić równanie opisujące
 zmienność aktywa bazowego w postaci \textit{zdyskretyzowanej}.
 
 W tym rozdziale pokażemy jak efektywnie, przy pomocy schematów dyskretyzacji i symulacji Monte Carlo, 
-wyznaczyć najpierw trajektorie procesu zmienności i aktywa bazowego, a następnie wyliczyć wartość opcji o zadanym schemacie wypłaty.
+wyznaczyć najpierw trajektorie procesu zmienności i aktywa bazowego, a następnie wyliczyć wartość
+opcji o zadanym schemacie wypłaty.
 
 \section{Prosta metoda Monte Carlo (MC)}
 \label{sec:mc}
 
-Rozdział zaczynamy od przedstawienia prostej metody Monte Carlo (\textit{ang. Crude Monte Carlo (CMC)}) \cite{Niemiro}.
+Rozdział zaczynamy od przedstawienia prostej metody 
+Monte Carlo (\textit{ang. Crude Monte Carlo (CMC)}) \cite{Niemiro}.
 
 \begin{defi}
 Załóżmy, że mamy wygenerowane $n$ zmiennych losowych $X_1, ..., X_n$ o takim samym rozkładzie. Wtedy estymatorem wartości
@@ -1102,7 +1114,10 @@ Inaczej mówiąc, aproksymujemy prawdziwą wartość wartością oczekiwaną \te
 \end{defi}
 
 
-Zgodnie z Mocnym Prawem Wielkich Liczb mamy pewność, że estymator $\hat{\theta}_n \rightarrow \theta_n$ prawie na pewno, wtedy gdy $n \rightarrow \infty$. Oznacza to, że estymator $\hat{\theta}_n $ jest \textbf{mocno zgodnym} estymatorem $\theta_n$ \cite{Glasserman}.
+Zgodnie z Mocnym Prawem Wielkich Liczb mamy pewność, że estymator 
+$\hat{\theta}_n \rightarrow \theta_n$ prawie na pewno, wtedy gdy $n \rightarrow \infty$. 
+Oznacza to, że estymator $\hat{\theta}_n $ jest \textbf{mocno zgodnym} 
+estymatorem $\theta_n$ \cite{Glasserman}.
 
 
 
@@ -1112,7 +1127,9 @@ Zgodnie z Mocnym Prawem Wielkich Liczb mamy pewność, że estymator $\hat{\thet
 Pierwszym krokiem jaki należy podjąć podczas przeprowadzania symulacji Monte Carlo jest 
 wygenerowanie zmiennych losowych o ustalonym rozkładzie.
 
-W przypadku wyceny opcji w modelu Blacka-Scholesa potrzebna jest umiejętność generowania liczb (pseudo)losowych z rozkładu normalnego. Znamy wiele algorytmów generowania liczb o rozkładzie normalnym, wśród których można wyróżnić:
+W przypadku wyceny opcji w modelu Blacka-Scholesa potrzebna jest umiejętność generowania liczb 
+(pseudo)losowych z rozkładu normalnego. Znamy wiele algorytmów generowania liczb o rozkładzie
+normalnym, wśród których można wyróżnić:
 \begin{enumerate}
   \item metoda odwrotnej dystrybuanty
   \item metoda Boxa-Mullera
