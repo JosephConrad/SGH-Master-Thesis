@@ -9,7 +9,6 @@
 \usepackage{dsfont}
 \usepackage{mathrsfs}
 \usepackage{listings}
-% package for hyperinks
 \usepackage{hyperref}
 \usepackage{amsmath, amsthm, amssymb}
 \usepackage[ansinew]{inputenc}
@@ -42,13 +41,10 @@
 \definecolor{grey}{gray}{0.9}
 \definecolor{bg}{HTML}{FAFAFA}
 \definecolor{darkgray}{HTML}{D5D5D5} 
-% \newgeometry{left=25mm,right=0.8in,top=25mm,bottom=25cm}
 
-% \renewcommand\lstlistlistingname{}
 \renewcommand*{\listlistingname}{Lista kodów źródłowych}
 \makeatletter
 \raggedbottom
-% \renewcommand{\lstlistlistingname}{Spis kodów źródłowych}
 \renewenvironment{minted@colorbg}[1]{
 \linespread{1.0} 
 \setlength{\fboxsep}{\z@}
@@ -61,11 +57,6 @@
 \colorbox{\minted@bgcol}{\usebox{\minted@bgbox}}}
 \makeatother
 
-%Jesli uzywasz kodowania polskich znakow ISO-8859-2 nastepna linia powinna byc odkomentowana
-%Jesli uzywasz kodowania polskich znakow CP-1250 to ta linia powinna byc 
-%odkomentowana
-%\usepackage[cp1250]{inputenc}
-
 % Dane magistranta:
 
 \author{Konrad Lisiecki}
@@ -73,9 +64,8 @@
 \title{Wycena Opcji przy pomocy Modeli Zmienności Stochastycznej} 
 \kierunek{Finanse i rachunkowość}
 \instytut{Ekonometrii}
-\opiekun{dra hab. Łukasza Delonga} 
+\opiekun{dra hab. Łukasza Delonga, prof. SGH} 
 \date{Warszawa 2015}   
-% Tu jest dobre miejsce na Twoje własne makra i~środowiska:
 \newtheorem{defi}{Definicja}[section]
 \newtheorem{prop}{Własność}
 
@@ -130,7 +120,7 @@ Pokazane zostaną również możliwości dalszych uogólnień modelu Hestona.
 Polegają one głównie na próbie uzależnienia od czasu tych wartości parametrów, które w 
 modelu Hestona są stałe w czasie.
 
-Trzeci rozdział jest poświęcony kalibracji modelu, czyli inaczej ujmując, znalezieniu 
+Trzeci rozdział jest poświęcony kalibracji modelu, czyli znalezieniu 
 optymalnych wartości nieznanych parametrów modelu. Optymalna wartość jest w tym przypadku zdefiniowana
 jako taka, dla której wartość opcji, wyliczonej na podstawie modelu Hestona, jest najbliższa wartości 
 obserwowanej na rynku.
@@ -141,7 +131,7 @@ jeśli chodzi o dokładność i szybkość działania symulacji.
 
 
 Ostatni rozdział to już próba empirycznego zbadania zachowania modelu Hestona. Zostanie w nim 
-porównana wartość opcji na indeks \textit{S\&P500} stosując odpowiednio model Blacka-Scholesa i model 
+porównana wartość opcji na indeks \textit{S\&P500} wyznaczona w oparciu o model Blacka-Scholesa i model 
 Hestona.
 
 
@@ -179,11 +169,11 @@ powyżej cytatem, że są to modele, gdzie nie tylko cena aktywa bazowego, ale r
 poruszają się w sposób nieprzewidywalny, losowy. 
 
 W niniejszej pracy przedstawiony zostanie model Hestona, w którym zmienność nie jest wartością stałą 
-oraz sposób wyliczenia wartości opcji przy pomocy tego modelu.
+oraz sposób wyznaczenia wartości opcji przy pomocy tego modelu.
 Część empiryczna pracy jest z kolei próbą sprawdzenia, jak model, oraz narzędzia do jego stosowania, 
 sprawdzają się w praktyce.
 
-W dalszej części tego rozdziału, zostaną przedstawione motywacje rozwoju takich modeli oraz w jaki 
+W dalszej części tego rozdziału, zostanie przedstawiona motywacja do rozwoju takich modeli oraz w jaki 
 sposób wpływają one na dokładność analizy finansowej i efektywność rynków finansowych. 
 
 
@@ -196,16 +186,16 @@ byli \textbf{Fischer Black}\index{Black, Fisher} oraz \textbf{Myron Scholes}\ind
 był przełomowy dla teorii wyceny opcji.
 U jego podstaw leży bardzo istotne założenie mówiące o tym, że zmienność instrumentów finansowych 
 jest stała w czasie. 
-Niestety, założenie to jest niezgodne z tym, co możemy obserwować na rynkach finansowych. 
+Niestety, założenie to jest niezgodne z tym co możemy obserwować na rynkach finansowych. 
 Można to szczególnie mocno zauważyć w czasie cyklicznie powtarzających się kryzysów finansowych.
 
 Obserwowalna duża zmienność w czasie parametru zmienności na rynkach finansowych stała się podstawową 
 motywacją wprowadzenia modeli wyceny
 opcji, dla których zmienność nie jest ustalonym parametrem, a zmienną zależną od pewnych innych 
 czynników. Pionierem w tym obszarze okazał się \textbf{Steven Heston}\index{Heston, Steven}, który w 
-1993 opublikował pracę, gdzie wprowadza
-nowy model wyceny opcji, w którym nie tylko proces cen instrumentu bazowego, ale również
-proces zmienności jest stochastyczny (losowy) i zależny od czasu  \cite{Heston}. Na jego cześć, model ten w literaturze znany jest pod nazwą modelu Hestona.
+1993 opublikował pracę gdzie wprowadza nowy model wyceny opcji, w którym nie tylko proces cen 
+instrumentu bazowego, ale również proces zmienności jest stochastyczny (losowy) i zależny od 
+czasu \cite{Heston}. Na jego cześć, model ten w literaturze znany jest pod nazwą modelu Hestona.
  
 
 \section{Wycena opcji na potrzeby rynków finansowych} % (fold)
@@ -221,8 +211,8 @@ cen instrumentów bazowych. W związku z tym można wyróżnić dwa podstawowe
 zastosowania opcji: 
 
 \begin{enumerate}
-  \item jako element zarządzania ryzykiem (\textit{ang. hedging})
-  \item jako inwestycja 
+  \item jako element zarządzania ryzykiem (\textit{ang. hedging}),
+  \item jako inwestycja.
 \end{enumerate}
 
 Pierwsze zastosowanie odnosi się do wymiany lub ograniczenia ryzyka rynkowego. Przedsiębiorstwa i 
@@ -230,23 +220,22 @@ instytucje finansowe używają opcji do
 ochrony przed niechcianymi, gwałtownymi ruchami instrumentów bazowych takich jak surowce, stopy 
 procentowe czy kursy akcji. Wpływa to na 
 \textbf{wygładzenie przepływów pieniężnych} (\textit{ang. cash flows}) w obrębie przedsiębiorstwa, co 
-wpływa na stabilność działalności 
+ma znaczenie w kontekście stabilności działalności 
 podmiotu gospodarczego. Dla przykładu, 92\% spośród 500 największych przedsiębiorstw świata ogranicza 
 ryzyko przy pomocy derywatów  \cite{GlobalDerMarket}.
 
 
-Transakcje na runku instrumentów pochodnych są szczególnie ważne z punktu widzenia 
+Transakcje na rynku instrumentów pochodnych są szczególnie ważne z punktu widzenia 
 ograniczenia \textbf{ryzyka walutowego}. Na rysunku \ref{fig:currencyRisk} przedstawiono kurs dolara 
 amerykańskiego w stosunku do rosyjskiego rubla na przestrzeni ostatnich 20 lat.
-
+Można na nim odnotować gwałtowne wahania kursu, które dla wielu przedsiębiorstw, nie stosujących 
+instrumentów pochodnych w celu ograniczenia ryzyka walutowego, może oznaczać bardzo szybkie 
+bankructwo. 
 \begin{figure}
   \centering  
   \includegraphics[width=0.80\textwidth]{../figures/currencyUSDRUB.pdf}
   \caption{Kurs walutowy rosyjskiego rubla w stosunku do dolara amerykańskiego.}\label{fig:currencyRisk}
 \end{figure} 
-Można na nim odnotować gwałtowne wahania kursu, które dla wielu przedsiębiorstw, nie stosujących 
-instrumentów pochodnych w celu ograniczenia ryzyka walutowego, może oznaczać bardzo szybkie 
-bankructwo. 
  
 Instrumenty pochodne mogą być również postrzegane przez uczestników rynku jako inwestycja. 
 Różnią się one od inwestycji w instrumenty bazowe w tym sensie, że można w nie inwestować bez ich 
@@ -282,11 +271,11 @@ każdego roku sprawozdawczego istnieje potrzeba określenia ich wartości w cela
 nie określa dokładnie w jaki sposób takie opcje mają być wycenione. 
 Określa jednak, że jednostka powinna użyć takiej metody, która odzwierciedla
 rzeczywistą  wartość instrumentu finansowego na dany moment. MSSR 13 wyróżnia podstawowe podejścia 
-ich wyceny \cite{IFRS2013}:
+do ich wyceny \cite{IFRS2013}:
 \begin{enumerate}
-  \item podejście dochodowe\index{Podejście dochodowe} (\textit{ang. income approach})
-  \item podejście rynkowe\index{Podejście rynkowe} (\textit{ang. market approach})
-  \item podejście kosztowe\index{Podejście kosztowe} (\textit{ang. cost approach})
+  \item podejście dochodowe\index{Podejście dochodowe} (\textit{ang. income approach}),
+  \item podejście rynkowe\index{Podejście rynkowe} (\textit{ang. market approach}),
+  \item podejście kosztowe\index{Podejście kosztowe} (\textit{ang. cost approach}).
 \end{enumerate}
 Pierwsze z nich, \textbf{podejście dochodowe}, określa wartość godziwą instrumentu finansowego na 
 podstawie bieżących oczekiwań rynkowych co do wartości 
@@ -320,7 +309,7 @@ model Blacka-Scholesa.
 \subsection{Klasyczny model Blacka-Scholesa} % (fold)
 \label{sub:subsection_name}
 
-Aby wycenić opcję rozważmy następujący model przedstawiający ewolucję ceny aktywa
+Rozważmy następujący model przedstawiający ewolucję ceny aktywa
 bazowego w czasie oraz obligacji, jako instrumentu finansowego pozbawionego ryzyka:
 \begin{equation}
   \label{eq:asset}
@@ -329,7 +318,7 @@ bazowego w czasie oraz obligacji, jako instrumentu finansowego pozbawionego ryzy
 
 \begin{equation}
   \label{eq:nonRiskAsset}
-  dB_t = r B_t dt, B_0 = 1
+  dB_t = r B_t dt, B_0 = 1, S_0 = 1
 \end{equation}
 gdzie:
 \begin{enumerate}
@@ -344,21 +333,21 @@ gdzie:
 Model ten znany jest pod nazwą \textbf{modelu Blacka-Scholesa} i jest fundamentalnym 
 narzędziem do wyceny opcji. Równanie \ref{eq:nonRiskAsset}  jest istotną częścią modelu, ponieważ 
 określa miarę w jakiej wyceniamy daną opcję. W zdecydowanej większości przypadków jest to miara 
-obojętna na ryzyko (miara martyngałowa\index{Miara martyngałowa}). 
-Rozwiązując to równanie można wyznaczyć:
+neutralna względem ryzyka (miara martyngałowa\index{Miara martyngałowa}). 
+Rozwiązując równania (\ref{eq:asset}) oraz (\ref{eq:nonRiskAsset}) można wyznaczyć:
 \begin{equation}
 B_t = e^{rt}
 \end{equation}
 co odpowiada procesowi kapitalizacji stopą równej stopie oprocentowania aktywa wolnego od ryzyka.
 
-Zgodnie z teorią wyceny opcji, jej wypłata $v$ w mierze obojętnej na ryzyko (na moment $t = 0$) 
+Zgodnie z teorią wyceny opcji, jej wypłata $v$ w mierze neutralnej względem ryzyka (na moment $t = 0$) 
 jest równa:
 
 \begin{equation}
 \label{eq:discounting}
  \frac{\mathbf{E}[v(S_T)]}{e^{rT}}
 \end{equation}
-gdzie dynamikę cen aktywa bazowego opisuje następujący proces opisany w równaniu \ref{eq:asset}.
+gdzie dynamikę cen aktywa bazowego opisuje następujący proces opisany w równaniu (\ref{eq:asset}).
 
 Jak więc wynika z tego równania cenę opcji określamy jako zdyskontowaną na moment zerowy wartość
 oczekiwaną z wypłat opcji w momencie jej wygaśnięcia. 
@@ -370,15 +359,15 @@ Model Blacka-Scholesa należy do najbardziej popularnych, a zarazem najprostszyc
 opcji. Podczas gdy jego prostota jest jedną z jego największych zalet, to posiada on wiele założeń,
 które nie przystają do rzeczywistości rynkowej. Pierwsza grupa to założenia dotyczące aktywów:
 \begin{enumerate}
-\item cena aktywów bazowych ma rozkład lognormalny
-\item zmienność aktywów bazowych jest stała i znana z góry
-\item akcje nie wypłacają dywidend
+\item cena aktywów bazowych ma rozkład lognormalny,
+\item zmienność aktywów bazowych jest stała i znana z góry,
+\item akcje nie wypłacają dywidend.
 \end{enumerate}
 Z kolei druga grupa założeń odnosi się do rynku na którym dane aktywa występują.
 \begin{enumerate}
-\item na rynku nie ma możliwości osiągnięcia ponadnormatywnego zysku bez ryzyka (brak możliwości arbitrażu)
-\item nie ma kosztów transakcyjnych.
-\item stopa procentowa na rynku $r_t$ jest stała i znana z góry 
+\item na rynku nie ma możliwości osiągnięcia ponadnormatywnego zysku bez ryzyka (brak możliwości arbitrażu),
+\item nie ma kosztów transakcyjnych,
+\item stopa procentowa na rynku jest stała i znana z góry.
 \end{enumerate}
 
 Wszystkie te założenia sprawiają, że model Blacka-Scholesa, mimo, że pozwala na wyznaczenie ceny
@@ -386,14 +375,12 @@ Wszystkie te założenia sprawiają, że model Blacka-Scholesa, mimo, że pozwal
   
 \subsection{Zmienność implikowana} % (fold)
 \label{sub:zmienno_implikowana} 
-Kalibracja jest jednym z najważniejszych elementów podczas wyceny opcji przy pomocy 
-jakiegokolwiek modelu.  
-
-W przypadku modelu Blacka-Scholesa, jedynym nieobserwowalnym parametrem jest zmienność $\sigma$ (
+Kalibracja jest jednym z najważniejszych elementów procesu wyceny opcji.
+W przypadku modelu Blacka-Scholesa jedynym nieobserwowalnym parametrem jest zmienność $\sigma$ (
 współczynnik dyfuzji). Można go wyznaczyć na jeden z dwóch sposobów:
 \begin{enumerate}
-  \item zmienność historyczna
-  \item zmienność implikowana
+  \item zmienność historyczna,
+  \item zmienność implikowana.
 \end{enumerate}
 
 Zmienność historyczna jest średnią (ważoną) zmienności zaobserwowanej na rynku w czasie 
@@ -402,26 +389,25 @@ poprzedzającym moment wyceny.
 Szczególnie interesującym przypadkiem jest jednak zmienność implikowana, ponieważ 
 wyraża ona \textit{"przewidywania rynku"} co do wartości zmienności danego aktywa bazowego. 
 Można ją w prosty sposób obliczyć przy użyciu analitycznego \textbf{wzoru Blacka-Scholesa} na 
-wycenę opcji, który możemy przedstawić jako:
+wycenę opcji, który da się przedstawić jako:
 
 \begin{equation}
+  \label{eq:impliedVol}
   C_{obs} = C(S_0, T, K, \sigma_{imp}, r)
 \end{equation}
-Jak widać, wiedząc jaka jest cena opcji na podstawie danych rynkowych, równanie staje się równaniem z 
-jedną niewiadomą. 
+Jak widać, wiedząc jaka jest cena opcji na podstawie danych rynkowych, równanie (\ref{eq:impliedVol}) staje się równaniem z jedną niewiadomą, z którego możemy wyliczyć $\sigma_{imp}$.
 
 W przypadku bardziej skomplikowanych modeli, nieznanych parametrów może być dużo więcej. Wtedy też 
 stosuje się bardziej zaawansowane techniki kalibracyjne, co będzie tematyką 
 rozdziału \ref{chap:chapterModelCalibration}.
   % \autoref - ok but it uses the english name of chapter
 
-
 \subsection{Wycena opcji europejskiej} % (fold)
 \label{sub:subsection_name}
  
-Mając wartości wszystkich parametrów modelu Blacka-Scholesa, można przystąpić
-do wyliczenia wartości opcji. I tak, dla przykładu, można wyznaczyć wartość opcji europejskiej dla 
-strony kupującej (\textit{and. long call option}). Wynosi ona:
+Mając wartości wszystkich parametrów modelu Blacka-Scholesa jesteśmy w stanie przystąpić
+do wyliczenia wartości opcji. Można wyznaczyć wartość opcji europejskiej dla 
+strony kupującej (\textit{and. long call option}). Wypłata ta wynosi:
 
 \begin{equation}
   v(S_T) = max(S_T-K, 0)
@@ -430,19 +416,18 @@ strony kupującej (\textit{and. long call option}). Wynosi ona:
 W powyższym wzorze $K$, czyli cena wykupu opcji jest parametrem, stąd też, aby 
 wyliczyć wartość opcji należy obliczyć wartość instrumentu bazowego w momencie wygaśnięcia opcji.
 
-W tym celu należy rozwiązać stochastyczne równanie różniczkowe \ref{eq:asset}. W modelu Blacka-
-Scholesa rozwiązanie to ma postać zamkniętą i można pokazać, że wartość ceny aktywa bazowego na 
-moment wygaśnięcia opcji możemy wyznaczyć przy pomocy następującego wzoru:
+W tym celu należy rozwiązać stochastyczne równanie różniczkowe (\ref{eq:asset}). W modelu Blacka-Scholesa
+można pokazać, że wartość ceny aktywa bazowego na moment wygaśnięcia opcji możemy wyznaczyć przy pomocy
+następującego wzoru:
 \begin{equation}
 \label{eq:closedFormBlack} 
-  S_T = S_0 e^{(r - \frac{1}{2} \sigma^2)T+\sigma \sqrt{T} N(0,1)}
+  S_T = S_0 e^{(r - \frac{1}{2} \sigma^2)T+\sigma \sqrt{T} X}
 \end{equation}
-gdzie fragment wzoru postaci $\frac{1}{2} \sigma^2 T$ znany jest pod 
+gdzie: $X ~ N(0,1)$.
+Fragment wzoru postaci $\frac{1}{2} \sigma^2 T$ znany jest natomiast pod 
 nazwą \textbf{poprawki Ito}\index{Poprawka Ito} (\textit{ang. Ito correction}).
 
-W końcu, aby uzyskać cenę opcji na dany moment, należy wziąć wartość oczekiwaną cen instrumentu 
-bazowgo, na tej podstawie wyliczyć wartość opcji oraz zdyskontować ją na moment zerowy. 
-Stosując wzór \ref{eq:closedFormBlack} do wzoru \ref{eq:discounting} otrzymujemy
+W końcu, aby uzyskać cenę opcji na dany moment, stosujemy wzór (\ref{eq:closedFormBlack}). Otrzymujemy
 \begin{equation}
   C = \frac{\mathbf{E}[v(S_0 e^{(r - \frac{1}{2} \sigma^2)T+\sigma \sqrt{T} N(0,1)})]}{e^{rT}}
 \end{equation}
@@ -457,14 +442,14 @@ Istnieją dwa główne sposoby używane podczas wyceny opcji: skorzystanie ze wz
 lub przeprowadzenie symulacji. O ile dla modelu Blacka-Scholesa rozwiązanie analityczne istnieje, 
 to dla modeli o bardziej złożonych formułach, takich jak model Hestona, takich rozwiązań nie ma. 
 
-Dlatego też o wiele bardziej generycznym rozwiązaniem jest podejście symulacyjne.
-Niezależnie jednak od rodzaju opcji, czy też modelu opisującego dynamikę cen aktywa bazowego, można 
+Dlatego też o wiele bardziej uniwersalnym rozwiązaniem problemu wyceny opcji jest podejście symulacyjne.
+Niezależnie od rodzaju opcji, czy też modelu opisującego dynamikę cen aktywa bazowego, można 
 wyróżnić podobne etapy symulacji. Zaliczamy do nich:
 \begin{enumerate}
-  \item Kalibracja modelu
-  \item Generowanie zmiennych losowych o ustalonym rozkładzie
-  \item Wyznaczenie wartości zmiennych losowych danego procesu stochastycznego
-  \item Symulacja Monte Carlo
+  \item Kalibracja modelu,
+  \item Generowanie zmiennych losowych o ustalonym rozkładzie,
+  \item Wyznaczenie wartości zmiennych losowych opisujących realizacje procesu stochastycznego,
+  \item Estymacja wartości oczekiwanej wypłaty.
 \end{enumerate}
 
 Kalibracja modelu jest tematem rozdziału \ref{chap:chapterModelCalibration}, natomiast pozostałe 
