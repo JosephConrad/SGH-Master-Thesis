@@ -467,21 +467,23 @@ elementy będą przedstawione w rozdziale nr \ref{chap:monteCarlo}, poświęcony
 
 Obecnie jednym z najpopularniejszych modeli do wyceny opcji jest model Blacka-Scholsa. Ceniony jest 
 on ze względu na prostotę oraz wygodę użycia, kosztem jednak wielu upraszczających założeń. 
-Jedno z nich, założenie o stałości zmienności modyfikuje model Hestona, który jest 
+Jedno z nich, założenie o stałości zmienności jest modyfikowane w modelu Hestona, który jest 
 tematem tego rozdziału.
 
 
 \section{Motywacja} 
 Jak zostało powiedziane we wstępie do niniejszego rozdziału, podstawowym modelem do wyceny opcji jest 
 model Blacka-Scholesa.
-Umożliwia on wyprowadzenie wzoru na cenę opcji europejskiej w postaci analitycznej. 
+Możemy w nim wyprowadzić wzór na cenę opcji europejskiej w postaci analitycznej. 
 
-Jednym z jego założeń jest założenie o stałej zmienności instrumentu bazowego, które okazuje się
-być nieprawdziwe w rzeczywistym świecie. Świadczy o tym chociażby
-wykres nr \ref{fig:vix}, na którym wyraźnie widać wysoką zmienność indeksu S\&P. Jednym z pomysłów na
+Jednym z założeń modelu Blacka-Scholesa jest założenie o stałej zmienności instrumentu bazowego, 
+które okazuje się być nieprawdziwe w rzeczywistym świecie. Świadczy o tym chociażby
+wykres nr \ref{fig:vix}, na którym wyraźnie widać duże wahania zmienność ceny instrumentu bazowego.
+Jednym z pomysłów na
 obejście tego problemu jest uzmiennienie stałej wartości wariancji w tym modelu. Dopuszczamy w ten 
 sposób, aby dla dowolnego czasu parametr ten przyjmował różną wartość. Można to zrobić np. poprzez 
-nadanie wariancji cech losowych. W takim przypadku nie tylko proces ceny akcji byłby procesem 
+nadanie cech losowych parametrowi zmienności. 
+W takim przypadku nie tylko proces ceny akcji byłby procesem 
 stochastycznym, ale także sama zmienność byłaby definiowana przy użyciu procesu stochastycznego. 
 Takie też podejście zostało wykorzystane przy budowie modelu Hestona.
 
@@ -496,39 +498,30 @@ Takie też podejście zostało wykorzystane przy budowie modelu Hestona.
 \section{Model Hestona}
 Jak wspomniano w poprzednim rozdziale, model Hestona eliminuje podstawową wadę modelu Blacka-Scholesa 
 jakim jest założenie o stałej zmienności w czasie.
-W tym celu zmienność również uzależniono od procesu losowego, tworząc kolejny proces stochastyczny. W 
-przypadku modelu Hestona jest to \textbf{model Coxa-Ingersolla-Rossa} 
+W tym celu zmienność uzależniono od dodatkowego procesu losowego. W 
+przypadku modelu Hestona współczynnik zmienności opisany jest równaniem:
+ \textbf{model Coxa-Ingersolla-Rossa} 
 \cite{CoxIngersollRoss}\index{Model Coxa–Ingersolla–Rossa} (model CIR):
 \begin{equation}
-dr_t  = \kappa (\theta  - r_t)dt + \epsilon \sqrt{r_t} dW_t^v 
+\label{eq:cir}
+dv_t  = \kappa (\theta  - v_t)dt + \epsilon \sqrt{v_t} dW_t^v 
 \end{equation}
 
-Model CIR jest często wykorzystywany przy modelowaniu zmienności stopy procentowej (stąd też 
-oznaczenie $r_t$) ze względu na \textbf{\textit{własność powrotu do średniej długoterminowej}}. 
-(\textit{ang. mean-reversion}). Gdy zamiast $r_t$ podstawimy $v_t$ otrzymamy proces przedstawiający 
-zmienność zmienności w czasie. Założenie to jest także prawdziwe w przypadku rynku 
-akcji. Jeżeli byśmy założyli, że zmienność nie ma własności powrotu do średniej, obserwowalibyśmy 
+Proces $v$ zdefiniowany przy pomocy (\ref{eq:cir}) posiada 
+\textbf{\textit{własność powrotu do średniej długoterminowej}} (\textit{ang. mean-reversion}). 
+Jeżeli byśmy założyli, że zmienność nie ma własności powrotu do średniej, obserwowalibyśmy 
 znaczną część aktywów z bardzo gwałtownie rosnącą zmiennością lub będącą blisko zera.
-Ponadto, tak jak w przypadku stopy procentowej, tak w przypadku akcji występuje własność powrotu do 
-średniej, gdy cena akcji nie spadnie poniżej 0  \cite{TestingMeanReversion}.
-Co więcej, gdy proces spełnia \textbf{warunek Fellera\index{Warunek Fellera}}:
+Zmienność jest zawsze wartością większą od zera, co wynika wprost z jej definicji.
+Z tego powodu, gdy założymy że proces spełnia \textbf{warunek Fellera\index{Warunek Fellera}}:
 \begin{equation}
 2 \kappa \theta > \epsilon^2
 \end{equation}
-proces jest ściśle dodatni  \cite{TheLittleHestonTrap}.
-
-
-Ponadto, zmienność jest zawsze wartością większą od zera, co wynika wprost z jej definicji. Stąd też 
-w drugiej części wzoru mamy funkcję pierwiastkową z $v_t$: 
-
-\begin{equation} 
-dv_t  = \kappa (\theta - v_t)dt + \epsilon \sqrt{v_t} dW_t^v 
-\end{equation}
+proces jest ściśle dodatni \cite{TheLittleHestonTrap}. 
 
 Mając równanie opisujące proces zmienności można już przedstawić model Hestona, który ma postać:
 
 \begin{equation}
-dS_t  = \mu S_t dt + \sqrt{v_t} S_t dW^S_t
+dS_t  = r S_t dt + \sqrt{v_t} S_t dW^S_t
 \end{equation}
 gdzie wariancja $v_t$ jest opisana przez następujące równanie: 
 
@@ -551,7 +544,7 @@ gdzie:
 \end{enumerate}
 
 W przedstawionym modelu występuje równanie $Cov[dW^S_t, dW^v_t] = \rho dt $. Mówi ono o tym, że 
-dwa procesy błądzenia losowego są w rzeczywistości ze sobą skorelowane przy pomocy stałego 
+dwa procesy błądzenia losowego są ze sobą skorelowane przy pomocy stałego 
 współczynnika korelacji $\rho$.
 To założenie jest zgodne z rzeczywistością. Często możemy na rynkach finansowych zaobserwować 
 następującą sekwencję zdarzeń: gdy cena rośnie gwałtownie w górę, zwiększa się zmienność, 
@@ -559,14 +552,14 @@ natomiast w okresach spokoju zmienność jest na relatywnie niskim poziomie.
 
 Niestety, w odróżnieniu od modelu Blacka-Scholsa, dla modelu Hestona nie istnieje pełne rozwiązanie 
 analitycznie (istnieje tylko częściowe rozwiązanie analityczne). Wobec tego, aby 
-wyliczyć wartość opcji, należy się posłużyć numerycznymi metodami wyznaczenia rozwiązania.
+wyliczyć wartość opcji, należy się posłużyć metodami numerycznymi.
 
 
-\section{Zamknięte równanie opisujące cenę opcji w modelu Hestona}
+\section{Wzór opisujący cenę opcji w modelu Hestona}
 
 
 
-Jak wspomniano we wstępie w modelu Hestona można wyznaczyć cenę opcji \textit{call} na moment t, 
+W modelu Hestona można wyznaczyć cenę opcji \textit{call} na moment t, 
 gdzie $t \in [0, T]$. Można ją zdefiniować, analogicznie do modelu Blacka-Scholesa, jako 
 \cite{Heston}:
 
@@ -588,20 +581,20 @@ Funkcje charakterystyczne mają postać:
 \begin{equation}
 \label{eq:HestonCharacteristic}
   \begin{aligned}
-f_j(x, v, T; \phi) &= e^{C(T-t; \phi) + D(T-t; \phi)v + i \phi x} \\
-C (\tau; \phi)     &= r \phi i \tau + \frac{a}{\sigma^2} \bigg\{ (b_j - \rho \sigma \phi i + d) \tau - 2 \cdot ln \bigg[ \frac{1 - ge^{dr}}{1-g} \bigg] \bigg\} \\
-D (r; \phi)        &= \frac{b_j- \rho \sigma \phi i + d}{\sigma^2} \bigg[ \frac{1 - e^{d\tau}}{1 - ge^{d\tau}} \bigg]   \\
+f_j(x, v, T; \phi) &= e^{C_j(T-t; \phi) + D_j(T-t; \phi)v + i \phi x} \\
+C_j (\tau; \phi)     &= r \phi i \tau + \frac{a}{\sigma^2} \bigg\{ (b_j - \rho \sigma \phi i + d) \tau - 2 \cdot ln \bigg[ \frac{1 - ge^{dr}}{1-g} \bigg] \bigg\} \\
+D_j (r; \phi)        &= \frac{b_j- \rho \sigma \phi i + d}{\sigma^2} \bigg[ \frac{1 - e^{d_j \tau}}{1 - g_je^{d\tau}} \bigg]   \\
 g_j                &= \frac{b_j - \rho \sigma \phi i + d}{b_j - \rho \sigma \phi i - d} \\
 d_j                &= \sqrt{(\rho \sigma \phi i  - b_j)^2 - \sigma^2(2 u_j \phi  i  - \phi^2)}.
   \end{aligned}
 \end{equation}
 gdzie: $j = 1,2$.
 
-Przedstawione powyżej równania nr \ref{eq:HestonProb} oraz 
-\ref{eq:HestonCharacteristic} będą użyte podczas kalibracji modelu. Należy jednak zaznaczyć, że 
+Przedstawione powyżej równania (\ref{eq:HestonProb}) oraz 
+(\ref{eq:HestonCharacteristic}) będą użyte podczas kalibracji modelu. Należy jednak zaznaczyć, że 
 w literaturze istnieją inne postacie analityczne ceny $C(S, v, t)$, które są bardziej wydajne 
 obliczeniowo. 
-Wiąże się to z faktem, że np. w wyrażeniu \ref{eq:HestonProb} występują dwie funkcje podcałkowe. 
+Wiąże się to z faktem, że np. w wyrażeniu (\ref{eq:HestonProb}) występują dwie funkcje podcałkowe. 
 Można pokazać, że równanie to da się przedstawić przy pomocy tylko jednej całki.
 
 \section{Współczynniki greckie\index{Współczynniki greckie}}
