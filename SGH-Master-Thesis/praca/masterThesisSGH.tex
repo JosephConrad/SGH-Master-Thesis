@@ -395,7 +395,8 @@ wycenę opcji, który da się przedstawić jako:
   \label{eq:impliedVol}
   C_{obs} = C(S_0, T, K, \sigma_{imp}, r)
 \end{equation}
-Jak widać, wiedząc jaka jest cena opcji na podstawie danych rynkowych, równanie (\ref{eq:impliedVol}) staje się równaniem z jedną niewiadomą, z którego możemy wyliczyć $\sigma_{imp}$.
+Jak widać, wiedząc jaka jest cena opcji na podstawie danych rynkowych, równanie (\ref{eq:impliedVol}) 
+staje się równaniem z jedną niewiadomą, z którego możemy wyliczyć $\sigma_{imp}$.
 
 W przypadku bardziej skomplikowanych modeli, nieznanych parametrów może być dużo więcej. Wtedy też 
 stosuje się bardziej zaawansowane techniki kalibracyjne, co będzie tematyką 
@@ -423,15 +424,22 @@ następującego wzoru:
 \label{eq:closedFormBlack} 
   S_T = S_0 e^{(r - \frac{1}{2} \sigma^2)T+\sigma \sqrt{T} X}
 \end{equation}
-gdzie: $X ~ N(0,1)$.
+gdzie: $X \~ N(0,1)$.
 Fragment wzoru postaci $\frac{1}{2} \sigma^2 T$ znany jest natomiast pod 
 nazwą \textbf{poprawki Ito}\index{Poprawka Ito} (\textit{ang. Ito correction}).
+Odpowiada on za przejście ze świata deterministycznego, opisywanego przez równania różniczkowe
+zwyczajne, do świata losowego, które opisują stochastyczne równania różniczkowe.
 
 W końcu, aby uzyskać cenę opcji na dany moment, stosujemy wzór (\ref{eq:closedFormBlack}). Otrzymujemy
 \begin{equation}
-  C = \frac{\mathbf{E}[v(S_0 e^{(r - \frac{1}{2} \sigma^2)T+\sigma \sqrt{T} N(0,1)})]}{e^{rT}}
+  C = \frac{\mathbf{E}[v(S_0 e^{(r - \frac{1}{2} \sigma^2)T+\sigma \sqrt{T} X})]}{e^{rT}}
 \end{equation}
-gdzie $C$ oznacza wartość opcji na moment zerowy $t = 0$.
+gdzie:
+\begin{itemize}
+  \item $X \~ N(0,1)$,
+  \item $C$ oznacza wartość opcji na moment zerowy $t = 0$.
+\end{itemize}
+
 
 
 
@@ -537,7 +545,7 @@ Cov[dW^S_t, dW^v_t] = \rho dt
 gdzie:
 
 \begin{enumerate}
-\item $\mu$ oznacza dryft (\textit{ang. drift}). ceny aktywa bazowego 
+\item $r$ oznacza dryft (\textit{ang. drift}). ceny aktywa bazowego 
 \item $\theta$ oznacza długoterminową wartość oczekiwaną $v_t$
 \item $\kappa$ jest współczynnikiem szybkości powrotu do średniej (\textit{ang. rate of mean-reversion})
 \item $\epsilon$ oznacza zmienność zmienności procesu $v_t$
@@ -618,19 +626,18 @@ Do wyznaczenia wartości tych współczynników używa się metod Monte Carlo. W
 że niemożliwe jest uzyskanie dla nich wzoru analitycznego, 
 zwłaszcza dla bardziej skomplikowanych modeli jak model Hestona.
 
-W części empirycznej pracy, tj. w rozdziale \ref{r:sp}, zostanie przedstawiona symulacja 
-kształtowania się trajektorii aktywa bazowego (indeksu S\&P) w zależności od wartości jednego z 
-parametrów opcji.
+W części empirycznej pracy (rozdział \ref{r:sp}) zostanie przedstawiona symulacja 
+kształtowania się trajektorii aktywa bazowego (indeksu S\&P) w zależności od czasu do wygaśnięcia. 
 
 \section{Rozszerzenia modelu Hestona}
 
 Model Hestona uogólnia założenie o stałości zmienności w czasie. 
-Jednak pozostałe parametry wciąż pozostają na niezmienionym poziomie, 
+Jednak pozostałe parametry wciąż pozostają na niezmienionym poziomie
 co daje możliwość uzależnienia w czasie kolejnych stałych w modelu.
 Ponadto, również wariancję w modelu Hestona można uzależnić nie tylko 
 od jednego, ale od wielu procesów zmienności (\textit{ang. Multifactor Heston Models}).
 
-Kolejna możliwość to wprowadzenie do modeli zmienności stochastycznej
+Kolejną możliwością uogólnienia modelu Hestona to wprowadzenie do modeli zmienności stochastycznej
 \textbf{skoków} (\textit{ang. stochastic volatility models with jumps})
 Tego typu modele tworzą odrębną klasę modeli, a procesem, który najczęściej modeluje właściwość
 skoków w tego typu modelach jest proces Poissona.
@@ -641,10 +648,8 @@ do wyliczenia ceny opcji w oparciu o model Hestona.
 
 \subsection{Dwuczynnikowy model Hestona} % (fold)
 \label{sec:modelDwuczynnikowy}
-Jak powiedziano we wstępie do rozdziału, jednym z możliwych rozszerzeń modelu Hestona jest wzbogacenie
-procesu zmienności o dodatkowe zależności. 
-Jeden z takich modeli, model dwuczynnikowy, został w 2009 zaproponowany prze
-Petera Christoffersena \index{Christoffersen, Peter}  \cite{Christoffersen}.
+Model dwuczynnikowy Hestona został w 2009 zaproponowany prze
+Petera Christoffersena \index{Christoffersen, Peter} \cite{Christoffersen}.
 Opisuje go następujący układ równań:
 
 \begin{equation}
@@ -685,27 +690,27 @@ Jest wiele powodów wprowadzenia skoków do równania modelującego cenę aktywa
 możemy wymienić `grube ogony' rozkładu stóp zwrotu. Zgodnie z danymi empirycznymi ogony rozkładu stóp 
 zwrotu aktywa bazowego są grubsze od tych występujących w rozkładzie normalnym.
 
-Kolejną przyczyną wprowadzenia skoków do modelu Hestona jest kształt płaszczyzny zmienności 
+Kolejną przyczyną wprowadzenia skoków do modelu Hestona jest kształt płaszczyzny zmienności implikowanej
 (\textit{ang. volatility surface}) dla opcji o krótkim terminie do wykupu. W rzeczywistości ma ona 
-bardziej skrzywiony kształt niż to wynika z danych wygenerowanych przez model Hestona. 
+bardziej skośny kształt niż to wynika z danych wygenerowanych przez model Hestona. 
 Bates \cite{Bates} rozszerzył więc model Hestona o dodatkowy element, który ma niwelować opisaną wadę.
 
 Model ten różni się od modelu Hestona tylko składnikiem definiującym skoki, jednak dla
 porządku podajemy jego pełną definincję:
 \begin{equation}
-dS_t  = \mu S_t dt + \sqrt{v_t} S_t dW^S_t + S_{t-} Y_t dN_t^S
+dS_t  = \mu S_t dt + \sqrt{v_t} S_t dW^S_t + S_{t-} Y_t dN_t^S.
 \end{equation}
-wariancję $v_t$ opisuje równanie: 
+Wariancję $v_t$ opisuje równanie: 
 
 \begin{equation}
-dv_t  = \kappa (\theta - v_t)dt + \epsilon \sqrt{v_t} dW_t^v 
+dv_t  = \kappa (\theta - v_t)dt + \epsilon \sqrt{v_t} dW_t^v.
 \end{equation}
-Procesy $dW_t^v$ oraz $dW_s^v$ są skorelowane w następujący sposób:
+Procesy $dW_t^v$ oraz $dW_s^v$ są skorelowane na poziomie $\rho$:
 
 \begin{equation}
-Cov[dW^S_t, dW^v_t] = \rho dt 
+Cov[dW^S_t, dW^v_t] = \rho dt.
 \end{equation}
-W powyższych wzorach $N_t^S$ jest procesem Poissona, $Y_t$ oznacza wielkość skoku, 
+W powyższych wzorach $N_t^S$ jest procesem Poissona, $Y_t$ oznacza wysokość skoku, 
 natomiast $S_{t-}$ oznacza, że skok dotyczy wartości procesu ceny przed pojawieniem się skoku.
 
 Motywacją stojącą za wprowadzeniem skoków do modelu jest chęć uchwycenia momentów o 
