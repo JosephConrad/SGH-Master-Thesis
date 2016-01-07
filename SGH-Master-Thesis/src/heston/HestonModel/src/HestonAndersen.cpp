@@ -7,8 +7,7 @@ HestonAndersen::HestonAndersen(
         double theta,
         double epsilon,
         double rho)
-        : Heston(option, kappa, theta, epsilon, rho)
-{ }
+        : Heston(option, kappa, theta, epsilon, rho) { }
 
 void HestonAndersen::simulateVolPath(const std::vector<double> &volDraws,
                                      std::vector<double> &volPath) {
@@ -46,10 +45,20 @@ void HestonAndersen::simulateSpotPath(const std::vector<double> spotDraws,
     auto size = spotDraws.size();
     double dt = option->T / static_cast<double>(size);
 
+    double k0, k1, k2, k3, k4, gamma1, gamma2;
+
     for (int i = 1; i < size; i++) {
-        double v_max = std::max(volPath[i - 1], 0.0);
-        spotPath[i] = spotPath[i - 1] * exp((option->r - 0.5 * v_max) * dt +
-                                            sqrt(v_max * dt) * spotDraws[i - 1]);
+
+        double normalRandom = normalDist(generator);
+
+        k0 = -dt * (rho * kappa * theta) / (epsilon);
+        k1 = gamma1 * dt * (((kappa * rho) / epsilon) - 0.5) - (rho / epsilon);
+        k2 = gamma2 * dt * (((kappa * rho) / epsilon) - 0.5) + (rho / epsilon);
+        k3 = gamma1 * dt * (1 - rho * rho);
+        k4 = gamma2 * dt * (1 - rho * rho);
+
+        spotPath[i] = spotPath[i - 1] + k0 + k1 * volPath[i - 1] + k2 * volPath[i] +
+                      sqrt(k3 * volPath[i - 1] + k4 * volPath[i]) * normalRandom;
     }
 }
 

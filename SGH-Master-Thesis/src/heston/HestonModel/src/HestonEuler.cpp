@@ -4,8 +4,7 @@
 #include "../header/HestonEuler.h"
 
 HestonEuler::HestonEuler(Option *option, double kappa, double theta, double epsilon, double rho)
-        : Heston(option, kappa, theta, epsilon, rho)
-{ }
+        : Heston(option, kappa, theta, epsilon, rho) { }
 
 void HestonEuler::simulateVolPath(const std::vector<double> &volDraws,
                                   std::vector<double> &volPath) {
@@ -28,9 +27,10 @@ void HestonEuler::simulateSpotPath(const std::vector<double> spotDraws,
     double dt = option->T / static_cast<double>(vec_size);
 
     for (int i = 1; i < vec_size; i++) {
+
         double v_max = std::max(volPath[i - 1], 0.0);
-        spotPath[i] = spotPath[i - 1] * exp((option->r - 0.5 * v_max) * dt +
-                                              sqrt(v_max * dt) * spotDraws[i - 1]);
+        spotPath[i] = spotPath[i - 1] + option->r * dt * spotPath[i - 1] +
+                      sqrt(v_max * dt) * spotPath[i - 1] * spotDraws[i - 1];
     }
 }
 

@@ -36,5 +36,4 @@ public:
                                   std::vector<double> &spotPath) = 0;
 };
 
-
 #endif
