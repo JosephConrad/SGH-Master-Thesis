@@ -34,7 +34,7 @@ double MCHeston::simulateHeston(std::vector<double> modelParams, std::vector<dou
     // Create the PayOff, Option and Heston objects
     PayOff *payOffCall = new PayOffCall(strike);
     Option *callOption = new Option(strike, riskFreeRate, timeToExpiry, payOffCall);
-    HestonEuler hest_euler(callOption, kappa, theta, sigma, rho);
+    HestonEuler hestonEuler(callOption, kappa, theta, sigma, rho);
 
     // Create the spot and vol initial normal and price paths
     std::vector<double> spot_draws(numIntervals, 0.0);  // Vector of initial spot normal draws
@@ -52,8 +52,8 @@ double MCHeston::simulateHeston(std::vector<double> modelParams, std::vector<dou
     for (unsigned i = 0; i < num_sims; i++) {
         //std::cout << "Calculating path " << i + 1 << " of " << num_sims << std::endl;
         generate_normal_correlation_paths(rho, spot_draws, vol_draws);
-        hest_euler.calc_vol_path(vol_draws, vol_prices);
-        hest_euler.calc_spot_path(spot_draws, vol_prices, spot_prices);
+        hestonEuler.simulateVolPath(vol_draws, vol_prices);
+        hestonEuler.simulateSpotPath(spot_draws, vol_prices, spot_prices);
 
         if (i % chartInterval == 0) {
             for (auto j = 0; j < spot_prices.size(); ++j) {

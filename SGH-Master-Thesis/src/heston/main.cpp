@@ -4,6 +4,7 @@
 #include "option.h"
 #include "correlated_snd.h"
 #include "HestonModel/header/HestonEuler.h"
+#include "HestonModel/header/HestonAndersen.h"
 
 void generate_normal_correlation_paths(double rho,
                                        std::vector<double> &spot_normals, std::vector<double> &cor_normals) {
@@ -38,8 +39,8 @@ int main(int argc, char **argv) {
     // First we create the parameter list
     // Note that you could easily modify this code to input the parameters
     // either from the command line or via a file
-    unsigned num_sims = 10000;   // Number of simulated asset paths
-    unsigned num_intervals = 1000;  // Number of intervals for the asset path to be sampled
+    unsigned numSims = 10000;   // Number of simulated asset paths
+    unsigned numInts = 1000;  // Number of intervals for the asset path to be sampled
 
     double S_0 = 100.0;    // Initial spot price
     double K = 100.0;      // Strike price
@@ -53,31 +54,50 @@ int main(int argc, char **argv) {
     double xi = 0.61;      // "Vol of vol"
 
     // Create the PayOff, Option and Heston objects
-    PayOff *pPayOffCall = new PayOffCall(K);
-    Option *pOption = new Option(K, r, T, pPayOffCall);
-    HestonEuler hest_euler(pOption, kappa, theta, xi, rho);
+    PayOff *payOffCall = new PayOffCall(K);
+    Option *option = new Option(K, r, T, payOffCall);
+    HestonEuler hestonEuler(option, kappa, theta, xi, rho);
+    HestonAndersen hestonAndersen(option, kappa, theta, xi, rho);
 
     // Create the spot and vol initial normal and price paths
-    std::vector<double> spot_draws(num_intervals, 0.0);  // Vector of initial spot normal draws
-    std::vector<double> vol_draws(num_intervals, 0.0);   // Vector of initial correlated vol normal draws
-    std::vector<double> spot_prices(num_intervals, S_0);  // Vector of initial spot prices
-    std::vector<double> vol_prices(num_intervals, v_0);   // Vector of initial vol prices
+    std::vector<double> spot_draws(numInts, 0.0);  // Vector of initial spot normal draws
+    std::vector<double> vol_draws(numInts, 0.0);   // Vector of initial correlated vol normal draws
+    std::vector<double> spot_prices(numInts, S_0);  // Vector of initial spot prices
+    std::vector<double> vol_prices(numInts, v_0);   // Vector of initial vol prices
 
     // Monte Carlo options pricing
     double payoff_sum = 0.0;
-    for (unsigned i = 0; i < num_sims; i++) {
-        std::cout << "Calculating path " << i + 1 << " of " << num_sims << std::endl;
+    for (unsigned i = 0; i < numSims; i++) {
+        //std::cout << "Calculating path " << i + 1 << " of " << numSims << std::endl;
         generate_normal_correlation_paths(rho, spot_draws, vol_draws);
-        hest_euler.calc_vol_path(vol_draws, vol_prices);
-        hest_euler.calc_spot_path(spot_draws, vol_prices, spot_prices);
-        payoff_sum += pOption->pay_off->operator()(spot_prices[num_intervals - 1]);
+        hestonEuler.simulateVolPath(vol_draws, vol_prices);
+        hestonEuler.simulateSpotPath(spot_draws, vol_prices, spot_prices);
+        payoff_sum += option->pay_off->operator()(spot_prices[numInts - 1]);
     }
-    double option_price = (payoff_sum / static_cast<double>(num_sims)) * exp(-r * T);
+
+
+    double option_price = (payoff_sum / static_cast<double>(numSims)) * exp(-r * T);
+    std::cout << "Option Price: " << option_price << std::endl;
+
+
+    payOffCall = new PayOffCall(K);
+    option = new Option(K, r, T, payOffCall);
+    payoff_sum = 0.0;
+
+    for (unsigned i = 0; i < numSims; i++) {
+        generate_normal_correlation_paths(rho, spot_draws, vol_draws);
+        //std::cout << "Calculating path " << i + 1 << " of " << numSims << std::endl;
+        hestonAndersen.simulateVolPath(vol_draws, vol_prices);
+        hestonAndersen.simulateSpotPath(spot_draws, vol_prices, spot_prices);
+        payoff_sum += option->pay_off->operator()(spot_prices[numInts - 1]);
+    }
+
+    option_price = (payoff_sum / static_cast<double>(numSims)) * exp(-r * T);
     std::cout << "Option Price: " << option_price << std::endl;
 
     // Free memory
-    delete pOption;
-    delete pPayOffCall;
+    delete option;
+    delete payOffCall;
 
     return 0;
 }

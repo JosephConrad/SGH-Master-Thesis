@@ -509,7 +509,7 @@ W tym celu zmienność uzależniono od dodatkowego procesu losowego. W
 przypadku modelu Hestona współczynnik zmienności może być opisany następującym równaniem:
 \begin{equation}
 \label{eq:cir}
-dv_t  = \kappa (\theta  - v_t)dt + \epsilon \sqrt{v_t} dW_t^v 
+dv_t  = \kappa (\theta  - v_t)dt + \varepsilon \sqrt{v_t} dW_t^v 
 \end{equation}
 
 Proces $v$ zdefiniowany przy pomocy (\ref{eq:cir}) posiada 
@@ -518,7 +518,7 @@ Jeżeli byśmy założyli, że zmienność nie ma własności powrotu do średni
 znaczną część aktywów ze zmiennością bardzo gwałtownie rosnącą lub będącą blisko zera.
 Z tego powodu, gdy założymy że proces spełnia \textbf{warunek Fellera\index{Warunek Fellera}}:
 \begin{equation}
-2 \kappa \theta > \epsilon^2
+2 \kappa \theta > \varepsilon^2
 \end{equation}
 proces jest ściśle dodatni \cite{TheLittleHestonTrap}. Zmienność wtedy będzie zawsze wartością większą
 od zera, co jest zgodne z jej definicją.
@@ -531,7 +531,7 @@ dS_t  = r S_t dt + \sqrt{v_t} S_t dW^S_t
 gdzie wariancja $v_t$ jest opisana przez następujące równanie: 
 
 \begin{equation}
-dv_t  = \kappa (\theta - v_t)dt + \epsilon \sqrt{v_t} dW_t^v 
+dv_t  = \kappa (\theta - v_t)dt + \varepsilon \sqrt{v_t} dW_t^v 
 \end{equation}
 Procesy $dW_t^v$ oraz $dW_s^v$ są standardowymi procesami Wienera\index{Proces Wienera} i są 
 skorelowane:
@@ -545,7 +545,7 @@ gdzie:
 \item $r$ oznacza dryft (\textit{ang. drift}) ceny aktywa bazowego 
 \item $\theta$ oznacza długoterminową wartość oczekiwaną $v_t$
 \item $\kappa$ jest współczynnikiem szybkości powrotu do średniej (\textit{ang. rate of mean-reversion})
-\item $\epsilon$ oznacza zmienność zmienności procesu $v_t$
+\item $\varepsilon$ oznacza zmienność zmienności procesu $v_t$
 \end{enumerate}
 
 W przedstawionym modelu występuje równanie $Cov[dW^S_t, dW^v_t] = \rho dt $. Mówi ono o tym, że 
@@ -769,7 +769,7 @@ dS_t  = \mu S_t dt + \sqrt{v_t} S_t dW^S_t + S_{t-} Y_t dN_t^S.
 Wariancję $v_t$ opisuje równanie: 
 
 \begin{equation}
-dv_t  = \kappa (\theta - v_t)dt + \epsilon \sqrt{v_t} dW_t^v.
+dv_t  = \kappa (\theta - v_t)dt + \varepsilon \sqrt{v_t} dW_t^v.
 \end{equation}
 Procesy $dW_t^v$ oraz $dW_s^v$ są skorelowane na poziomie $\rho$:
 
@@ -1288,10 +1288,10 @@ Dla przypadku dwuwymiarowego problem redukuje się do
 następującej postaci:
 
 \begin{equation}
-  \epsilon_1 = x_1
+  \varepsilon_1 = x_1
 \end{equation}
 \begin{equation}
-  \epsilon_2 = \rho x_1 + x_2 \sqrt{1-\rho^2}
+  \varepsilon_2 = \rho x_1 + x_2 \sqrt{1-\rho^2}
 \end{equation}
 gdzie:
 \begin{enumerate}
@@ -1334,7 +1334,7 @@ Poniższe równanie nr \ref{h:euler} przedstawia \textbf{dyskretyzację Eulera} 
 zmienności \cite{Broadie}:
  
 \begin{equation}\label{h:euler}
-v_{i+1}  = v_i + \kappa (\theta - v_i) \Delta t + \epsilon  \sqrt{v_i} \Delta W^{v}_{i+1}.
+v_{i+1}  = v_i + \kappa (\theta - v_i) \Delta t + \varepsilon  \sqrt{v_i} \Delta W^{v}_{i+1}.
 \end{equation}
 gdzie: $\Delta W^{v}_{i+1} = W^{v} (t_i+\Delta) - W^{v} (t_i)$.
 
@@ -1351,7 +1351,7 @@ efektywnym w swojej klasie \cite{Malham}. Ostatecznie więc, wzór opisujący dy
 postać:
 
 \begin{equation}\label{h:eulerNonZero}
-v_{i+1}  = v_i + \kappa (\theta - v_i^+) \Delta t + \epsilon \sqrt{v_i^+} \Delta W^{v}_{i+1}.
+v_{i+1}  = v_i + \kappa (\theta - v_i^+) \Delta t + \varepsilon \sqrt{v_i^+} \Delta W^{v}_{i+1}.
 \end{equation}
 
 Mając wygenerowaną trajektorię zmienności, można przystąpić do zdyskretyzowania równania opisującego 
@@ -1395,7 +1395,7 @@ postać:
 
 \begin{equation}
   \label{eq:s2}
-  s^2 = \frac{\hat{v}(t)\epsilon^2 e^{-\kappa \Delta}}{\kappa} (1 - e^{-\kappa \Delta}) + \frac{\theta \epsilon^2}{2 \kappa}(1 - e^{-\kappa \Delta})^2
+  s^2 = \frac{\hat{v}(t)\varepsilon^2 e^{-\kappa \Delta}}{\kappa} (1 - e^{-\kappa \Delta}) + \frac{\theta \varepsilon^2}{2 \kappa}(1 - e^{-\kappa \Delta})^2
 \end{equation}
 \end{prop}
  
@@ -1407,7 +1407,7 @@ $\Psi$ zdefiniowany jako:
 
 \begin{equation}
  \label{eq:ksi}
- \Psi = \frac{s^2}{m^2} = \frac{\frac{\hat{v}(t)\epsilon^2 e^{-\kappa \Delta}}{\kappa} (1 - e^{-\kappa \Delta}) + \frac{\theta \epsilon^2}{2 \kappa}(1 - e^{-\kappa \Delta})^2}{(\theta + (\hat{v}(t) - \theta) e^{-\kappa \Delta})^2} 
+ \Psi = \frac{s^2}{m^2} = \frac{\frac{\hat{v}(t)\varepsilon^2 e^{-\kappa \Delta}}{\kappa} (1 - e^{-\kappa \Delta}) + \frac{\theta \varepsilon^2}{2 \kappa}(1 - e^{-\kappa \Delta})^2}{(\theta + (\hat{v}(t) - \theta) e^{-\kappa \Delta})^2} 
 \end{equation}
 gdzie $m$ i $s^2$ zdefiniowane są przy pomocy równań \ref{eq:m} oraz \ref{eq:s2}.
 Dla wartości parametru $\Psi \leq 2.0$, definiuje się wartość zmiennej $\hat{v}(t + \Delta)$ pod 
@@ -1470,7 +1470,7 @@ Obydwa schematy można złączyć w jedno równanie o postaci:
 \begin{equation}
 \label{eq:andersen}
 \hat{v}(t + \Delta)  = \mathds{1}_{\Phi \geq \Phi_c} a (b + Z_V)^2
- + \mathds{1}_{\Phi \le \Phi_c} \beta^{-1} \ln (\frac{1-p}{1-U})
+ + \mathds{1}_{\Phi \le \Phi_c} \beta^{-1} \ln (\frac{1-p}{1-u})
 \end{equation}
 gdzie $Z$ jest standardowym rozkładem normalnym, natomiast $U$ jest rozkładem jednostajnym na 
 przedziale $[0;1]$.
@@ -1497,11 +1497,12 @@ ma następującą postać:
 \begin{algorithmic}[1]
  
   \State Oblicz $m$ oraz $s^2$ na podstawie równań $\hat{v}(t)$ oraz równań (\ref{eq:m}) i (\ref{eq:s2}) odpowiednio
-  \State Wyznacz $\Psi = \frac{s^2}{m^2}$ i wyznacz $f_{\mu}(\Psi)$ oraz $f_{\sigma}(\Psi)$ 
+  \State Wyznacz $\Psi = \frac{s^2}{m^2}$ 
+  % i wyznacz $f_{\mu}(\Psi)$ oraz $f_{\sigma}(\Psi)$ 
   \State Wylosuj liczbę $U_V$ z rozkładu jednostajnego 
   \State Jeżeli $\Psi \leq \Psi_c$:
   \State \hspace{\algorithmicindent} wyznacz $a$ i $b$ na podstawie (\ref{eq:b}) oraz (\ref{eq:a})
-  \State \hspace{\algorithmicindent} oblicz $Z_V = \Psi^{-1}(U_V)$
+  \State \hspace{\algorithmicindent} oblicz $Z_V = \Phi^{-1}(U_V)$
   \State \hspace{\algorithmicindent} oblicz $\hat{v}(t + \Delta)  = a(b+ Z_V)^2$
   \State W przeciwnym przypadku:
   \State \hspace{\algorithmicindent} wyznacz $\beta$ oraz $p$ zgodnie z równaniami (\ref{eq:beta}) i (\ref{eq:p})
@@ -1536,14 +1537,14 @@ Andersen proponuje więc użyć dokładnej reprezentacji wartości procesu $\ln 
 \begin{equation}
 \begin{aligned}
 \label{eq:xt}
-\ln S(t + \Delta) = & \ln S(t)  + \frac{\rho}{\epsilon} (v(t + \Delta)  - v(t) - \kappa \theta \Delta) + \\
-& \Big( \frac{\kappa \rho}{\epsilon} - \frac{1}{2} \Big)
+\ln S(t + \Delta) = & \ln S(t)  + \frac{\rho}{\varepsilon} (v(t + \Delta)  - v(t) - \kappa \theta \Delta) + \\
+& \Big( \frac{\kappa \rho}{\varepsilon} - \frac{1}{2} \Big)
 \int_t^{t+\Delta} v(u) du + \sqrt{1-\rho^2} \int_t^{t+\Delta} \sqrt{v(u)}dW(u)
 \end{aligned}
 \end{equation}
 gdzie:
 
-Składnik $\frac{\rho}{\epsilon} (V(t + \Delta)$ jest elementem, który odpowiada za korelację między 
+Składnik $\frac{\rho}{\varepsilon} (V(t + \Delta)$ jest elementem, który odpowiada za korelację między 
 procesami $V(t + \Delta)$ oraz $X(t + \Delta)$.
 
 Istotną kwestią pozostaje znalezienie sposobu na oszacowanie całki występującej we wzorze (\ref{eq:xt}):
@@ -1558,8 +1559,8 @@ następujący schemat aproksymacji dla zlogarytmowanego procesu aktywa bazowego:
 \begin{equation}
 \begin{aligned}
 \label{eq:xhatt}
-\ln X(t + \Delta) = & \ln X(t)  + \frac{\rho}{\epsilon} (V(t + \Delta)  - V(t) - \kappa \theta \Delta) + \\
-& + \Delta \Big( \frac{\kappa \rho}{\epsilon} - \frac{1}{2} \Big) (\gamma_1 \hat{v}(t) \gamma_2 \hat{v}(t + \Delta)) + \\
+\ln X(t + \Delta) = & \ln X(t)  + \frac{\rho}{\varepsilon} (V(t + \Delta)  - V(t) - \kappa \theta \Delta) + \\
+& + \Delta \Big( \frac{\kappa \rho}{\varepsilon} - \frac{1}{2} \Big) (\gamma_1 \hat{v}(t) \gamma_2 \hat{v}(t + \Delta)) + \\
 & + \sqrt{1-\rho^2} \sqrt{\gamma_1 \hat{v}(t) + \gamma_2 \hat{v}(t + \Delta)} \cdot Z,
 \end{aligned}
 \end{equation}

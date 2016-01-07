@@ -4,9 +4,19 @@
 
 #include "../header/Heston.h"
 
-Heston::Heston(Option *_pOption,
-                         double _kappa, double _theta,
-                         double _xi, double _rho) :
-        pOption(_pOption), kappa(_kappa), theta(_theta), xi(_xi), rho(_rho) { }
+Heston::Heston(
+        Option *option,
+        double kappa,
+        double theta,
+        double epsilon,
+        double rho)
+        :
+        option(option),
+        kappa(kappa),
+        theta(theta),
+        epsilon(epsilon),
+        rho(rho)
+{
+}
 
 Heston::~Heston() { }
