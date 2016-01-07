@@ -1,10 +1,5 @@
-//
-// Created by Konrad Lisiecki on 18/05/15.
-//
-
 #ifndef HESTON_HESTON_MC_H
 #define HESTON_HESTON_MC_H
-
 
 #include <cmath>
 #include <vector>

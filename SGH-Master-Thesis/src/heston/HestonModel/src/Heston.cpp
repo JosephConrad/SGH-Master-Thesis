@@ -1,7 +1,3 @@
-//
-// Created by Konrad Lisiecki on 06/01/16.
-//
-
 #include "../header/Heston.h"
 
 Heston::Heston(
@@ -16,7 +12,6 @@ Heston::Heston(
         theta(theta),
         epsilon(epsilon),
         rho(rho)
-{
-}
+{ }
 
 Heston::~Heston() { }

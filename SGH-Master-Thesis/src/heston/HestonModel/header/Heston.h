@@ -1,7 +1,3 @@
-//
-// Created by Konrad Lisiecki on 06/01/16.
-//
-
 #ifndef HESTON_HESTON_H
 #define HESTON_HESTON_H
 
@@ -41,4 +37,4 @@ public:
 };
 
 
-#endif //HESTON_HESTON_H
+#endif

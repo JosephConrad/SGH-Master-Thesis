@@ -1,15 +1,11 @@
-//
-// Created by Konrad Lisiecki on 18/05/15.
-//
 #ifndef __HESTON_MC_CPP
 #define __HESTON_MC_CPP
 
 #include "../header/HestonEuler.h"
 
-
 HestonEuler::HestonEuler(Option *option, double kappa, double theta, double epsilon, double rho)
-        : Heston(option, kappa, theta, epsilon, rho) { }
-
+        : Heston(option, kappa, theta, epsilon, rho)
+{ }
 
 void HestonEuler::simulateVolPath(const std::vector<double> &volDraws,
                                   std::vector<double> &volPath) {

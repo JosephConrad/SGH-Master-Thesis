@@ -1,19 +1,14 @@
-//
-// Created by Konrad Lisiecki on 06/01/16.
-//
-
 #include <random>
 #include "../header/HestonAndersen.h"
 
-
 HestonAndersen::HestonAndersen(
-        Option *pOption,
+        Option *option,
         double kappa,
         double theta,
         double epsilon,
         double rho)
-        : Heston(pOption, kappa, theta, epsilon, rho) { }
-
+        : Heston(option, kappa, theta, epsilon, rho)
+{ }
 
 void HestonAndersen::simulateVolPath(const std::vector<double> &volDraws,
                                      std::vector<double> &volPath) {

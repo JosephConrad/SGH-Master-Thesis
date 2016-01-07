@@ -1,10 +1,5 @@
-//
-// Created by Konrad Lisiecki on 06/01/16.
-//
-
 #ifndef HESTON_HESTONANDERSEN_H
 #define HESTON_HESTONANDERSEN_H
-
 
 #include "Heston.h"
 
@@ -33,4 +28,4 @@ public:
 };
 
 
-#endif //HESTON_HESTONANDERSEN_H
+#endif
