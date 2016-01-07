@@ -4,17 +4,12 @@
 #ifndef __HESTON_MC_CPP
 #define __HESTON_MC_CPP
 
-#include "heston_mc.h"
+#include "../header/HestonEuler.h"
 
-// HestonEuler
-// ===========
 
-HestonEuler::HestonEuler(Option *_pOption,
-                         double _kappa, double _theta,
-                         double _xi, double _rho) :
-        pOption(_pOption), kappa(_kappa), theta(_theta), xi(_xi), rho(_rho) { }
+HestonEuler::HestonEuler(Option *_pOption, double _kappa, double _theta, double _xi, double _rho)
+        : Heston(_pOption, _kappa, _theta, _xi, _rho) { }
 
-HestonEuler::~HestonEuler() { }
 
 void HestonEuler::calc_vol_path(const std::vector<double> &vol_draws,
                                 std::vector<double> &vol_path) {

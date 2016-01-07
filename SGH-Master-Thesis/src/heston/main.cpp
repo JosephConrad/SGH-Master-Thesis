@@ -3,7 +3,7 @@
 #include "payoff.h"
 #include "option.h"
 #include "correlated_snd.h"
-#include "heston_mc.h"
+#include "HestonModel/header/HestonEuler.h"
 
 void generate_normal_correlation_paths(double rho,
                                        std::vector<double> &spot_normals, std::vector<double> &cor_normals) {

@@ -6,7 +6,8 @@
 #include "../statistics.h"
 #include "../correlated_snd.h"
 #include "../payoff.h"
-#include "../heston_mc.h"
+#include "../option.h"
+#include "../HestonModel/header/HestonEuler.h"
 #include <fstream>
 #include <sstream>
 

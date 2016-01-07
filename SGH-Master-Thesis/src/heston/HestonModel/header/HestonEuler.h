@@ -8,25 +8,15 @@
 
 #include <cmath>
 #include <vector>
-#include "option.h"
+#include "Heston.h"
 
 // The HestonEuler class stores the necessary information
 // for creating the volatility and spot paths based on the
 // Heston Stochastic Volatility model.
-class HestonEuler {
-private:
-    Option *pOption;
-    double kappa;
-    double theta;
-    double xi;
-    double rho;
+class HestonEuler : Heston {
 
 public:
-    HestonEuler(Option *_pOption,
-                double _kappa, double _theta,
-                double _xi, double _rho);
-
-    virtual ~HestonEuler();
+    HestonEuler(Option *_pOption, double _kappa, double _theta, double _xi, double _rho);
 
     // Calculate the volatility path
     void calc_vol_path(const std::vector<double> &vol_draws,
