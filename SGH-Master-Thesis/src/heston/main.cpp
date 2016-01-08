@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
 
     double S_0 = 100.0;    // Initial spot price
     double K = 100.0;      // Strike price
-    double r = 0.0319;     // Risk-free rate
+    double r = 0.0;     // Risk-free rate
     double v_0 = 0.010201; // Initial volatility
     double T = 1.00;       // One year until expiry
 

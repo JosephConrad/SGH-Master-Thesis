@@ -47,6 +47,8 @@ void HestonAndersen::simulateSpotPath(const std::vector<double> spotDraws,
 
     double k0, k1, k2, k3, k4, gamma1, gamma2;
 
+    gamma1 = 1.0;
+    gamma2 = 0.0;
     for (int i = 1; i < size; i++) {
 
         double normalRandom = normalDist(generator);
@@ -57,8 +59,8 @@ void HestonAndersen::simulateSpotPath(const std::vector<double> spotDraws,
         k3 = gamma1 * dt * (1 - rho * rho);
         k4 = gamma2 * dt * (1 - rho * rho);
 
-        spotPath[i] = spotPath[i - 1] + k0 + k1 * volPath[i - 1] + k2 * volPath[i] +
-                      sqrt(k3 * volPath[i - 1] + k4 * volPath[i]) * normalRandom;
+        spotPath[i] = spotPath[i - 1] * exp(k0 + k1 * volPath[i - 1]) * exp(k2 * volPath[i] +
+                      sqrt(k3 * volPath[i - 1] + k4 * volPath[i]) * normalRandom);
     }
 }
 
