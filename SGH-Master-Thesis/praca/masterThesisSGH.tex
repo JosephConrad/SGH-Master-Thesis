@@ -526,18 +526,21 @@ od zera, co jest zgodne z jej definicją.
 Mając równanie opisujące proces zmienności można już przedstawić model Hestona, który ma postać:
 
 \begin{equation}
-dS_t  = r S_t dt + \sqrt{v_t} S_t dW^S_t
+\label{eq:heston1}
+dS(t)  = r S(t) dt + \sqrt{v(t)} S(t) dW^S(t)
 \end{equation}
 gdzie wariancja $v_t$ jest opisana przez następujące równanie: 
 
 \begin{equation}
-dv_t  = \kappa (\theta - v_t)dt + \varepsilon \sqrt{v_t} dW_t^v 
+\label{eq:heston2}
+dv(t)  = \kappa (\theta - v(t))dt + \varepsilon \sqrt{v(t)} dW^v(t) 
 \end{equation}
-Procesy $dW_t^v$ oraz $dW_s^v$ są standardowymi procesami Wienera\index{Proces Wienera} i są 
+Procesy $dW^v(t)$ oraz $dW^S(t)$ są standardowymi procesami 
+Wienera\index{Proces Wienera} i są 
 skorelowane:
 
 \begin{equation}
-Cov[dW^S_t, dW^v_t] = \rho dt 
+Cov[dW^S(t), dW^v(t)] = \rho dt 
 \end{equation}
 gdzie:
 
@@ -548,7 +551,7 @@ gdzie:
 \item $\varepsilon$ oznacza zmienność zmienności procesu $v_t$
 \end{enumerate}
 
-W przedstawionym modelu występuje równanie $Cov[dW^S_t, dW^v_t] = \rho dt $. Mówi ono o tym, że 
+W przedstawionym modelu występuje równanie $Cov[dW^S(t), dW^v(t)] = \rho dt $. Mówi ono o tym, że 
 dwa procesy błądzenia losowego są ze sobą skorelowane przy pomocy stałego 
 współczynnika korelacji $\rho$.
 To założenie jest zgodne z rzeczywistością. Często możemy na rynkach finansowych zaobserwować 
@@ -558,6 +561,65 @@ natomiast w okresach spokoju zmienność jest na relatywnie niskim poziomie.
 Niestety, w odróżnieniu od modelu Blacka-Scholsa, dla modelu Hestona nie istnieje pełne rozwiązanie 
 analitycznie (istnieje tylko częściowe rozwiązanie analityczne). Wobec tego, aby 
 wyliczyć wartość opcji, należy się posłużyć metodami numerycznymi.
+
+\section{Aplikacja lematu Ito dla modelu Hestona}
+
+Często P
+Często łatwiej jest jednak operować na logarytmie procesu bazowego, czyli $\ln S(t)$
+
+Procesy stochastyczne opisane równaniami (\ref{eq:heston1}) i (\ref{eq:heston2}) są tak zwanymi \textbf{procesami Ito}
+(\textit{ang. Ito process}), które dają się przedstawić w 
+następującej formie:
+\begin{equation}
+  dx = a(x,t) dt + b(x,t) dz
+\end{equation}
+gdzie o zmiennej $a$ można myśleć jako o współczynniku opisującym
+wielkości wzrostu, natomiast 
+o zmiennej $b$ jako o współczynniku definiującym jak duża jest losowość w danym 
+modelu.
+
+Dla procesów zdefiniowanych zgodnie z tym równaniem, możemy 
+stosować \textbf{lemat Ito} (\textit{ang. Ito lemma}). Możemy na niego patrzeć jako stochastyczny odpowiednik
+reguły łańcuchowej (\textit{ang. chaining rule}) znanej z klasycznego rachunku 
+różniczkowego. 
+Po zastosowaniu lematu Ito dla $\ln S(t)$ otrzymujemy:
+\begin{subequations}
+\begin{align}
+d \ln S(t) &= \left( r - \frac{1}{2} v(t) \right) dt 
+              + \sqrt{v(t)} SdW^S(t) \label{eq:HestonlnS} \\
+dv(t)      &= \kappa (\theta - v(t))dt + \varepsilon 
+              \sqrt{v(t)} dW^v(t)  \label{eq:HestonlnY}
+\end{align} 
+\end{subequations}
+Aplikując do równania (\ref{eq:HestonlnS}) \textbf{dekompozycję Cholesky'ego} można
+otrzymać:
+\begin{equation}
+  \ln S(t + \Delta) = \ln S(t) + \left( r - \frac{1}{2} v(t) \right) dt 
+              + \rho \sqrt{v(t)} dW^v(t) + \sqrt{1 - \rho^2} \sqrt{v(t)} dW(t)
+\end{equation}
+Natomiast drugie równanie (\ref{eq:HestonlnY}) można przedstawić następująco:
+\begin{equation}
+  v(t + \Delta)      = v(t) + \int_t^{t+\Delta} \kappa 
+                        (\theta - v(u))du + \varepsilon 
+                        \int_t^{t+\Delta}  \sqrt{v(t)} dW^v(u) du 
+\end{equation}
+Co można przekształcić do następującej postaci:
+\begin{equation}
+  \int_t^{t+\Delta}  \sqrt{v(t)} dW^v(u) du  = \varepsilon^{-1} \left(v(t+\Delta) 
+  - v(t) - \kappa \theta \Delta + \kappa \int_t^{t+\Delta}  v(u) du \right)
+\end{equation}
+Podstawiając to równanie do (\ref{eq:HestonlnS}) otrzymujemy:
+
+\begin{equation}
+\begin{aligned}
+\label{eq:HestonLnSDiscretization}
+d \ln S(t) = & r \Delta + \frac{\rho}{\varepsilon} (v(t + \Delta)  - v(t) - \kappa \theta \Delta) + \\
+& \Big( \frac{\kappa \rho}{\varepsilon} - \frac{1}{2} \Big)
+\int_t^{t+\Delta} v(u) du + \sqrt{1-\rho^2} \int_t^{t+\Delta} \sqrt{v(u)}dW(u)
+\end{aligned}
+\end{equation}
+
+Ró
 
 
 \section{Wzór opisujący cenę opcji w modelu Hestona}
@@ -616,9 +678,7 @@ Mukarram}, która jest bardziej efektywną metodą do jej obliczenia:
 \begin{aligned}
   C(S_0, T, K) = S_0 &- \frac{1}{2} e^{-rT}K  \\ 
   &- e^{-rT} K 
-  \left( 
-  \frac{1}{\pi} \int_0^{+\infty} Z d\omega 
-  \ritht)
+  \left( \frac{1}{\pi} \int_0^{+\infty} Z d\omega \right)
     \end{aligned}
 \end{equation}
 gdzie:
@@ -1537,7 +1597,7 @@ Andersen proponuje więc użyć dokładnej reprezentacji wartości procesu $\ln 
 \begin{equation}
 \begin{aligned}
 \label{eq:xt}
-\ln S(t + \Delta) = & \ln S(t)  + \frac{\rho}{\varepsilon} (v(t + \Delta)  - v(t) - \kappa \theta \Delta) + \\
+\ln S(t + \Delta) = & \ln S(t) + r \Delta + \frac{\rho}{\varepsilon} (v(t + \Delta)  - v(t) - \kappa \theta \Delta) + \\
 & \Big( \frac{\kappa \rho}{\varepsilon} - \frac{1}{2} \Big)
 \int_t^{t+\Delta} v(u) du + \sqrt{1-\rho^2} \int_t^{t+\Delta} \sqrt{v(u)}dW(u)
 \end{aligned}
@@ -1558,9 +1618,9 @@ są pewne stałe $\gamma_1$ oraz $\gamma_2$. Na podstawie tego można wyznaczyć
 następujący schemat aproksymacji dla zlogarytmowanego procesu aktywa bazowego:
 \begin{equation}
 \begin{aligned}
-\label{eq:xhatt}
-\ln X(t + \Delta) = & \ln X(t)  + \frac{\rho}{\varepsilon} (V(t + \Delta)  - V(t) - \kappa \theta \Delta) + \\
-& + \Delta \Big( \frac{\kappa \rho}{\varepsilon} - \frac{1}{2} \Big) (\gamma_1 \hat{v}(t) \gamma_2 \hat{v}(t + \Delta)) + \\
+\label{eq:lnxhatt}
+\ln \hat{S}(t + \Delta) = & \ln \hat{S}(t)  + \frac{\rho}{\varepsilon} (V(t + \Delta)  - V(t) - \kappa \theta \Delta) + \\
+& + \Delta \Big( \frac{\kappa \rho}{\varepsilon} - \frac{1}{2} \Big) (\gamma_1 \hat{v}(t) + \gamma_2 \hat{v}(t + \Delta)) + \\
 & + \sqrt{1-\rho^2} \sqrt{\gamma_1 \hat{v}(t) + \gamma_2 \hat{v}(t + \Delta)} \cdot Z,
 \end{aligned}
 \end{equation}
@@ -1569,6 +1629,21 @@ gdzie:
   \item $Z \sim N(0,1)$,
   \item $Z$ jest niezależne.
 \end{itemize}
+
+Na koniec pozostaje przekształcić równanie (\ref{eq:lnxhatt}) tak, aby zamiast 
+zmiennej $\ln X(t + \Delta)$ uzyskać zmienną $\ln X(t)$. Aplikując obustronnie
+funkcję eksponencjalna otrzymujemy:
+\begin{equation}
+\begin{aligned}
+\label{eq:xhatt}
+\hat{S}(t + \Delta) = & \hat{S}(t)  + exp(\frac{\rho}{\varepsilon} 
+(V(t + \Delta)  - V(t) - \kappa \theta \Delta) + \\
+& + \Delta \Big( \frac{\kappa \rho}{\varepsilon} - 
+\frac{1}{2} \Big) (\gamma_1 \hat{v}(t) + \gamma_2 \hat{v}(t + \Delta)) + \\
+& + \sqrt{1-\rho^2} \sqrt{\gamma_1 \hat{v}(t) + \gamma_2 \hat{v}(t + \Delta)} \cdot Z),
+\end{aligned}
+\end{equation}
+
 
 Wartość parametrów $\gamma_1$ oraz $\gamma_2$ można ustalić na wiele 
 sposobów tak, aby $\gamma_1 + \gamma_2 = 1$. 
@@ -1601,6 +1676,18 @@ $(\hat{S}(t+ \Delta), \hat{v}(t+ \Delta))$ na podstawie $(\hat{S}(t), \hat{v}(t)
 Wprowadzając w poprzednim podrozdziale metody dyskretyzacji procesu stochastycznego mamy niezbędne 
 narzędzia do przeprowadzenia symulacji Monte Carlo do wygenerowania ceny opcji w oparciu o model 
 Hestona.
+Wzór na wycenę europejskiej opcji \textit{call} na moment $T$ można przedstawić w następujący sposób:
+
+\begin{equation}
+  \hat{C}(T) = E \left[ (\hat{S}(T) - K)^{+}  \right]
+\end{equation}
+gdzie: $\hat{C}(T)$ oznacza aproksymację ceny opcji na moment $T$.
+
+
+Gdy zdyskontujemy $\hat{C}(T)$ na moment zerowy otrzymamy wzór na moment zerowy:
+\begin{equation}
+  \hat{C}(0) = \frac{E \left[ (\hat{S}(T) - K)^{+} \right]}{e^{rT}} 
+\end{equation}
 
 
 \begin{listing}[H]

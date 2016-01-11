@@ -44,20 +44,20 @@ int main(int argc, char **argv) {
 
     double S_0 = 100.0;    // Initial spot price
     double K = 100.0;      // Strike price
-    double r = 0.0;     // Risk-free rate
+    double r =  0.0319;     // Risk-free rate
     double v_0 = 0.010201; // Initial volatility
     double T = 1.00;       // One year until expiry
 
     double rho = -0.7;     // Correlation of asset and volatility
     double kappa = 6.21;   // Mean-reversion rate
     double theta = 0.019;  // Long run average volatility
-    double xi = 0.61;      // "Vol of vol"
+    double epsilon = 0.61;      // "Vol of vol"
 
     // Create the PayOff, Option and Heston objects
     PayOff *payOffCall = new PayOffCall(K);
     Option *option = new Option(K, r, T, payOffCall);
-    HestonEuler hestonEuler(option, kappa, theta, xi, rho);
-    HestonAndersen hestonAndersen(option, kappa, theta, xi, rho);
+    HestonEuler hestonEuler(option, kappa, theta, epsilon, rho);
+    HestonAndersen hestonAndersen(option, kappa, theta, epsilon, rho);
 
     // Create the spot and vol initial normal and price paths
     std::vector<double> spot_draws(numInts, 0.0);  // Vector of initial spot normal draws
@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
     // Monte Carlo options pricing
     double payoff_sum = 0.0;
     for (unsigned i = 0; i < numSims; i++) {
-        //std::cout << "Calculating path " << i + 1 << " of " << numSims << std::endl;
+//        std::cout << "Calculating path " << i + 1 << " of " << numSims << std::endl;
         generate_normal_correlation_paths(rho, spot_draws, vol_draws);
         hestonEuler.simulateVolPath(vol_draws, vol_prices);
         hestonEuler.simulateSpotPath(spot_draws, vol_prices, spot_prices);
@@ -85,8 +85,7 @@ int main(int argc, char **argv) {
     payoff_sum = 0.0;
 
     for (unsigned i = 0; i < numSims; i++) {
-        generate_normal_correlation_paths(rho, spot_draws, vol_draws);
-        //std::cout << "Calculating path " << i + 1 << " of " << numSims << std::endl;
+//        std::cout << "Calculating path " << i + 1 << " of " << numSims << std::endl;
         hestonAndersen.simulateVolPath(vol_draws, vol_prices);
         hestonAndersen.simulateSpotPath(spot_draws, vol_prices, spot_prices);
         payoff_sum += option->pay_off->operator()(spot_prices[numInts - 1]);
