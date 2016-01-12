@@ -613,13 +613,13 @@ Podstawiając to równanie do (\ref{eq:HestonlnS}) otrzymujemy:
 \begin{equation}
 \begin{aligned}
 \label{eq:HestonLnSDiscretization}
-d \ln S(t) = & r \Delta + \frac{\rho}{\varepsilon} (v(t + \Delta)  - v(t) - \kappa \theta \Delta) + \\
+\ln S(t + \Delta) = & \ln S(t) + r \Delta + \frac{\rho}{\varepsilon} (v(t + \Delta)  - v(t) - \kappa \theta \Delta) + \\
 & \Big( \frac{\kappa \rho}{\varepsilon} - \frac{1}{2} \Big)
 \int_t^{t+\Delta} v(u) du + \sqrt{1-\rho^2} \int_t^{t+\Delta} \sqrt{v(u)}dW(u)
 \end{aligned}
 \end{equation}
 
-Ró
+
 
 
 \section{Wzór opisujący cenę opcji w modelu Hestona}
@@ -1643,6 +1643,19 @@ funkcję eksponencjalna otrzymujemy:
 & + \sqrt{1-\rho^2} \sqrt{\gamma_1 \hat{v}(t) + \gamma_2 \hat{v}(t + \Delta)} \cdot Z),
 \end{aligned}
 \end{equation}
+
+\begin{equation} 
+\hat{S}(t + \Delta) = \hat{S}(t) * exp(r \Delta + K_0 + K_1 \hat{v}(t) +  K_2 \hat{v}(t+\Delta)
+                    + \sqrt{K_3 \hat{v}(t) +  K_4 \hat{v}(t+\Delta)} \cdot Z)
+\end{equation}
+gdzie:
+\begin{enumerate}
+  \item $K_0 = - \frac{\rho \kappa \theta}{\varepsilon} \Delta$
+  \item $K_1 = \gamma_1 \Delta \left(  \frac{\kappa \rho}{\varepsilon}  - \frac{1}{2}  \right) - \frac{\rho}{\varepsilon}$
+  \item $K_2 = \gamma_2 \Delta \left(  \frac{\kappa \rho}{\varepsilon}  - \frac{1}{2}  \right) + \frac{\rho}{\varepsilon}$
+  \item $K_3 = \gamma_1 \Delta (1 - \rho^2)$
+  \item $K_4 = \gamma_2 \Delta (1 - \rho^2)$
+\end{enumerate}
 
 
 Wartość parametrów $\gamma_1$ oraz $\gamma_2$ można ustalić na wiele 

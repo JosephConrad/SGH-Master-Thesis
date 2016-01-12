@@ -6,7 +6,15 @@
 class HestonAndersen : Heston {
 
 protected:
+
+    double A;
+    double a;
+    double b2;
+    double beta;
+    std::vector<std::vector<double> > martingaleCorrectionCoeffs; // pis, a, b2, beta
+
     double PSI_CRITICAL = 1.5;
+
 
 public:
     HestonAndersen(Option *option,
@@ -25,6 +33,8 @@ public:
     double modifiedExponentialInvertedCDF(double random,
                                           double p,
                                           double beta);
+
+    double calcMartingaleCorrection(std::vector<double> &vector, double A, double B);
 };
 
 
