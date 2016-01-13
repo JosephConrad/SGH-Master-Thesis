@@ -1,6 +1,8 @@
 #include <random>
 #include <iostream>
 #include "../header/HestonAndersen.h"
+#include "../../option/option.h"
+#include <src/main/cpp/option/option.h>
 
 HestonAndersen::HestonAndersen(
         Option *option,

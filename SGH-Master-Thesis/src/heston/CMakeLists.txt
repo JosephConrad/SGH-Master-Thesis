@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.2)
 project(heston)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+SET(BASEPATH "${CMAKE_SOURCE_DIR}")
+INCLUDE_DIRECTORIES("${BASEPATH}")
 
 find_package(Boost 1.58.0 COMPONENTS system filesystem REQUIRED)
 
@@ -20,9 +22,9 @@ if(Boost_FOUND)
         set(SOURCE_FILES heston)
         add_executable(${SOURCE_FILES}
                 MonteCarlo/MCHeston.cpp MonteCarlo/MCHeston.h
-                main.cpp option.h option.cpp HestonModel/header/HestonEuler.h HestonModel/src/HestonEuler.cpp payoff.h payoff.cpp statistics.h statistics.cpp correlated_snd.h correlated_snd.cpp
+                main.cpp src/main/cpp/option/option.h src/main/cpp/option/option.cpp src/main/cpp/heston/header/HestonEuler.h src/main/cpp/heston/src/HestonEuler.cpp src/main/cpp/payoff/payoff.h src/main/cpp/payoff/payoff.cpp src/main/cpp/statistics/statistics.h src/main/cpp/statistics/statistics.cpp src/main/cpp/correlated/correlated_snd.h src/main/cpp/correlated/correlated_snd.cpp
                 MonteCarlo/MCHeston.cpp MonteCarlo/MCHeston.h
-                SimpleMonteCarlo/MCBlackScholes.cpp SimpleMonteCarlo/MCBlackScholes.h SimpleMonteCarlo/PolarGenerator.cpp SimpleMonteCarlo/PolarGenerator.h OrderBook/OrderBook.cpp
-                OrderBook/OrderBook.h OrderBook/Order.cpp OrderBook/Order.h OrderBook/Operation.h HestonModel/src/HestonAndersen.cpp HestonModel/header/HestonAndersen.h HestonModel/src/Heston.cpp HestonModel/header/Heston.h)
+                SimpleMonteCarlo/MCBlackScholes.cpp SimpleMonteCarlo/MCBlackScholes.h SimpleMonteCarlo/PolarGenerator.cpp SimpleMonteCarlo/PolarGenerator.h
+                src/main/cpp/heston/src/HestonAndersen.cpp src/main/cpp/heston/header/HestonAndersen.h src/main/cpp/heston/src/Heston.cpp src/main/cpp/heston/header/Heston.h)
         target_link_libraries(heston ${Boost_LIBRARIES})
 endif()

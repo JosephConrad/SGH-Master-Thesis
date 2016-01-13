@@ -3,13 +3,13 @@
 #include <ostream>
 #include <iostream>
 #include "MCHeston.h"
-#include "../statistics.h"
-#include "../correlated_snd.h"
-#include "../payoff.h"
-#include "../option.h"
-#include "../HestonModel/header/HestonEuler.h"
 #include <fstream>
 #include <sstream>
+#include <src/main/cpp/payoff/payoff.h>
+#include <src/main/cpp/option/option.h>
+#include <src/main/cpp/heston/header/HestonEuler.h>
+#include <src/main/cpp/statistics/statistics.h>
+#include <src/main/cpp/correlated/correlated_snd.h>
 
 MCHeston::MCHeston() { };
 

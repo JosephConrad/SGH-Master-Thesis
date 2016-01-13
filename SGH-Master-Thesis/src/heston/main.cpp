@@ -1,10 +1,10 @@
 #include <iostream>
-
-#include "payoff.h"
-#include "option.h"
-#include "correlated_snd.h"
-#include "HestonModel/header/HestonEuler.h"
-#include "HestonModel/header/HestonAndersen.h"
+#include <src/main/cpp/statistics/statistics.h>
+#include <src/main/cpp/correlated/correlated_snd.h>
+#include <src/main/cpp/payoff/payoff.h>
+#include <src/main/cpp/option/option.h>
+#include <src/main/cpp/heston/header/HestonEuler.h>
+#include <src/main/cpp/heston/header/HestonAndersen.h>
 
 void generate_normal_correlation_paths(double rho,
                                        std::vector<double> &spot_normals, std::vector<double> &cor_normals) {
@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
     // First we create the parameter list
     // Note that you could easily modify this code to input the parameters
     // either from the command line or via a file
-    unsigned numSims = 100000;   // Number of simulated asset paths
+    unsigned numSims = 10000;   // Number of simulated asset paths
     unsigned numInts = 1000;  // Number of intervals for the asset path to be sampled
 
     double S_0 = 100.0;    // Initial spot price

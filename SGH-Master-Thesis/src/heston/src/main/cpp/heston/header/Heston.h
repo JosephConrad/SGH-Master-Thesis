@@ -4,7 +4,7 @@
 #include <cmath>
 #include <vector>
 #include <random>
-#include "../../option.h"
+#include <src/main/cpp/option/option.h>
 
 class Heston {
 protected:

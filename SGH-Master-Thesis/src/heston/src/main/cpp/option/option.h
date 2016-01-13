@@ -5,7 +5,8 @@
 #ifndef HESTON_OPTION_H
 #define HESTON_OPTION_H
 
-#include "payoff.h"
+
+#include "src/main/cpp/payoff/payoff.h"
 
 class Option {
 public:
