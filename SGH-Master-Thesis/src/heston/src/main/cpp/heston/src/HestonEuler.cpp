@@ -2,7 +2,6 @@
 #define __HESTON_MC_CPP
 
 #include "../header/HestonEuler.h"
-#include "../../option/option.h"
 
 HestonEuler::HestonEuler(
         Option *option,

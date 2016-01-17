@@ -1,5 +1,6 @@
 #include <math.h>
-#include "PolarGenerator.h"
+
+#include <src/main/cpp/random/PolarGenerator.h>
 
 double PolarGenerator::genNorm() {
     double square;

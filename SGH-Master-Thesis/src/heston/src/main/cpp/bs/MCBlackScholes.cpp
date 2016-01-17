@@ -1,6 +1,8 @@
 #include <math.h>
-#include "MCBlackScholes.h"
-#include "PolarGenerator.h"
+
+#include <src/main/cpp/random/PolarGenerator.h>
+#include <src/main/cpp/bs/MCBlackScholes.h>
+
 
 MCBlackScholes::MCBlackScholes(double Expiry, double Strike,
                                double Spot, double Vol, double r,

@@ -1503,8 +1503,8 @@ stosując następujące przekształcenie:
 \begin{equation}
 \label{eq:psi}
 F^{-1}(u) = F^{-1}(u;p,\beta) = \begin{cases}
-               0, \qquad \qquad \qquad  0 \le u \leq p,\\
-               \beta^{-1} \ln (\frac{1-p}{1-U}), \qquad  p \le u \leq 1, \\
+               0, & 0 \le u \leq p,\\
+               \beta^{-1} \ln (\frac{1-p}{1-u}), & p < u < 1, \\
             \end{cases} 
 \end{equation} 
 gdzie $u \in U_V$ jest realizacją zmiennej losowej z rozkładu jednostajnego, $F^{-1}$ oznacza
@@ -1643,10 +1643,16 @@ funkcję eksponencjalna otrzymujemy:
 & + \sqrt{1-\rho^2} \sqrt{\gamma_1 \hat{v}(t) + \gamma_2 \hat{v}(t + \Delta)} \cdot Z),
 \end{aligned}
 \end{equation}
-
-\begin{equation} 
-\hat{S}(t + \Delta) = \hat{S}(t) * exp(r \Delta + K_0 + K_1 \hat{v}(t) +  K_2 \hat{v}(t+\Delta)
+Równanie to można przedstawić w bardziej usystematyzowany sposób w następującej postaci:
+\begin{equation}
+\begin{aligned}
+\label{eq:HestonInterest} 
+\hat{S}(t + \Delta) &= \hat{S}(t) * exp(r \Delta +\\ 
+                    &+ K_0 + K_1 \hat{v}(t) 
+                    + K_2 \hat{v}(t+\Delta)
                     + \sqrt{K_3 \hat{v}(t) +  K_4 \hat{v}(t+\Delta)} \cdot Z)
+
+\end{aligned}
 \end{equation}
 gdzie:
 \begin{enumerate}
@@ -1682,6 +1688,70 @@ $(\hat{S}(t+ \Delta), \hat{v}(t+ \Delta))$ na podstawie $(\hat{S}(t), \hat{v}(t)
 \end{algorithmic}
 \label{alg:andersenAlgorithmAsset}
 \end{algorithm}
+
+
+ 
+\subsection{Dyskretyzacja aktywa bazowego z poprawką martyngałową}
+
+Przedstawiony na równaniu (\ref{eq:heston1}) proces aktywa bazowego charakteryzuje się dryftem dla
+niezerowej wartości stopy procentowej $r$.
+Przy założeniu jednak, że stopa procentowa wynosi $r = 0$, proces aktywa 
+bazowego opisany równaniem (\ref{eq:heston1}) miałby
+następującą formę:
+\begin{equation}
+\label{eq:AssetNoInterest}
+dS(t)  = \sqrt{v(t)} S(t) dW^S(t)
+\end{equation}
+Dyskretyzacja tego procesu, zgodnie z modelem Hestona wyglądałaby następująco:
+\begin{equation}
+\begin{aligned}
+\label{eq:HestonNoInterest} 
+\hat{S}(t + \Delta) &= \hat{S}(t) * exp(\\ 
+                    &+ K_0 + K_1 \hat{v}(t) 
+                    + K_2 \hat{v}(t+\Delta)
+                    + \sqrt{K_3 \hat{v}(t) +  K_4 \hat{v}(t+\Delta)} \cdot Z)
+
+\end{aligned}
+\end{equation}
+Gdzie parametry $K_i$, dla $i \in [0..4]$ są takie same jak dla równania (\ref{eq:HestonInterest}).
+Równanie (\ref{eq:AssetNoInterest}) można sprowadzić do następującej postaci:
+\begin{equation}
+dS(t)/S(t) = \sqrt{v(t)}  dW^S(t)
+\end{equation}
+Powyższe równanie przedstawia proces, który jest martyngałem, tzn. 
+\begin{equation}
+E(S(t + \Delta)| S(t)) = S(t) < \infty
+\end{equation}
+Wartość oczekiwana aktywa bazowego, zgodna z równaniem (\ref{eq:HestonNoInterest})
+nie jest jednak martyngałem:
+\begin{equation}
+  E(\hat{S}(t + \Delta)| \hat{S}(t)) \neq \hat{S}(t) < \infty
+\end{equation}
+Należy więc odpowiednio zmodyfikować schemat z równanie (\ref{eq:HestonNoInterest}). W tym celu
+Andersen proponuje, aby $K_0$ zastąpić nowym wyrażeniem $K_0^*$ zdefiniowanym w następujący 
+sposób:
+\begin{equation}
+\label{eq:psi}
+K_0^* =
+            \begin{cases}
+               - \frac{Ab^2a}{1-2Aa} + \frac{1}{2} \ln (1 - 2Aa) - (K_1 + \frac{1}{2} \Delta \gamma_1), &  \Psi \leq \Psi_c,\\
+               - \ln (\frac{\beta (1-p)}{\beta - A} - (K_1 + \frac{1}{2} \Delta \gamma_1)), & \Psi > \Psi_c,\\
+            \end{cases} 
+\end{equation} 
+Podstawiając powyższe wyrażenie do wzoru (\ref{eq:HestonNoInterest}) oraz ponownie uwzględniając
+niezerową wartość stopy procentowej otrzymujemy:
+\begin{equation}
+\begin{aligned}
+\label{eq:HestonInterestMartingale} 
+\hat{S}(t + \Delta) &= \hat{S}(t) * exp(r \Delta\\ 
+                    &+ K_0^* + K_1 \hat{v}(t) 
+                    + K_2 \hat{v}(t+\Delta)
+                    + \sqrt{K_3 \hat{v}(t) +  K_4 \hat{v}(t+\Delta)} \cdot Z)
+
+\end{aligned}
+\end{equation}
+Powyższe równanie powoduje zdyskredytowane równanie dla aktywa bazowego jest martyngałem, a samą
+wartość $K_0^*$ nazywamy \textbf{poprawką martyngałową} (\textit{ang. martingale correction}).
 
 
 \section{Symulacja cen opcji w modelu Hestona}
@@ -1932,50 +2002,82 @@ model ten jest o wiele bardziej czasochłonny obliczeniowo, niż chociażby mode
 
 \chapter{Lista kodów źródłowych}
 
+\section{Schemat Andersena}
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/HestonModel/header/HestonEuler.h}
+{../src/heston/src/main/cpp/heston/header/HestonEuler.h}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
 \label{lst:MCHeston}
 \end{listing} 
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/HestonModel/header/HestonAndersen.h}
+{../src/heston/src/main/cpp/heston/header/HestonAndersen.h}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
 \label{lst:MCHeston}
 \end{listing} 
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/HestonModel/header/Heston.h}
+{../src/heston/src/main/cpp/heston/header/Heston.h}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
 \label{lst:MCHeston}
 \end{listing} 
 
-
-
-\begin{listing}[H]
+ 
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/HestonModel/src/HestonAndersen.cpp}
-\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
-\label{lst:MCHeston}
-\end{listing} 
-
-\begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/HestonModel/src/Heston.cpp}
+{../src/heston/src/main/cpp/heston/src/HestonAndersen.cpp}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
 \label{lst:MCHeston}
 \end{listing} 
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/HestonModel/src/HestonEuler.cpp}
+{../src/heston/src/main/cpp/heston/src/Heston.cpp}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
 \label{lst:MCHeston}
 \end{listing} 
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../src/heston/src/main/cpp/heston/src/HestonEuler.cpp}
+\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+\label{lst:MCHeston}
+\end{listing} 
+ 
+
+\section{Generator liczb z rozkładu normalnego}
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../src/heston/src/main/cpp/random/PolarGenerator.h}
+\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+\label{lst:MCHeston}
+\end{listing} 
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../src/heston/src/main/cpp/random/PolarGenerator.cpp}
+\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+\label{lst:MCHeston}
+\end{listing} 
+
+
+\section{Model Blacka-Scholesa}
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../src/heston/src/main/cpp/bs/MCBlackScholes.cpp}
+\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+\label{lst:MCHeston}
+\end{listing} 
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../src/heston/src/main/cpp/bs/MCBlackScholes.h}
+\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+\label{lst:MCHeston}
+\end{listing} 
+
  
 
 

@@ -5,6 +5,7 @@
 #include <src/main/cpp/option/option.h>
 #include <src/main/cpp/heston/header/HestonEuler.h>
 #include <src/main/cpp/heston/header/HestonAndersen.h>
+#include <src/main/cpp/mc/MonteCarloSimulation.h>
 
 void generate_normal_correlation_paths(double rho,
                                        std::vector<double> &spot_normals, std::vector<double> &cor_normals) {
@@ -56,6 +57,7 @@ int main(int argc, char **argv) {
     // Create the PayOff, Option and Heston objects
     PayOff *payOffCall = new PayOffCall(K);
     Option *option = new Option(K, r, T, payOffCall);
+     
     HestonEuler hestonEuler(option, kappa, theta, epsilon, rho);
     HestonAndersen hestonAndersen(option, kappa, theta, epsilon, rho);
 

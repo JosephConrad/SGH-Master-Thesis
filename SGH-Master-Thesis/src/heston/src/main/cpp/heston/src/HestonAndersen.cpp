@@ -1,8 +1,6 @@
 #include <random>
 #include <iostream>
 #include "../header/HestonAndersen.h"
-#include "../../option/option.h"
-#include <src/main/cpp/option/option.h>
 
 HestonAndersen::HestonAndersen(
         Option *option,
@@ -12,8 +10,10 @@ HestonAndersen::HestonAndersen(
         double rho)
         : Heston(option, kappa, theta, epsilon, rho) { }
 
-void HestonAndersen::simulateVolPath(const std::vector<double> &volDraws,
-                                     std::vector<double> &volPath) {
+void HestonAndersen::
+simulateVolPath(const std::vector<double> &volDraws,
+                std::vector<double> &volPath) {
+
     auto size = volPath.size();
     double dt = option->T / static_cast<double>(size);
 
@@ -48,9 +48,11 @@ void HestonAndersen::simulateVolPath(const std::vector<double> &volDraws,
     }
 }
 
-void HestonAndersen::simulateSpotPath(const std::vector<double> spotDraws,
-                                      const std::vector<double> &volPath,
-                                      std::vector<double> &spotPath) {
+void HestonAndersen::
+simulateSpotPath(const std::vector<double> spotDraws,
+                 const std::vector<double> &volPath,
+                 std::vector<double> &spotPath) {
+
     auto size = spotDraws.size();
     double dt = option->T / static_cast<double>(size);
 
@@ -67,7 +69,6 @@ void HestonAndersen::simulateSpotPath(const std::vector<double> spotDraws,
 
     A = k2 + 0.5 * k4;
     for (int i = 1; i < size; i++) {
-
         double normalRandom = normalDist(generator);
 
         B = (k1 + k3 / 2.0) * volPath[i - 1];
@@ -77,14 +78,17 @@ void HestonAndersen::simulateSpotPath(const std::vector<double> spotDraws,
     }
 }
 
-double HestonAndersen::modifiedExponentialInvertedCDF(double uniformRandom,
-                                                      double p,
-                                                      double beta) {
-    return uniformRandom > p ? (pow(beta, -1) * log((1 - p) / (1 - uniformRandom))) : 0;
+double HestonAndersen::
+modifiedExponentialInvertedCDF(double uniformRandom,
+                               double p,
+                               double beta) {
+    return uniformRandom > p ?
+           (pow(beta, -1) * log((1 - p) / (1 - uniformRandom))) : 0;
 }
 
-double HestonAndersen::calcMartingaleCorrection(std::vector<double> &coeffs,
-                                                double A, double B) {
+double HestonAndersen::
+calcMartingaleCorrection(std::vector<double> &coeffs,
+                         double A, double B) {
     double psi, a, b2, beta, p;
     psi = coeffs[0];
     a = coeffs[1];
@@ -94,10 +98,10 @@ double HestonAndersen::calcMartingaleCorrection(std::vector<double> &coeffs,
     double x;
 
     if (psi <= PSI_CRITICAL) {
-        x = -((A * b2 * a) / (1 - (2 * A * a))) + 0.5 * log(1 - (2 * A * a));
+        x = -((A * b2 * a) / (1 - (2 * A * a)))
+            + 0.5 * log(1 - (2 * A * a));
     } else {
         x = -log(p + (beta * (1 - p)) / (beta - A));
     }
-    double ret = x - B;
-    return ret;
+    return x - B;
 }

@@ -1,10 +1,5 @@
-//
-// Created by Konrad Lisiecki on 05/10/15.
-//
-
 #ifndef HESTON_BOXMULLER_H
 #define HESTON_BOXMULLER_H
-
 
 #include <stdlib.h>
 #include <time.h>
