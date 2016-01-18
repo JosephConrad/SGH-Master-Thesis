@@ -29,11 +29,13 @@ public:
     virtual ~Heston();
 
     virtual void simulateVolPath(const std::vector<double> &volDraws,
-                                 std::vector<double> &volPath) = 0;
+                                 std::vector<double> &volPath);
 
     virtual void simulateSpotPath(const std::vector<double> spotDraws,
                                   const std::vector<double> &volPath,
-                                  std::vector<double> &spotPath) = 0;
+                                  std::vector<double> &spotPath);
+
+    double getRho() const;
 };
 
 #endif

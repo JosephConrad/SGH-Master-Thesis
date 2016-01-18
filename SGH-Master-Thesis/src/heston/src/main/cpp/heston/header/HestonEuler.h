@@ -5,7 +5,7 @@
 #include <vector>
 #include "Heston.h"
 
-class HestonEuler : Heston {
+class HestonEuler : public Heston {
 
 public:
     HestonEuler(Option *option,

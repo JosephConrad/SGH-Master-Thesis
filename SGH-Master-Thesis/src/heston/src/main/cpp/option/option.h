@@ -14,11 +14,16 @@ public:
     double K;
     double r;
     double T;
+    double S_0;
+    double v_0;
 
     Option(double _K, double _r,
-           double _T, PayOff *_pay_off);
+           double _T, double _S_0,
+           double _v_0, PayOff *_pay_off);
 
     virtual ~Option();
+
+    double getDiscountFactor();
 };
 
 

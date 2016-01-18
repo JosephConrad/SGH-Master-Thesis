@@ -6,8 +6,15 @@
 #define HESTON_MONTECARLOSIMULATION_H
 
 
+#include <src/main/cpp/heston/header/HestonEuler.h>
+
 class MonteCarloSimulation {
 
+public:
+    void simulate(Heston* heston, Option* option);
+
+    MonteCarloSimulation();
+    virtual ~MonteCarloSimulation();
 };
 
 

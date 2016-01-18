@@ -3,7 +3,7 @@
 
 #include "Heston.h"
 
-class HestonAndersen : Heston {
+class HestonAndersen : public Heston {
 
 protected:
 
@@ -14,6 +14,9 @@ protected:
     std::vector<std::vector<double> > martingaleCorrectionCoeffs; // pis, a, b2, beta
 
     double PSI_CRITICAL = 1.5;
+
+    double gamma1 = 0.5;
+    double gamma2 = 0.5;
 
 
 public:
@@ -34,7 +37,7 @@ public:
                                           double p,
                                           double beta);
 
-    double calcMartingaleCorrection(std::vector<double> &vector, double A, double B);
+    double calcMartingaleCorrection(std::vector<double> &vector, double a, double d);
 };
 
 

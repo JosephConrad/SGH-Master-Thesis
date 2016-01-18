@@ -56,10 +56,7 @@ simulateSpotPath(const std::vector<double> spotDraws,
     auto size = spotDraws.size();
     double dt = option->T / static_cast<double>(size);
 
-    double k0, k1, k2, k3, k4, gamma1, gamma2, A, B;
-
-    gamma1 = 0.5;
-    gamma2 = 0.5;
+    double k0, k1, k2, k3, k4;
 
     k0 = -dt * (rho * kappa * theta) / (epsilon);
     k1 = gamma1 * dt * (((kappa * rho) / epsilon) - 0.5) - (rho / epsilon);
@@ -67,13 +64,10 @@ simulateSpotPath(const std::vector<double> spotDraws,
     k3 = gamma1 * dt * (1 - pow(rho, 2));
     k4 = gamma2 * dt * (1 - pow(rho, 2));
 
-    A = k2 + 0.5 * k4;
     for (int i = 1; i < size; i++) {
         double normalRandom = normalDist(generator);
 
-        B = (k1 + k3 / 2.0) * volPath[i - 1];
-        double k0star = calcMartingaleCorrection(martingaleCorrectionCoeffs[i - 1], A, B);
-        spotPath[i] = spotPath[i - 1] * exp(option->r * dt + k0star + k1 * volPath[i - 1] + k2 * volPath[i] +
+        spotPath[i] = spotPath[i - 1] * exp(option->r * dt + k0 + k1 * volPath[i - 1] + k2 * volPath[i] +
                                             (sqrt(k3 * volPath[i - 1] + k4 * volPath[i]) * normalRandom));
     }
 }
@@ -84,24 +78,4 @@ modifiedExponentialInvertedCDF(double uniformRandom,
                                double beta) {
     return uniformRandom > p ?
            (pow(beta, -1) * log((1 - p) / (1 - uniformRandom))) : 0;
-}
-
-double HestonAndersen::
-calcMartingaleCorrection(std::vector<double> &coeffs,
-                         double A, double B) {
-    double psi, a, b2, beta, p;
-    psi = coeffs[0];
-    a = coeffs[1];
-    b2 = coeffs[2];
-    beta = coeffs[3];
-    p = coeffs[4];
-    double x;
-
-    if (psi <= PSI_CRITICAL) {
-        x = -((A * b2 * a) / (1 - (2 * A * a)))
-            + 0.5 * log(1 - (2 * A * a));
-    } else {
-        x = -log(p + (beta * (1 - p)) / (beta - A));
-    }
-    return x - B;
 }

@@ -15,3 +15,16 @@ Heston::Heston(
 { }
 
 Heston::~Heston() { }
+
+double Heston::getRho() const {
+    return rho;
+}
+
+void Heston::simulateVolPath(const std::vector<double> &volDraws, std::vector<double> &volPath) {
+
+}
+
+void Heston::simulateSpotPath(const std::vector<double> spotDraws, const std::vector<double> &volPath,
+                              std::vector<double> &spotPath) {
+
+}
