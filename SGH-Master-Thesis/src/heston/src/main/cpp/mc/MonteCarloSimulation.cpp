@@ -7,6 +7,16 @@
 #include <iostream>
 #include "MonteCarloSimulation.h"
 
+
+
+MonteCarloSimulation::MonteCarloSimulation(
+        unsigned int simulationTrials,
+        unsigned int timeSteps)
+        : simulationTrials(simulationTrials),
+          timeSteps(timeSteps) {
+    srand(0);
+}
+
 void generate_normal_correlation_paths(double rho,
                                        std::vector<double> &spot_normals, std::vector<double> &cor_normals) {
     unsigned vals = spot_normals.size();
@@ -19,6 +29,7 @@ void generate_normal_correlation_paths(double rho,
     for (int i = 0; i < snd_uniform_draws.size(); i++) {
         snd_uniform_draws[i] = rand() / static_cast<double>(RAND_MAX);
     }
+    //srand(time(NULL));
 
     // Create standard normal random draws
     snd.random_draws(snd_uniform_draws, spot_normals);
@@ -36,33 +47,32 @@ void generate_normal_correlation_paths(double rho,
     csnd.random_draws(csnd_uniform_draws, cor_normals);
 }
 
-void MonteCarloSimulation::simulate(HestonMC * heston, Option* option) {
-    unsigned numSims = 100000;
-    unsigned numInts = 1000;
 
-    std::vector<double> spot_draws(numInts, 0.0);
-    std::vector<double> vol_draws(numInts, 0.0);
-    std::vector<double> spot_prices(numInts, option->S_0);
-    std::vector<double> vol_prices(numInts, option->v_0);
+void MonteCarloSimulation::simulate(HestonMC *heston, Option *option) {
+
+    std::vector<double> spot_draws(timeSteps, 0.0);
+    std::vector<double> vol_draws(timeSteps, 0.0);
+    std::vector<double> spot_prices(timeSteps, option->S_0);
+    std::vector<double> vol_prices(timeSteps, option->v_0);
+
 
     // Monte Carlo options pricing
     double payoff_sum = 0.0;
-    for (unsigned i = 0; i < numSims; i++) {
+    for (unsigned i = 0; i < simulationTrials; i++) {
         generate_normal_correlation_paths(heston->getRho(), spot_draws, vol_draws);
         heston->simulateVolPath(vol_draws, vol_prices);
         heston->simulateSpotPath(spot_draws, vol_prices, spot_prices);
-        payoff_sum += option->pay_off->operator()(spot_prices[numInts - 1]);
+        payoff_sum += option->pay_off->operator()(spot_prices[timeSteps - 1]);
     }
 
     double discount = option->getDiscountFactor();
-    double option_price = (payoff_sum / static_cast<double>(numSims)) * discount;
-    std::cout << "Option Price: " << option_price << std::endl;
+    double option_price = (payoff_sum / static_cast<double>(simulationTrials)) * discount;
+    std::cout << heston->getName() << "\n\t Option Price:\t" << option_price << std::endl;
 
 
 }
 
 MonteCarloSimulation::MonteCarloSimulation() {
-
 }
 
 MonteCarloSimulation::~MonteCarloSimulation() {

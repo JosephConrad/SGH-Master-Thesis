@@ -9,11 +9,19 @@
 #include <src/main/cpp/heston/header/HestonEuler.h>
 
 class MonteCarloSimulation {
+private:
+
+    unsigned int simulationTrials;
+    unsigned int timeSteps;
 
 public:
-    void simulate(HestonMC * heston, Option* option);
+
+    MonteCarloSimulation(unsigned int simulationTrials, unsigned int timeSteps);
+
+    void simulate(HestonMC *heston, Option *option);
 
     MonteCarloSimulation();
+
     virtual ~MonteCarloSimulation();
 };
 

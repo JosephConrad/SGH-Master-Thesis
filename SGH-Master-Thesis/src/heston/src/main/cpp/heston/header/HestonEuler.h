@@ -20,6 +20,8 @@ public:
     void simulateSpotPath(const std::vector<double> spotDraws,
                           const std::vector<double> &volPath,
                           std::vector<double> &spotPath);
+
+    std::string getName();
 };
 
 

@@ -89,3 +89,7 @@ dcomp HestonExact::calc_x(double phi, int j) {
 //    xj = bj - rho.*sig.*phi.*i;
     return b[j] - rho * epsilon * phi * DCOMP;
 }
+
+std::string HestonExact::getName() {
+    return "HESTON EXACT";
+}

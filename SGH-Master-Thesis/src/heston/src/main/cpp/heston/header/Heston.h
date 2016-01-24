@@ -7,6 +7,7 @@
 
 
 #include <src/main/cpp/option/option.h>
+#include <string>
 
 class Heston {
 protected:
@@ -24,6 +25,9 @@ public:
            double rho);
 
     virtual ~Heston();
+
+    virtual std::string getName() = 0;
+
 
     double getRho() const;
 };

@@ -26,4 +26,3 @@ Heston::~Heston() { }
 double Heston::getRho() const {
     return rho;
 }
-

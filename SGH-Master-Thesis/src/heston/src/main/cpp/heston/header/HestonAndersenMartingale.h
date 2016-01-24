@@ -23,7 +23,7 @@ public:
             double epsilon,
             double rho);
 
-    std::vector<double> calcMartingaleCorrection(std::vector<std::vector<double>> martingaleCorrectionCoeffs, double A);
+    std::string getName();
 };
 
 #endif //HESTON_ANDERSENNORMAL_H

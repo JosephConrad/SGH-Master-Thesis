@@ -29,6 +29,7 @@ public:
                                   const std::vector<double> &volPath,
                                   std::vector<double> &spotPath);
 
+    virtual std::string getName();
 };
 
 #endif

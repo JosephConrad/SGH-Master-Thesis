@@ -19,7 +19,7 @@ void HestonEuler::simulateVolPath(const std::vector<double> &volDraws,
 
     for (int i = 1; i < size; i++) {
         double v_max = std::max(volPath[i - 1], 0.0);
-        volPath[i] = volPath[i - 1] + kappa * dt * (theta - v_max) +
+        volPath[i] = volPath[i - 1] + kappa * (theta - v_max) * dt +
                      epsilon * sqrt(v_max * dt) * volDraws[i - 1];
     }
 }
@@ -36,6 +36,10 @@ void HestonEuler::simulateSpotPath(const std::vector<double> spotDraws,
         spotPath[i] = spotPath[i - 1] + option->r * dt * spotPath[i - 1] +
                       sqrt(v_max * dt) * spotPath[i - 1] * spotDraws[i - 1];
     }
+}
+
+std::string HestonEuler::getName() {
+    return "HESTON EULER";
 }
 
 #endif

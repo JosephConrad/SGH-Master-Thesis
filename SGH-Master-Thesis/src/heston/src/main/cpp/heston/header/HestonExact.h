@@ -56,6 +56,8 @@ public:
     double integralFun(double xt, double vt, double t, double phi, double lnK, double j);
 
     double optionPrice(double xt, double vt, double t);
+
+    std::string getName();
 };
 
 

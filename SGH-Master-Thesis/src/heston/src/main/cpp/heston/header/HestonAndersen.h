@@ -34,6 +34,8 @@ public:
                                           double beta);
 
     double calcMartingaleCorrection(std::vector<double> &vector, double a, double d);
+
+    std::string getName();
 };
 
 

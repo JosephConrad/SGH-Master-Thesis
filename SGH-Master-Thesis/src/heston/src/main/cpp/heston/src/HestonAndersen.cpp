@@ -65,10 +65,8 @@ simulateSpotPath(const std::vector<double> spotDraws,
     k4 = GAMMA2 * dt * (1 - pow(rho, 2));
 
     for (int i = 1; i < size; i++) {
-        double normalRandom = normalDist(generator);
-
         spotPath[i] = spotPath[i - 1] * exp(option->r * dt + k0 + k1 * volPath[i - 1] + k2 * volPath[i] +
-                                            (sqrt(k3 * volPath[i - 1] + k4 * volPath[i]) * normalRandom));
+                                            (sqrt(k3 * volPath[i - 1] + k4 * volPath[i]) * spotDraws[i-1]));
     }
 }
 
@@ -78,4 +76,8 @@ modifiedExponentialInvertedCDF(double uniformRandom,
                                double beta) {
     return uniformRandom > p ?
            (pow(beta, -1) * log((1 - p) / (1 - uniformRandom))) : 0;
+}
+
+std::string HestonAndersen::getName() {
+    return "HESTON ANDERSEN";
 }
