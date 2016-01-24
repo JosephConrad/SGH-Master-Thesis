@@ -15,8 +15,13 @@ Option::Option(double _K, double _r,
 
 Option::~Option() { }
 
-double Option::getDiscountFactor(){
+double Option::getDiscountFactor() {
     return exp(-r * T);
 }
+
+double Option::getDiscountFactor(double t) {
+    return exp(-r * (T - t));
+}
+
 
 #endif

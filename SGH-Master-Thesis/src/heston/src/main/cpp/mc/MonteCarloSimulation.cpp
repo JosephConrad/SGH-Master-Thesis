@@ -36,8 +36,8 @@ void generate_normal_correlation_paths(double rho,
     csnd.random_draws(csnd_uniform_draws, cor_normals);
 }
 
-void MonteCarloSimulation::simulate(Heston* heston, Option* option) {
-    unsigned numSims = 5000;
+void MonteCarloSimulation::simulate(HestonMC * heston, Option* option) {
+    unsigned numSims = 100000;
     unsigned numInts = 1000;
 
     std::vector<double> spot_draws(numInts, 0.0);

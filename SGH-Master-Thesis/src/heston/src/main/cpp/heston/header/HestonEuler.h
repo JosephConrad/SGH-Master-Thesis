@@ -3,9 +3,9 @@
 
 #include <cmath>
 #include <vector>
-#include "Heston.h"
+#include "HestonMC.h"
 
-class HestonEuler : public Heston {
+class HestonEuler : public HestonMC {
 
 public:
     HestonEuler(Option *option,

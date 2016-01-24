@@ -11,7 +11,7 @@
 class MonteCarloSimulation {
 
 public:
-    void simulate(Heston* heston, Option* option);
+    void simulate(HestonMC * heston, Option* option);
 
     MonteCarloSimulation();
     virtual ~MonteCarloSimulation();

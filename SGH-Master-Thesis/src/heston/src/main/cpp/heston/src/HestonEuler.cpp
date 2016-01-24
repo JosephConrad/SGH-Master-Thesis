@@ -9,7 +9,7 @@ HestonEuler::HestonEuler(
         double theta,
         double epsilon,
         double rho)
-        : Heston(option, kappa, theta, epsilon, rho) { }
+        : HestonMC(option, kappa, theta, epsilon, rho) { }
 
 void HestonEuler::simulateVolPath(const std::vector<double> &volDraws,
                                   std::vector<double> &volPath) {

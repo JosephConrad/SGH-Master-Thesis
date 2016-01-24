@@ -32,48 +32,56 @@ T=optionInputChart(:,3)/365;
 strike=optionInputChart(:,1);
 impvol=optionInputChart(:,2);
 
+strike(1)
+T(1)
+impvol(1)
+x = [0.0395,   40.5962,    0.0098,    0.0022,    0.4031];
+x = lsqnonlin(@costf2,initPoint,lowerBound,upperBound);
+y = HestonCall(F0,strike(1),r,T(1),x(1),x(2),x(3),x(4),x(5),0);
+z = blsprice(F0,strike(1),r,T(1),impvol(1));
 %Optimization
+ y
+ z
 % x=fmincon(@costf2,x0,[],[],[],[],lb,ub,@Feller); 
-x = lsqnonlin(@costfun,initPoint,lowerBound,upperBound);
-
-for k=1:length(T);
-%Initial asset price
-shes(1)=F0;
-%Number of Time Steps,time step size
-N=round(T(k)/(1/360));dt=T(k)/N;
-
-%Heston Parameters
-vhes(1)=x(1);  kappa=x(2); theta=x(3); vsigma=x(4);rho=x(5); simPath=0;
-
-%Simulation of Heston Model
-for i = 1:M  
-for j=1:N
-%heston model
-r1 = randn;
-r2 = rho*r1+sqrt(1-rho^2)*randn;   
-shes(j+1)=shes(j)*exp((-0.5*vhes(j))*dt+sqrt(vhes(j))*sqrt(dt)*r1);
-vhes(j+1)=vhes(j)*exp(((kappa*(theta - vhes(j))-0.5*vsigma^2)*dt)/vhes(j) + vsigma*(1/sqrt(vhes(j)))*sqrt(dt)*r2);
-end
-simPath = simPath + exp(-r*T(k)) * max(shes(j+1) - strike(k), 0);
-end
-simhes(k)=simPath/M;
-simimpvol(k)=blkimpv(shes(1), strike(k), r, T(k), simhes(k));
-modhes(k)=HestonCall(shes(1),strike(k),r,T(k),vhes(1),kappa,theta,vsigma,rho,0);
-hesimpvol(k)=blkimpv(shes(1), strike(k), r, T(k), modhes(k));
-end
-
-for i=1:length(T)
-bsprice(i)=blsprice(F0,strike(i),r,T(i),impvol(i));
-end
+% 
+% for k=1:length(T);
+% %Initial asset price
+% shes(1)=F0;
+% %Number of Time Steps,time step size
+% N=round(T(k)/(1/360));dt=T(k)/N;
+% 
+% %Heston Parameters
+% vhes(1)=x(1);  kappa=x(2); theta=x(3); vsigma=x(4);rho=x(5); simPath=0;
+% % 
+% %Simulation of Heston Model
+% for i = 1:M  
+% for j=1:N
+% %heston model
+% r1 = randn;
+% r2 = rho*r1+sqrt(1-rho^2)*randn;   
+% shes(j+1)=shes(j)*exp((-0.5*vhes(j))*dt+sqrt(vhes(j))*sqrt(dt)*r1);
+% vhes(j+1)=vhes(j)*exp(((kappa*(theta - vhes(j))-0.5*vsigma^2)*dt)/vhes(j) + vsigma*(1/sqrt(vhes(j)))*sqrt(dt)*r2);
+% end
+% simPath = simPath + exp(-r*T(k)) * max(shes(j+1) - strike(k), 0);
+% end
+% simhes(k)=simPath/M;
+% simimpvol(k)=blkimpv(shes(1), strike(k), r, T(k), simhes(k));
+% modhes(k)=HestonCall(shes(1),strike(k),r,T(k),vhes(1),kappa,theta,vsigma,rho,0);
+% hesimpvol(k)=blkimpv(shes(1), strike(k), r, T(k), modhes(k));
+% end
+% 
+% for i=1:length(T)
+% bsprice(i)=blsprice(F0,strike(i),r,T(i),impvol(i));
+% end
 
 %Output optimized Parameters
 x
 
-%Compare blackscholes option price, analytical heston price, and simulated
-%heston prices for a given maturity and strike
-pricedata=[T,strike,bsprice',modhes',simhes']
-
-%Compare blackscholes option IV, analytical heston IV, and simulated
-%heston IV for a given maturity and strike
-
-voldata=[T,strike,impvol,hesimpvol',simimpvol']
+% %Compare blackscholes option price, analytical heston price, and simulated
+% %heston prices for a given maturity and strike
+% pricedata=[T,strike,bsprice',modhes',simhes']
+% 
+% %Compare blackscholes option IV, analytical heston IV, and simulated
+% %heston IV for a given maturity and strike
+% 
+% voldata=[T,strike,impvol,hesimpvol',simimpvol']

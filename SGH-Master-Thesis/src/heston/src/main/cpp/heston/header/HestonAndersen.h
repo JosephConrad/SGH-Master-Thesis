@@ -1,22 +1,18 @@
 #ifndef HESTON_HESTONANDERSEN_H
 #define HESTON_HESTONANDERSEN_H
 
-#include "Heston.h"
+#include "HestonMC.h"
 
-class HestonAndersen : public Heston {
+class HestonAndersen : public HestonMC {
 
 protected:
-
-    double A;
     double a;
-    double b2;
-    double beta;
     std::vector<std::vector<double> > martingaleCorrectionCoeffs; // pis, a, b2, beta
 
     double PSI_CRITICAL = 1.5;
 
-    double gamma1 = 0.5;
-    double gamma2 = 0.5;
+    double GAMMA1 = 0.5;
+    double GAMMA2 = 0.5;
 
 
 public:

@@ -1,9 +1,11 @@
+//
+// Created by Konrad Lisiecki on 18/01/16.
+//
+
 #ifndef HESTON_HESTON_H
 #define HESTON_HESTON_H
 
-#include <cmath>
-#include <vector>
-#include <random>
+
 #include <src/main/cpp/option/option.h>
 
 class Heston {
@@ -13,11 +15,6 @@ protected:
     double theta;
     double epsilon;
     double rho;
-
-    std::default_random_engine generator;
-    std::normal_distribution<double> normalDist;
-    std::uniform_real_distribution<double> uniformDist;
-
 public:
 
     Heston(Option *option,
@@ -28,14 +25,8 @@ public:
 
     virtual ~Heston();
 
-    virtual void simulateVolPath(const std::vector<double> &volDraws,
-                                 std::vector<double> &volPath);
-
-    virtual void simulateSpotPath(const std::vector<double> spotDraws,
-                                  const std::vector<double> &volPath,
-                                  std::vector<double> &spotPath);
-
     double getRho() const;
 };
 
-#endif
+
+#endif //HESTON_HESTON_H

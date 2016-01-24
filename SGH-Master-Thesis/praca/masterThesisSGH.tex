@@ -2004,6 +2004,15 @@ model ten jest o wiele bardziej czasochłonny obliczeniowo, niż chociażby mode
 
 \section{Schemat Andersena}
 
+Na schemacie \ref{fig:currencyRisk} widać drzewo dziedziczenia dla modułu wyliczającego cenę
+opcji zgodną z modelem Hestona.
+\begin{figure}
+  \centering  
+  \includegraphics[width=1.00\textwidth]{../diagramms/HestonDiagramm.pdf}
+  \caption{Drzewo dziedziczenia dla modułu wyliczającego cenę opcji wg różnych metodologii w modelu Hestona.}\label{fig:currencyRisk}
+\end{figure} 
+
+% integral for "P1" (effectively the delta) and P2 (effectively the risk-neutral probability that spot exceed strike at expiry, see Mikhailov+Nögel)
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/heston/src/main/cpp/heston/header/HestonEuler.h}
@@ -2025,7 +2034,8 @@ model ten jest o wiele bardziej czasochłonny obliczeniowo, niż chociażby mode
 \label{lst:MCHeston}
 \end{listing} 
 
- 
+
+\begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/heston/src/main/cpp/heston/src/HestonAndersen.cpp}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}

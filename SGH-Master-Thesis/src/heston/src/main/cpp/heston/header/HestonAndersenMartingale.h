@@ -22,6 +22,8 @@ public:
             double theta,
             double epsilon,
             double rho);
+
+    std::vector<double> calcMartingaleCorrection(std::vector<std::vector<double>> martingaleCorrectionCoeffs, double A);
 };
 
 #endif //HESTON_ANDERSENNORMAL_H

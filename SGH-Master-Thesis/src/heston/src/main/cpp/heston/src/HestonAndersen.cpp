@@ -8,7 +8,7 @@ HestonAndersen::HestonAndersen(
         double theta,
         double epsilon,
         double rho)
-        : Heston(option, kappa, theta, epsilon, rho) { }
+        : HestonMC(option, kappa, theta, epsilon, rho) { }
 
 void HestonAndersen::
 simulateVolPath(const std::vector<double> &volDraws,
@@ -59,10 +59,10 @@ simulateSpotPath(const std::vector<double> spotDraws,
     double k0, k1, k2, k3, k4;
 
     k0 = -dt * (rho * kappa * theta) / (epsilon);
-    k1 = gamma1 * dt * (((kappa * rho) / epsilon) - 0.5) - (rho / epsilon);
-    k2 = gamma2 * dt * (((kappa * rho) / epsilon) - 0.5) + (rho / epsilon);
-    k3 = gamma1 * dt * (1 - pow(rho, 2));
-    k4 = gamma2 * dt * (1 - pow(rho, 2));
+    k1 = GAMMA1 * dt * (((kappa * rho) / epsilon) - 0.5) - (rho / epsilon);
+    k2 = GAMMA2 * dt * (((kappa * rho) / epsilon) - 0.5) + (rho / epsilon);
+    k3 = GAMMA1 * dt * (1 - pow(rho, 2));
+    k4 = GAMMA2 * dt * (1 - pow(rho, 2));
 
     for (int i = 1; i < size; i++) {
         double normalRandom = normalDist(generator);

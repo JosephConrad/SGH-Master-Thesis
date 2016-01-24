@@ -24,6 +24,8 @@ public:
     virtual ~Option();
 
     double getDiscountFactor();
+
+    double getDiscountFactor(double t);
 };
 
 

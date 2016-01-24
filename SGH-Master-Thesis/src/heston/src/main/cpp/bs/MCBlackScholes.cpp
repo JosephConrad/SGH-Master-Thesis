@@ -16,7 +16,7 @@ double MCBlackScholes::simulate() {
     double variance = vol * vol * expiry;
     double rootVariance = sqrt(variance);
     double itoCorrection = -0.5 * variance;
-    double movedSpot = spot * exp(riskFree * expiry * itoCorrection);
+    double movedSpot = spot * exp(riskFree * expiry + itoCorrection);
 
     double payoffSum = 0.0;
     double spot, payoff;
@@ -24,11 +24,12 @@ double MCBlackScholes::simulate() {
     PolarGenerator &polarGen = PolarGenerator::getInstance();
 
     for (auto i = 0; i < numberOfPaths; ++i) {
-        spot = movedSpot * exp(rootVariance * polarGen.genNorm());
+        auto normal = polarGen.genNorm();
+        spot = movedSpot * exp(rootVariance * normal);
         payoff = spot - strike;
         payoffSum += payoff > 0 ? payoff : 0;
     }
-    double meanPayoff = payoffSum / numberOfPaths;
+    double meanPayoff = payoffSum / static_cast<double>(numberOfPaths);
     return meanPayoff * exp(-riskFree * expiry);
 }
 

@@ -1,4 +1,11 @@
-#include "../header/Heston.h"
+//
+// Created by Konrad Lisiecki on 18/01/16.
+//
+
+
+#include <src/main/cpp/heston/header/Heston.h>
+#include <vector>
+#include <src/main/cpp/option/option.h>
 
 Heston::Heston(
         Option *option,
@@ -20,11 +27,3 @@ double Heston::getRho() const {
     return rho;
 }
 
-void Heston::simulateVolPath(const std::vector<double> &volDraws, std::vector<double> &volPath) {
-
-}
-
-void Heston::simulateSpotPath(const std::vector<double> spotDraws, const std::vector<double> &volPath,
-                              std::vector<double> &spotPath) {
-
-}
