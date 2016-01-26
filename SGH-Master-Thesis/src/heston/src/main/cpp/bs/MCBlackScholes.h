@@ -20,6 +20,8 @@ private:
     unsigned long numberOfPaths;
 
     double GetGaussianBoxMuller();
+
+    double impliedVolatility();
 };
 
 

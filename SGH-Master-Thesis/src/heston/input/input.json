@@ -1,30 +1,47 @@
 {
   "heston": [
     {
-      "asset":   "100.0",
-      "strike"  : "100.0",
-      "riskFree": "0.05",
-      "volatility": "0.09",
-      "expiry": "5.0",
-      "rho": "-0.30",
-      "kappa": "2.0",
-      "theta": "0.09",
-      "epsilon": "1.0",
+      "asset": "100.0",
+      "strike": "100.0",
+      "volatility": "0.010201",
+      "riskFree": "0.0319",
+      "expiry": "1.0",
+      "kappa": "6.21",
+      "theta": "0.019",
+      "epsilon": "0.61",
+      "rho": "-0.70",
       "trials": "10000",
-      "timeSteps": "1000"
-    },
-    {
-      "asset":   "100.0",
-      "strike"  : "100.0",
-      "riskFree": "0.05",
-      "volatility": "0.09",
-      "expiry": "5.0",
-      "rho": "-0.30",
-      "kappa": "2.0",
-      "theta": "0.09",
-      "epsilon": "1.0",
-      "trials": "20000",
-      "timeSteps": "1000"
+      "timeSteps": "1000",
+      "truePrice": "9.51"
     }
+    //    },
+    //    {
+    //      "asset": "100.0",
+    //      "strike": "100.0",
+    //      "volatility": "0.01",
+    //      "riskFree": "0.05",
+    //      "expiry": "0.5",
+    //      "kappa": "2.0",
+    //      "theta": "0.01",
+    //      "epsilon": "0.225",
+    //      "rho": "0.0",
+    //      "trials": "10000",
+    //      "timeSteps": "1000",
+    //      "truePrice": "4.082"
+    //    },
+    //    {
+    //      "asset": "100.0",
+    //      "strike": "100.0",
+    //      "volatility": "0.09",
+    //      "riskFree": "0.05",
+    //      "expiry": "5.0",
+    //      "kappa": "2.0",
+    //      "theta": "0.09",
+    //      "epsilon": "1.0",
+    //      "rho": "-0.30",
+    //      "trials": "10000",
+    //      "timeSteps": "1000",
+    //      "truePrice": "34.9998"
+    //    }
   ]
 }

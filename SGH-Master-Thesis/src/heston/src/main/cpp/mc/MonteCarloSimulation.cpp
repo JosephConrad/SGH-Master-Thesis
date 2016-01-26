@@ -8,13 +8,11 @@
 #include "MonteCarloSimulation.h"
 
 
-
 MonteCarloSimulation::MonteCarloSimulation(
         unsigned int simulationTrials,
         unsigned int timeSteps)
         : simulationTrials(simulationTrials),
           timeSteps(timeSteps) {
-    srand(0);
 }
 
 void generate_normal_correlation_paths(double rho,
@@ -29,7 +27,6 @@ void generate_normal_correlation_paths(double rho,
     for (int i = 0; i < snd_uniform_draws.size(); i++) {
         snd_uniform_draws[i] = rand() / static_cast<double>(RAND_MAX);
     }
-    //srand(time(NULL));
 
     // Create standard normal random draws
     snd.random_draws(snd_uniform_draws, spot_normals);
@@ -48,7 +45,7 @@ void generate_normal_correlation_paths(double rho,
 }
 
 
-void MonteCarloSimulation::simulate(HestonMC *heston, Option *option) {
+double MonteCarloSimulation::simulate(HestonMC *heston, Option *option) {
 
     std::vector<double> spot_draws(timeSteps, 0.0);
     std::vector<double> vol_draws(timeSteps, 0.0);
@@ -67,8 +64,8 @@ void MonteCarloSimulation::simulate(HestonMC *heston, Option *option) {
 
     double discount = option->getDiscountFactor();
     double option_price = (payoff_sum / static_cast<double>(simulationTrials)) * discount;
-    std::cout << heston->getName() << "\n\t Option Price:\t" << option_price << std::endl;
-
+    std::cout << heston->getName() << ":\t" << option_price << std::endl;
+    return option_price;
 
 }
 

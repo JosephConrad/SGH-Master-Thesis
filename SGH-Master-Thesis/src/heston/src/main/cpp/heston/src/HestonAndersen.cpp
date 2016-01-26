@@ -79,5 +79,5 @@ modifiedExponentialInvertedCDF(double uniformRandom,
 }
 
 std::string HestonAndersen::getName() {
-    return "HESTON ANDERSEN";
+    return "HESTON ANDER";
 }

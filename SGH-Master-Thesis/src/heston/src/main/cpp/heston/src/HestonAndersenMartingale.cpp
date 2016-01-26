@@ -61,5 +61,5 @@ calcMartingaleCorrection(std::vector<double> &coeffs,
 }
 
 std::string HestonAndersenMartingale::getName() {
-    return "HESTON ANDERSEN MARTINGALE";
+    return "HESTON MART";
 }

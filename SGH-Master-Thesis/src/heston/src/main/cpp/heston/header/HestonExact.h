@@ -18,7 +18,7 @@ typedef std::complex<double> dcomp;
 class HestonExact : public Heston {
 
 private:
-    const double LAMBDA = 2.0;
+    const double LAMBDA = 0.0;
     const double DPHI = 0.01;
     dcomp DCOMP = std::complex<double>(0.0, 1.0);
     const double INTEGRATION_LEFT = std::numeric_limits<double>::epsilon();
@@ -36,8 +36,6 @@ public:
                 double theta,
                 double epsilon,
                 double rho);
-
-    double costFunction();
 
     double calcP(double x, double v, double t, double lgK, double j);
 

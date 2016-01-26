@@ -10,13 +10,19 @@
 #include <src/main/cpp/heston/header/HestonAndersen.h>
 #include <src/main/cpp/heston/header/HestonAndersenMartingale.h>
 #include <src/main/cpp/mc/MonteCarloSimulation.h>
+#include <src/main/cpp/bs/MCBlackScholes.h>
+#include <src/main/cpp/bs/BlackScholesAnalytic.h>
+#include <boost/tokenizer.hpp>
+#include <boost/algorithm/string/classification.hpp>
 
 using boost::property_tree::ptree;
 using boost::property_tree::read_json;
 using boost::property_tree::write_json;
 
 
-static boost::property_tree::ptree pt;
+//void processVolatilitySmile(char *string);
+//
+//void calcVolatilitySmile(std::vector<double> vector);
 
 void makeSimulation(std::vector<double> params, int simulationTrials, int timeSteps) {
 
@@ -25,24 +31,11 @@ void makeSimulation(std::vector<double> params, int simulationTrials, int timeSt
     double r = params[2];
     double v_0 = params[3];
     double T = params[4];
-
-//    double S_0 = 100.0;
-//    double K = 100.0;
-//    double r = 0.05;
-//    double v_0 = 0.09;
-//    double T = 5.0;
-//
     double rho = params[5];
     double kappa = params[6];
     double theta = params[7];
-    double epsilon = params[7];
-//    double rho = -0.30;
-//    double kappa = 2.00;
-//    double theta = 0.09;
-//    double epsilon = 1.00;
-//    double impliedVol = 0.1561; // Initial volatility
-//
-//
+    double epsilon = params[8];
+
     PayOff *payOffCall = new PayOffCall(K);
     Option *option = new Option(K, r, T, S_0, v_0, payOffCall);
 
@@ -53,13 +46,24 @@ void makeSimulation(std::vector<double> params, int simulationTrials, int timeSt
 
     MonteCarloSimulation mc = MonteCarloSimulation(simulationTrials, timeSteps);
     mc.simulate(hestonEuler, option);
-    mc.simulate(hestonAndersen, option);
-    mc.simulate(hestonAndersenMartingale, option);
+    //mc.simulate(hestonAndersen, option);
+    //mc.simulate(hestonAndersenMartingale, option);
 
-    hestonExact->optionPrice(log(option->S_0), option->v_0, 0.0);
+    double hestonPrice = mc.simulate(hestonEuler, option);
+    std::ofstream outf("impVol.txt");
+    outf << S_0 << ";" << K << ";" << r << ";" << T << ";" << hestonPrice << std::endl;
+    //prepareImpliedVolatility
 
-//    MCBlackScholes *mcBlackScholes = new MCBlackScholes(T, K, S_0, impliedVol, r, 100000);
-//    std::cout << mcBlackScholes->simulate();
+
+    double impliedVol = 0.2;
+    // black scholes implied volatility important
+    BlackScholesAnalytic *bsAnalytic = new BlackScholesAnalytic();
+    MCBlackScholes *mcBlackScholes = new MCBlackScholes(T, K, S_0, impliedVol, r, 100000);
+    std::cout << "BS SIMULATION:\t" << mcBlackScholes->simulate() << std::endl;
+    double call = bsAnalytic->call_price(S_0, K, r, impliedVol, T);
+
+    std::cout << "BS ANALYTIC:\t" << call << std::endl;
+    std::cout << "IMPLIED VOL:\t" << bsAnalytic->impliedVolatility(S_0, T, call) << std::endl;
 
     delete option;
     delete payOffCall;
@@ -70,14 +74,22 @@ void makeSimulation(std::vector<double> params, int simulationTrials, int timeSt
 }
 
 
-void loadConfig(std::string filename) {
+boost::property_tree::ptree loadConfig(std::string filename) {
+    static boost::property_tree::ptree pt;
     boost::property_tree::read_json(filename, pt);
-    return;
+    return pt;
 }
 
-void processInput(const ptree &tree) {
-    for (const ptree::value_type &node: tree.get_child("heston")) {
-        std::vector<double> params{
+void processValuation(char *fname, std::vector<double> &params, int &simulationTrials, int &timeSteps) {
+
+    const ptree &jsonTree = loadConfig(fname);
+//    std::ifstream ifs(fname);
+//    std::string content((std::istreambuf_iterator<char>(ifs)),
+//                        (std::istreambuf_iterator<char>()));
+//    ptree json;
+//    std::istringstream is(content);
+    for (const ptree::value_type &node: jsonTree.get_child("heston")) {
+        params = {
                 node.second.get<double>("asset"),
                 node.second.get<double>("strike"),
                 node.second.get<double>("riskFree"),
@@ -88,19 +100,65 @@ void processInput(const ptree &tree) {
                 node.second.get<double>("theta"),
                 node.second.get<double>("epsilon")
         };
-        int simulationTrials = node.second.get<int>("trials");
-        int timeSteps = node.second.get<int>("timeSteps");
-        makeSimulation(params, simulationTrials, timeSteps);
+        simulationTrials = node.second.get<int>("trials");
+        timeSteps = node.second.get<int>("timeSteps");
     }
 }
 
 
 int main(int argc, char **argv) {
-    std::ifstream ifs(argv[1]);
-    std::string content((std::istreambuf_iterator<char>(ifs)),
-                        (std::istreambuf_iterator<char>()));
-    ptree json;
-    std::istringstream is(content);
-    loadConfig(argv[1]);
-    processInput(pt);
+    std::vector<double> params;
+    int simulationTrials, timeSteps;
+    processValuation(argv[1], params, simulationTrials, timeSteps);
+    makeSimulation(params, simulationTrials, timeSteps);
 }
+
+
+//std::vector<double> processLine(std::string str) {
+//    std::vector<std::string> vectorStr;
+//    std::vector<double> vectorDouble;
+//    boost::split(vectorStr, str, boost::is_any_of(";"), boost::token_compress_on);
+//    std::transform(vectorStr.begin(),
+//                   vectorStr.end(),
+//                   std::back_inserter(vectorDouble),
+//                   [](const int &p) { return static_cast<double>(p); });
+//    return vectorDouble;
+//}
+
+void processVolatilitySmile(char *fname) {
+
+    std::ifstream file(fname);
+    std::string line;
+
+    while (getline(file, line)) {
+        std::vector<std::string> params;
+        boost::split(params, line, boost::is_any_of(";"), boost::token_compress_on);
+        std::vector<double> paramsDouble{
+                std::stod(params[0]),
+                std::stod(params[1]),
+                std::stod(params[2])
+        };
+//        calcVolatilitySmile(paramsDouble);
+    }
+
+}
+
+//void calcVolatilitySmile(std::vector<double> params, std::vector<double> params) {
+//    // params (timeToExpiry, kappa, cena)
+//    double S_0 = params[0];
+//    double K = params[1];
+//    double r = params[2];
+//    double v_0 = params[3];
+//    double T = params[4];
+//    double rho = params[5];
+//    double kappa = params[6];
+//    double theta = params[7];
+//    double epsilon = params[8];
+//
+//    PayOff *payOffCall = new PayOffCall(K);
+//    Option *option = new Option(K, r, T, S_0, v_0, payOffCall);
+//
+//    HestonEuler *hestonEuler = new HestonEuler(option, kappa, theta, epsilon, rho);
+//    MonteCarloSimulation mc = MonteCarloSimulation(simulationTrials, timeSteps);
+//    mc.simulate(hestonEuler, option);
+//}

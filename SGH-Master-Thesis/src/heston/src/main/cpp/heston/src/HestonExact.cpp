@@ -24,7 +24,7 @@ double HestonExact::optionPrice(double xt, double vt, double t) {
     double P2 = calcP(xt, vt, t, K, 2);
 
     double optionPrice = option->S_0 * P1 - K * P2 * option->getDiscountFactor(t);
-    std::cout << "Option Price: " << optionPrice << std::endl;
+    std::cout << this->getName() << ":\t" << optionPrice << std::endl;
     return optionPrice;
 }
 
@@ -81,12 +81,11 @@ dcomp HestonExact::calc_g(double phi, int j) {
 }
 
 dcomp HestonExact::calc_d(double phi, int j) {
-    return sqrt(pow(rho * epsilon * phi * DCOMP - b[j], 2) -
+    return sqrt(pow(calc_x(phi, j), 2) -
                 pow(epsilon, 2) * (2.0 * u[j] * phi * DCOMP - pow(phi, 2)));
 }
 
 dcomp HestonExact::calc_x(double phi, int j) {
-//    xj = bj - rho.*sig.*phi.*i;
     return b[j] - rho * epsilon * phi * DCOMP;
 }
 

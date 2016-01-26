@@ -18,7 +18,7 @@ public:
 
     MonteCarloSimulation(unsigned int simulationTrials, unsigned int timeSteps);
 
-    void simulate(HestonMC *heston, Option *option);
+    double simulate(HestonMC *heston, Option *option);
 
     MonteCarloSimulation();
 

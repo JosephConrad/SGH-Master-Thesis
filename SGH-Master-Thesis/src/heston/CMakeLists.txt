@@ -50,6 +50,6 @@ if(Boost_FOUND)
                 src/main/cpp/heston/header/HestonExact.h
                 src/main/cpp/heston/header/Heston.h
                 src/main/cpp/heston/header/HestonEuler.h
-                src/main/cpp/heston/header/HestonAndersenMartingale.h )
+                src/main/cpp/heston/header/HestonAndersenMartingale.h src/main/cpp/bs/BlackScholesAnalytic.cpp src/main/cpp/bs/BlackScholesAnalytic.h)
         target_link_libraries(heston ${Boost_LIBRARIES})
 endif()

@@ -33,3 +33,7 @@ double MCBlackScholes::simulate() {
     return meanPayoff * exp(-riskFree * expiry);
 }
 
+double MCBlackScholes::impliedVolatility(){
+    return 0.0;
+}
+
