@@ -1,2 +1,2 @@
-cd SGH-Master-Thesis/src/heston/
+cd SGH-Master-Thesis/src/HestonCPP/
 ./run.sh

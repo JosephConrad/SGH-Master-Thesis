@@ -105,6 +105,4 @@ target/
 *.lof
 
 # ignore folders
-sgh_symulacje/
-books/
-src/qsforex/
+temp/

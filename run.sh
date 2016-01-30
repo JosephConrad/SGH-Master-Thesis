@@ -1,0 +1,2 @@
+./travisBuildSGH.sh
+./travisRunSGH.sh
