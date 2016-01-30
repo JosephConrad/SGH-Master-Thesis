@@ -1,19 +1,21 @@
+#include <fstream>
+#include <map>
+#include <iostream>
+
 #include <src/main/cpp/payoff/payoff.h>
 #include <src/main/cpp/heston/header/HestonEuler.h>
 #include <src/main/cpp/heston/header/HestonExact.h>
-#include <iostream>
-#include <boost/algorithm/string/split.hpp>
-#include <fstream>
-#include <map>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
 #include <src/main/cpp/heston/header/HestonAndersen.h>
 #include <src/main/cpp/heston/header/HestonAndersenMartingale.h>
 #include <src/main/cpp/mc/MonteCarloSimulation.h>
 #include <src/main/cpp/bs/MCBlackScholes.h>
 #include <src/main/cpp/bs/BlackScholesAnalytic.h>
-#include <boost/tokenizer.hpp>
+
 #include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/tokenizer.hpp>
 
 void calcVolatilitySmile(char *string, std::vector<double> vector, int i, int i1);
 
@@ -21,10 +23,6 @@ using boost::property_tree::ptree;
 using boost::property_tree::read_json;
 using boost::property_tree::write_json;
 
-
-//void processVolatilitySmile(char *string);
-//
-//void calcVolatilitySmile(std::vector<double> vector);
 
 void makeSimulation(std::vector<double> params, int simulationTrials, int timeSteps) {
 

@@ -2,18 +2,19 @@ cmake_minimum_required(VERSION 2.8)
 project(heston)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-SET(BASEPATH "${CMAKE_SOURCE_DIR}")
-# Directories configuration
+set(BASEPATH "${CMAKE_SOURCE_DIR}")
 set(SOURCE_DIR "${PROJECT_SOURCE_DIR}/src")
+set(GEN_DIR "{PROJECT_SOURCE_DIR}/gen")
+include_directories("${BASEPATH}")
+
+# Directories configuration
 #set(PROJECT_BINARY_DIR "${PROJECT_SOURCE_DIR}/build")
 #set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
-INCLUDE_DIRECTORIES("${BASEPATH}")
-#SET(CMAKE_CXX_FLAGS_DEBUG "-O2")
-#SET(CMAKE_C_FLAGS_DEBUG "-O2")
+#set(CMAKE_CXX_FLAGS_DEBUG "-O2")
+#set(CMAKE_C_FLAGS_DEBUG "-O2")
 
 find_package(Boost 1.55.0 COMPONENTS system filesystem REQUIRED)
 
-set(GEN_DIR "{PROJECT_SOURCE_DIR}/gen")
 # Build protocol buffers
 add_custom_command(
         OUTPUT ${GEN_DIR}/execute.pb.cc ${GEN_DIR}/execute.pb.h
@@ -26,7 +27,6 @@ if(Boost_FOUND)
         message(STATUS "Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")
         message(STATUS "Boost_LIBRARIES: ${Boost_LIBRARIES}")
         message(STATUS "Boost_VERSION: ${Boost_VERSION}")
-
         include_directories(${Boost_INCLUDE_DIRS})
 
 endif()
@@ -62,6 +62,8 @@ if(Boost_FOUND)
                 src/main/cpp/heston/header/HestonExact.h
                 src/main/cpp/heston/header/Heston.h
                 src/main/cpp/heston/header/HestonEuler.h
-                src/main/cpp/heston/header/HestonAndersenMartingale.h src/main/cpp/bs/BlackScholesAnalytic.cpp src/main/cpp/bs/BlackScholesAnalytic.h)
+                src/main/cpp/heston/header/HestonAndersenMartingale.h
+                src/main/cpp/bs/BlackScholesAnalytic.cpp
+                src/main/cpp/bs/BlackScholesAnalytic.h)
         target_link_libraries(heston ${Boost_LIBRARIES})
 endif()

@@ -13,6 +13,7 @@ addons:
     - libboost1.55-all-dev
     - cmake
 
-before_script:
-  - ./travisBuildSGH.sh
-script: ./travisRunSGH.sh
+#before_script:
+#  - ./travisBuildSGH.sh
+#script: ./travisRunSGH.sh
+script: ./travisBuildSGH.sh
