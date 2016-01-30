@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+   <FileVersion major="1" minor="6" />
+   <Project>
+      <Option title="heston" />
+      <Option makefile_is_custom="1" />
+      <Option compiler="gcc" />
+      <Option virtualFolders="CMake Files\;" />
+      <Build>
+      <Target title="all">
+         <Option working_dir="/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/opt/local/bin/gmake -f &quot;/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug/Makefile&quot;  VERBOSE=1 all" />
+            <CompileFile command="/opt/local/bin/gmake -f &quot;/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/opt/local/bin/gmake -f &quot;/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/opt/local/bin/gmake -f &quot;/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="edit_cache">
+         <Option working_dir="/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/opt/local/bin/gmake -f &quot;/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug/Makefile&quot;  VERBOSE=1 edit_cache" />
+            <CompileFile command="/opt/local/bin/gmake -f &quot;/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/opt/local/bin/gmake -f &quot;/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/opt/local/bin/gmake -f &quot;/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="rebuild_cache">
+         <Option working_dir="/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/opt/local/bin/gmake -f &quot;/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug/Makefile&quot;  VERBOSE=1 rebuild_cache" />
+            <CompileFile command="/opt/local/bin/gmake -f &quot;/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/opt/local/bin/gmake -f &quot;/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/opt/local/bin/gmake -f &quot;/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="heston">
+         <Option output="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/bin/heston" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston" />
+            <Add directory="/opt/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/opt/local/bin/gmake -f &quot;/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug/Makefile&quot;  VERBOSE=1 heston" />
+            <CompileFile command="/opt/local/bin/gmake -f &quot;/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/opt/local/bin/gmake -f &quot;/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/opt/local/bin/gmake -f &quot;/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="heston/fast">
+         <Option output="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/bin/heston" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston" />
+            <Add directory="/opt/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/opt/local/bin/gmake -f &quot;/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug/Makefile&quot;  VERBOSE=1 heston/fast" />
+            <CompileFile command="/opt/local/bin/gmake -f &quot;/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/opt/local/bin/gmake -f &quot;/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/opt/local/bin/gmake -f &quot;/Users/konrad/Library/Caches/CLion12/cmake/generated/9d55cc88/9d55cc88/Debug/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      </Build>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/main.cpp">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/bs/BlackScholesAnalytic.cpp">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/bs/BlackScholesAnalytic.h">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/bs/MCBlackScholes.cpp">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/bs/MCBlackScholes.h">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/correlated/correlated_snd.cpp">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/correlated/correlated_snd.h">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/heston/header/Heston.h">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/heston/header/HestonAndersen.h">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/heston/header/HestonAndersenMartingale.h">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/heston/header/HestonEuler.h">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/heston/header/HestonExact.h">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/heston/header/HestonMC.h">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/heston/src/Heston.cpp">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/heston/src/HestonAndersen.cpp">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/heston/src/HestonAndersenMartingale.cpp">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/heston/src/HestonEuler.cpp">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/heston/src/HestonExact.cpp">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/heston/src/HestonMC.cpp">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/mc/MonteCarloSimulation.cpp">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/mc/MonteCarloSimulation.h">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/option/option.cpp">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/option/option.h">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/payoff/payoff.cpp">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/payoff/payoff.h">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/random/PolarGenerator.cpp">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/random/PolarGenerator.h">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/statistics/statistics.cpp">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/src/main/cpp/statistics/statistics.h">
+         <Option target="heston"/>
+      </Unit>
+      <Unit filename="/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/heston/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\" />
+      </Unit>
+   </Project>
+</CodeBlocks_project_file>

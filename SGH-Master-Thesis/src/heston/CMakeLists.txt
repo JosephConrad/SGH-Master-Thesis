@@ -3,11 +3,23 @@ project(heston)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 SET(BASEPATH "${CMAKE_SOURCE_DIR}")
+# Directories configuration
+set(SOURCE_DIR "${PROJECT_SOURCE_DIR}/src")
+#set(PROJECT_BINARY_DIR "${PROJECT_SOURCE_DIR}/build")
+#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 INCLUDE_DIRECTORIES("${BASEPATH}")
 #SET(CMAKE_CXX_FLAGS_DEBUG "-O2")
 #SET(CMAKE_C_FLAGS_DEBUG "-O2")
 
 find_package(Boost 1.58.0 COMPONENTS system filesystem REQUIRED)
+
+set(GEN_DIR "{PROJECT_SOURCE_DIR}/gen")
+# Build protocol buffers
+add_custom_command(
+        OUTPUT ${GEN_DIR}/execute.pb.cc ${GEN_DIR}/execute.pb.h
+        COMMAND protoc -I=${PROTO_DIR} --cpp_out=${GEN_DIR} ${PROTO_DIR}/execute.proto
+        DEPENDS ${PROTO_DIR}/execute.proto
+)
 
 if(Boost_FOUND)
 

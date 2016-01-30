@@ -10,7 +10,7 @@
       "theta": "0.019",
       "epsilon": "0.61",
       "rho": "-0.70",
-      "trials": "10000",
+      "trials": "1000",
       "timeSteps": "1000",
       "truePrice": "9.51"
     }

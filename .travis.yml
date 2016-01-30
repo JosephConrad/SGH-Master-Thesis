@@ -1,0 +1,7 @@
+language: cpp
+compiler:
+  - gcc
+  - clang
+before_script:
+  - ./SGH-Master-Thesis/src/heston/run.sh
+script: ./SGH-Master-Thesis/src/heston/run.sh
