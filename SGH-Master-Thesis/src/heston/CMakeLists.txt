@@ -11,7 +11,7 @@ INCLUDE_DIRECTORIES("${BASEPATH}")
 #SET(CMAKE_CXX_FLAGS_DEBUG "-O2")
 #SET(CMAKE_C_FLAGS_DEBUG "-O2")
 
-find_package(Boost 1.55.0 COMPONENTS system filesystem REQUIRED)
+find_package(Boost 1.58.0 COMPONENTS system filesystem REQUIRED)
 
 set(GEN_DIR "{PROJECT_SOURCE_DIR}/gen")
 # Build protocol buffers
