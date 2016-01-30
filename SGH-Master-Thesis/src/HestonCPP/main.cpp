@@ -90,7 +90,7 @@ void calcVolatilitySmile(char *fname, std::vector<double> params, int simulation
 
     std::string line;
     std::ifstream inputStream(fname);
-    std::ofstream outputStream("impVol.txt");
+    std::ofstream outputStream("./../output/hestonPrices.txt");
 
     while (getline(inputStream, line)) {
         std::vector<std::string> params;

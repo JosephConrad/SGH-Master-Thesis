@@ -30,8 +30,6 @@
 *.iws
 
 ## Plugin-specific files:
-
-# IntelliJ
 /out/
 
 # mpeltonen/sbt-idea plugin
@@ -44,7 +42,6 @@ atlassian-ide-plugin.xml
 com_crashlytics_export_strings.xml
 crashlytics.properties
 
-cppExample/
 
 # gitignore for cmake
 CMakeCache.txt
@@ -56,3 +53,4 @@ install_manifest.txt
 
 #directories
 bin/
+build/
