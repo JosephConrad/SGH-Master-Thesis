@@ -9,14 +9,15 @@
 
 
 MonteCarloSimulation::MonteCarloSimulation(
-        unsigned int simulationTrials,
-        unsigned int timeSteps)
+        int simulationTrials,
+        int timeSteps)
         : simTrials(simulationTrials),
           timeSteps(timeSteps) {
 }
 
-void corellatedNormalPaths(double rho,
-                           std::vector<double> &spot_normals, std::vector<double> &cor_normals) {
+void corellatedNormalPaths(double rho, std::vector<double> &spot_normals,
+                           std::vector<double> &cor_normals) {
+
     unsigned vals = spot_normals.size();
 
     StandardNormalDistribution snd;

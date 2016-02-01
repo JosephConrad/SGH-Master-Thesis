@@ -8,7 +8,7 @@ MCBlackScholes::MCBlackScholes(double Expiry, double Strike,
                                double Spot, double Vol, double r,
                                unsigned long NumberOfPaths)
         : expiry(Expiry), strike(Strike), spot(Spot), vol(Vol),
-          riskFree(r), numberOfPaths(NumberOfPaths) { }
+          riskFree(r), simNumber(NumberOfPaths) { }
 
 
 double MCBlackScholes::simulate() {
@@ -23,17 +23,12 @@ double MCBlackScholes::simulate() {
 
     PolarGenerator &polarGen = PolarGenerator::getInstance();
 
-    for (auto i = 0; i < numberOfPaths; ++i) {
+    for (auto i = 0; i < simNumber; ++i) {
         auto normal = polarGen.genNorm();
         spot = movedSpot * exp(rootVariance * normal);
         payoff = spot - strike;
         payoffSum += payoff > 0 ? payoff : 0;
     }
-    double meanPayoff = payoffSum / static_cast<double>(numberOfPaths);
-    return meanPayoff * exp(-riskFree * expiry);
+    double payoffAvg = payoffSum / static_cast<double>(simNumber);
+    return payoffAvg * exp(-riskFree * expiry);
 }
-
-double MCBlackScholes::impliedVolatility(){
-    return 0.0;
-}
-

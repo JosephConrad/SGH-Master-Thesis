@@ -6,8 +6,9 @@ class MCBlackScholes {
 
 public:
 
-    MCBlackScholes(double Expiry, double Strike, double Spot,
-                   double Vol, double r, unsigned long NumberOfPaths);
+    MCBlackScholes(double Expiry, double Strike,
+                   double Spot, double Vol, double r,
+                   unsigned long NumberOfPaths);
 
     double simulate();
 
@@ -17,11 +18,7 @@ private:
     double spot;
     double vol;
     double riskFree;
-    unsigned long numberOfPaths;
-
-    double GetGaussianBoxMuller();
-
-    double impliedVolatility();
+    unsigned long simNumber;
 };
 
 

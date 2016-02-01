@@ -14,7 +14,7 @@ protected:
     Option *option;
     double kappa;
     double theta;
-    double epsilon;
+    double eps;
     double rho;
 public:
 

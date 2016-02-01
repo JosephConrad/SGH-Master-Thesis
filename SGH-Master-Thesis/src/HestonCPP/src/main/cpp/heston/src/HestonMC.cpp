@@ -1,5 +1,4 @@
 #include <src/main/cpp/heston/header/HestonMC.h>
-#include <src/main/cpp/heston/header/Heston.h>
 
 
 HestonMC::HestonMC(
@@ -12,11 +11,13 @@ HestonMC::HestonMC(
     generator.seed(0);
 }
 
-void HestonMC::simulateVolPath(const std::vector<double> &volDraws, std::vector<double> &volPath) {
+void HestonMC::simulateVolPath(const std::vector<double> &volDraws,
+                               std::vector<double> &volPath) {
 
 }
 
-void HestonMC::simulateSpotPath(const std::vector<double> spotDraws, const std::vector<double> &volPath,
+void HestonMC::simulateSpotPath(const std::vector<double> spotDraws,
+                                const std::vector<double> &volPath,
                                 std::vector<double> &spotPath) {
 
 }

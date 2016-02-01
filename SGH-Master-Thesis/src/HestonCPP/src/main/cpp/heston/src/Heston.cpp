@@ -17,7 +17,7 @@ Heston::Heston(
         option(option),
         kappa(kappa),
         theta(theta),
-        epsilon(epsilon),
+        eps(epsilon),
         rho(rho)
 { }
 

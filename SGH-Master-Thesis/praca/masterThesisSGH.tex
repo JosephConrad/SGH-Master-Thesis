@@ -564,11 +564,13 @@ wyliczyć wartość opcji, należy się posłużyć metodami numerycznymi.
 
 \section{Aplikacja lematu Ito dla modelu Hestona}
 
-Często P
-Często łatwiej jest jednak operować na logarytmie procesu bazowego, czyli $\ln S(t)$
+Pracując z szeregami czasowymi często łatwiej jest operować na 
+logarytmach procesu bazowego, czyli $\ln S(t)$.
+Podstawowym narzędziem używanym w wykonywaniu takich transformacji jest lemat Ito.
 
-Procesy stochastyczne opisane równaniami (\ref{eq:heston1}) i (\ref{eq:heston2}) są tak zwanymi \textbf{procesami Ito}
-(\textit{ang. Ito process}), które dają się przedstawić w 
+Procesy stochastyczne opisane równaniami (\ref{eq:heston1}) i (\ref{eq:heston2}) są tak 
+zwanymi \textbf{procesami Ito}
+(\textit{ang. Ito process}), które ogólnie dają się przedstawić w 
 następującej formie:
 \begin{equation}
   dx = a(x,t) dt + b(x,t) dz
@@ -579,10 +581,10 @@ o zmiennej $b$ jako o współczynniku definiującym jak duża jest losowość w 
 modelu.
 
 Dla procesów zdefiniowanych zgodnie z tym równaniem, możemy 
-stosować \textbf{lemat Ito} (\textit{ang. Ito lemma}). Możemy na niego patrzeć jako stochastyczny odpowiednik
-reguły łańcuchowej (\textit{ang. chaining rule}) znanej z klasycznego rachunku 
-różniczkowego. 
-Po zastosowaniu lematu Ito dla $\ln S(t)$ otrzymujemy:
+stosować \textbf{lemat Ito} (\textit{ang. Ito lemma}). Możemy na niego patrzeć 
+jako stochastyczny odpowiednik reguły łańcuchowej (\textit{ang. chaining rule}) znanej z 
+klasycznego rachunku różniczkowego. 
+Po zastosowaniu lematu Ito dla $S(t)$ otrzymujemy układ równań z logarytmem aktywa bazowego $\ln S(t)$:
 \begin{subequations}
 \begin{align}
 d \ln S(t) &= \left( r - \frac{1}{2} v(t) \right) dt 
@@ -592,12 +594,12 @@ dv(t)      &= \kappa (\theta - v(t))dt + \varepsilon
 \end{align} 
 \end{subequations}
 Aplikując do równania (\ref{eq:HestonlnS}) \textbf{dekompozycję Cholesky'ego} można
-otrzymać:
+otrzymać następującą zależność:
 \begin{equation}
   \ln S(t + \Delta) = \ln S(t) + \left( r - \frac{1}{2} v(t) \right) dt 
               + \rho \sqrt{v(t)} dW^v(t) + \sqrt{1 - \rho^2} \sqrt{v(t)} dW(t)
 \end{equation}
-Natomiast drugie równanie (\ref{eq:HestonlnY}) można przedstawić następująco:
+Natomiast drugie równanie (\ref{eq:HestonlnY}) można przedstawić jako:
 \begin{equation}
   v(t + \Delta)      = v(t) + \int_t^{t+\Delta} \kappa 
                         (\theta - v(u))du + \varepsilon 
@@ -609,7 +611,6 @@ Co można przekształcić do następującej postaci:
   - v(t) - \kappa \theta \Delta + \kappa \int_t^{t+\Delta}  v(u) du \right)
 \end{equation}
 Podstawiając to równanie do równania (\ref{eq:HestonlnS}) otrzymujemy:
-
 \begin{equation}
 \begin{aligned}
 \label{eq:HestonLnSDiscretization}
@@ -619,16 +620,16 @@ Podstawiając to równanie do równania (\ref{eq:HestonlnS}) otrzymujemy:
 \end{aligned}
 \end{equation}
 
-Powyższe równanie przedstawie dokładny wzór na wartość aktywa 
+Powyższe równanie przedstawia dokładny wzór na wartość aktywa 
 bazowego $\ln S(t + \Delta) $ mając daną wartość $\ln S(t)$.
-
-
-
+Jedyną trudnością w wyznaczeniu wartości aktywa bazowego w momencie
+$t + \Delta$ stanowią dwie całki, które muszą zostać wyzanczone przy 
+pomocy metod numerycznych. 
 
 \section{Wzór opisujący cenę opcji w modelu Hestona}
 
-W modelu Hestona można wyznaczyć cenę opcji \textit{call} na moment t, 
-gdzie $t \in [0, T]$. Można ją zdefiniować, analogicznie do modelu Blacka-Scholesa, jako 
+W modelu Hestona można wyznaczyć cenę dla europejskiej opcji \textit{call} na moment t, 
+gdzie $t \in [0, T]$. Można ją zdefiniować, w sposób analogiczny do modelu Blacka-Scholesa, jako 
 \cite{Heston}:
 
 \begin{equation}
@@ -657,7 +658,15 @@ g_j                &= \frac{b_j - \rho \sigma \phi i + d}{b_j - \rho \sigma \phi
 d_j                &= \sqrt{(\rho \sigma \phi i  - b_j)^2 - \sigma^2(2 u_j \phi  i  - \phi^2)}.
   \end{aligned}
 \end{equation}
-gdzie: $j = 1,2$.
+gdzie:
+\begin{itemize}
+  \item  $ u_1 = \frac{1}{2}$
+  \item  $ u_2 = -\frac{1}{2}$
+  \item  $ a = \kappa * \theta$
+  \item  $ b_1 = \kappa + \lambda - \rho * \sigma$
+  \item  $ b_2 = \kappa + \lambda$
+\end{itemize}
+dla: $j = 1,2$.
 
 Przedstawione powyżej równania (\ref{eq:HestonProb}) oraz 
 (\ref{eq:HestonCharacteristic}) będą użyte podczas kalibracji modelu. Należy jednak zaznaczyć, że 
@@ -1306,11 +1315,11 @@ przekształcenia:
 \begin{equation}
   u_1 = x \sqrt{\frac{-2ln(s)}{s}}, u_2 = y \sqrt{\frac{-2ln(s)}{s}}
 \end{equation}
-Poniższy kod przedstawia implementację tego algorytmu \cite{JoshiDesignPatterns}:
+Poniższy kod przedstawia implementację tego algorytmu:
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/HestonCPP/src/main/cpp/random/PolarGenerator.cpp}
+{../src/heston/SimpleMonteCarlo/PolarGenerator.cpp}
 \caption{Generowanie zmiennych o rozkładzie normalnym zgodnie z metodą biegunów}
 \label{lst:lambdaSyntax}
 \end{listing} 
@@ -1342,6 +1351,7 @@ Poniższy kod przedstawia implementację tego algorytmu \cite{JoshiDesignPattern
 % otrzymamy mocno zgodny estymator ceny opcji.
 
 \subsection{Generowanie skorelowanych ruchów Browna}
+\label{sec:genRB}
 
 Ważną kwestią, która pojawia się w implementacji modelu Hestona, jest generowanie skorelowanych 
 ruchów Browna.
@@ -1522,8 +1532,8 @@ odwrotną dystrybuantę gęstości prawdopodobieństwa, natomiast $p$ oraz $\bet
 p = \frac{\Psi - 1}{\Psi + 1}
 \end{equation}
 
-Schemat ten znany jest w literaturze pod nazwą \textbf{aproksymacji przy pomocy zero-zmodyfikowanego rozkładu
-wykładniczego} (ang. zero-modified exponential approximation). 
+Schemat ten znany jest w literaturze pod nazwą \textbf{aproksymacji przy pomocy 
+zero-zmodyfikowanego rozkładu wykładniczego} (ang. zero-modified exponential approximation). 
 Jest to aproksymacja, która w części niezerowej ma 
 rozkład wykładniczy, natomiast dla zera przyjmuje inną wartość, spoza rozkładu. 
 
@@ -1586,7 +1596,7 @@ główną pętlą schematu Monte Carlo.
 Na podstawie wyznaczonej trajektorii procesu wariancji należy wygenerować trajektoria aktywa bazowego 
 $S(t)$. Wydawać się może, na pierwszy rzut oka, że dobrym sposobem jest wygenerowanie tej trajektorii 
 przy pomocy schematu Eulera. Niestety, w schemacie Eulera możemy wygenerować skorelowane zmienne 
-losowe przy pomocy metody podanej w punkcie \ref{}.
+losowe przy pomocy metody podanej w punkcie \ref{sec:genRB}.
 W schemacie Andersena, do wygenerowania elementów procesu losowego $v(t)$ używamy albo zmiennej 
 losowej o rozkładzie normalnym albo zmiennej losowej z rozkładu jednostajnego. Dlatego, też nie jest 
 jasne jak dobrze skorelować proces $S(t)$ z $v(t)$. Próba skorelowania $W^S$ ze zmienną $W^V$
@@ -1942,7 +1952,6 @@ bazowego w momencie wygaśnięcia opcji.
 Jest to zgodne z intuicją. Opcje, których cena jest zależna od zmienności instrumentu bazowego, 
 w krótszym okresie czasu będą mniej warte od tych z dłuższym okresem do wygaśnięcia.
 
-
 \begin{figure}
   \includegraphics[width=1.00\textwidth]{../output/figures/hestonTimeToExpiry.pdf}
   \caption{Cena instrumentu bazowego w modelu Hestona w zależności od czasu do wygaśnięcia opcji}
@@ -2001,19 +2010,50 @@ model ten jest o wiele bardziej czasochłonny obliczeniowo, niż chociażby mode
 \phantomsection
 \appendix
 
-\chapter{Lista kodów źródłowych}
+\chapter{Opis kodu źródłowego}
+
+W tym rozdziale zostaną przedstawiona implementacja wybranych zagadnień przedstawionych w 
+pracy magisterskiej. Kod źródłowy został napisany w dwóch językach programowania: 
+\begin{enumerate}
+  \item \textit{C++}
+  \item \textit{Matlab}
+\end{enumerate}
+W tym pierwszym zaimplementowano następujące moduły:
+\begin{itemize}
+  \item model Hestona i różne sposoby jego dyskretyzacji
+  \item model Blacka-Scholesa
+  \item generator liczb z rozkładu normalnego
+  \item symulację Monte Carlo dla modelu Hestona
+\end{itemize}
+Z kolei w języku \textit{Matlab} zimplementowano kalibrację modelu Hestona cen opcji pochodzących
+z danych rynkowych.
+
+Wszystkie zaimplementowane moduły zostały wykonane na maszynie o następujących parametrach:
+
 
 \section{Schemat Andersena}
+Na schemacie \ref{fig:currencyRisk} widać poszczególne klasy zaimplementowane w 
+ramach modułu wyliczającego cenę opcji zgodną z modelem Hestona.
+Klasą bazową, po której wszystkie inne dziedziczą jest klasa \textit{Heston}.
+Jest ona bezpośrednią nadklasą dla klas definiujących różne podejścia do wyceny opcji zgodnej
+z modelem Hestona:
+\begin{enumerate}
+  \item symulacji Monte Carlo (klasa \textit{HestonMC})
+  \item wzoru zamkniętego (klasa \textit{HestonExact})
+\end{enumerate}
+O ile klasa \textit{HestonExact} zawiera w sobie implementację wzoru zamkniętego na cenę opcji,
+o tyle klasa \textit{HestonMC} definiuje jedynie interfejs jaki muszą spełniać klasy po niej 
+dziedziczące.
 
-Na schemacie \ref{fig:currencyRisk} widać drzewo dziedziczenia dla modułu wyliczającego cenę
-opcji zgodną z modelem Hestona.
+
+
 \begin{figure}
   \centering  
-  \includegraphics[width=1.00\textwidth]{../diagramms/HestonDiagramm.pdf}
-  \caption{Drzewo dziedziczenia dla modułu wyliczającego cenę opcji wg różnych metodologii w modelu Hestona.}\label{fig:currencyRisk}
+  \includegraphics[width=1.00\textwidth]{../output/diagramms/HestonDiagramm.pdf}
+  \caption{Drzewo dziedziczenia dla modułu wyliczającego 
+  cenę opcji wg różnych metodologii w modelu Hestona.}\label{fig:currencyRisk}
 \end{figure} 
 
-% integral for "P1" (effectively the delta) and P2 (effectively the risk-neutral probability that spot exceed strike at expiry, see Mikhailov+Nögel)
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/heston/src/main/cpp/heston/header/HestonEuler.h}
@@ -2021,16 +2061,106 @@ opcji zgodną z modelem Hestona.
 \label{lst:MCHeston}
 \end{listing} 
 
-\begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/src/main/cpp/heston/header/HestonAndersen.h}
-\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
-\label{lst:MCHeston}
-\end{listing} 
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/src/main/cpp/heston/header/Heston.h}
+{../src/HestonCPP/src/main/cpp/heston/src/HestonEuler.cpp}
+\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+\label{lst:MCHeston}
+\end{listing} 
+\cleardoublepage
+
+
+
+
+\subsection{Schemat Andersena}
+W tym punkcie podana zostanie implementacja schematu Andersena. Zostały podane dwa
+pliki: jeden to plik nagłówkowy, a drugie z implementacją odpowiednich metod.
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../output/listings/HestonAndersen.h}
+\caption{Schemat generowania trajektorii procesu aktywa bazowego wraz z poprawką
+martyngałową}
+\label{lst:MCHeston}
+\end{listing}  
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../output/listings/HestonAndersen.cpp}
+\caption{Metoda wyliczająca poprawkę martyngałową}
+\label{lst:MCHeston}
+\end{listing}  
+
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../output/listings/HestonAndersen2.cpp}
+\caption{Metoda wyliczająca poprawkę martyngałową}
+\label{lst:MCHeston}
+\end{listing}   
+\cleardoublepage
+
+
+
+
+
+\subsection{Schemat Andersena z poprawką Martyngałową}
+W poprzednim punkcie zaimplementowano schemat Andersena. 
+Niestety, proces aktywa bazowego w tym schemacie nie jest martyngałem.
+Algorytm ten można jednak usprawnić tak, aby własność martyngału była spełniona.
+Definiuję się zmienną $k_0^*$, która zastępuje zmienną $k_0$ następująco: 
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../output/listings/HestonAndersenMartingaleSpot.cpp}
+\caption{Schemat generowania trajektorii procesu aktywa bazowego wraz z poprawką
+martyngałową}
+\label{lst:MCHeston}
+\end{listing}  
+
+Poniżej podajemy implementację funkcji wyliczającej poprawkę martyngałową 
+dla każdej punktu realizacji procesu aktywa bazowego.
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../output/listings/HestonAndersenMartingaleMart.cpp}
+\caption{Metoda wyliczająca poprawkę martyngałową}
+\label{lst:MCHeston}
+\end{listing}  
+\cleardoublepage
+
+
+
+
+\subsection{Wycena opcji w modelu Hestona przy pomocy wzoru zamkniętego}
+W tym rozdziale zostaną przedstawione kody źródłowe dla alternatywnego podejścia 
+wyceny opcji w modelu Hestona. Zamiast polegać na niedeterministycznej metodzie
+Monte Carlo, zostanie użyty wzór zamknięty. Plik nagłówkowy dla tej klasy
+został przedstawiony poniżej.
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../output/listings/HestonExact.h}
+\caption{Metoda wyliczająca poprawkę martyngałową}
+\label{lst:MCHeston}
+\end{listing}  
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../output/listings/HestonExact1.cpp}
+\caption{Metoda wyliczająca poprawkę martyngałową}
+\label{lst:MCHeston}
+\end{listing}  
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../output/listings/HestonExact2.cpp}
+\caption{Metoda wyliczająca poprawkę martyngałową}
+\label{lst:MCHeston}
+\end{listing}  
+
+
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../src/heston/src/main/cpp/heston/header/HestonAndersen.h}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
 \label{lst:MCHeston}
 \end{listing} 
@@ -2057,7 +2187,7 @@ opcji zgodną z modelem Hestona.
 \label{lst:MCHeston}
 \end{listing} 
  
-
+\cleardoublepage
 \section{Generator liczb z rozkładu normalnego}
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
@@ -2073,37 +2203,41 @@ opcji zgodną z modelem Hestona.
 \label{lst:MCHeston}
 \end{listing} 
 
-
+\cleardoublepage
 \section{Model Blacka-Scholesa}
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/src/main/cpp/bs/MCBlackScholes.cpp}
+{../src/HestonCPP/src/main/cpp/bs/MCBlackScholes.cpp}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
 \label{lst:MCHeston}
 \end{listing} 
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/src/main/cpp/bs/MCBlackScholes.h}
+{../src/HestonCPP/src/main/cpp/bs/MCBlackScholes.h}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
 \label{lst:MCHeston}
 \end{listing} 
 
-\section{Symulacja Monte Carlo}
+
+\cleardoublepage
+\section{Symulacje Monte Carlo}
+
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/HestonCPP/src/main/cpp/mc/MonteCarloSimulation.h}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
 \label{lst:MCHeston}
-\end{listing}
+\end{listing} 
  
+
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../output/listings/MonteCarloSimulation.cpp}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
 \label{lst:MCHeston}
-\end{listing}
- 
+\end{listing}  
+
 
 
 %===========================================================================

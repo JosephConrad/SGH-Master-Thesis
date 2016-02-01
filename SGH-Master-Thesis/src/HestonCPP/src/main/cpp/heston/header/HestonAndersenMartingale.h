@@ -10,9 +10,9 @@
 
 class HestonAndersenMartingale : public HestonAndersen {
 
-    double calcMartingaleCorrection(std::vector<double> &vector, double A, double B);
+    double calcMartingaleCorr(std::vector<double> &vector, double A, double B);
 
-    void simulateSpotPath(const std::vector<double> spotDraws, const std::vector<double> &volPath,
+    void simulateSpotPath(const std::vector<double> spotDraws, const std::vector<double> &vol,
                           std::vector<double> &spotPath);
 
 public:

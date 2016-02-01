@@ -1,11 +1,7 @@
-//
-// Created by Konrad Lisiecki on 17/01/16.
-//
-
+#include <iostream>
 #include <src/main/cpp/option/option.h>
 #include <src/main/cpp/heston/header/HestonAndersen.h>
 #include <src/main/cpp/heston/header/HestonAndersenMartingale.h>
-#include <iostream>
 
 HestonAndersenMartingale::HestonAndersenMartingale(
         Option *option,
@@ -15,34 +11,39 @@ HestonAndersenMartingale::HestonAndersenMartingale(
         double rho)
         : HestonAndersen(option, kappa, theta, epsilon, rho) { }
 
-
 void HestonAndersenMartingale::
 simulateSpotPath(const std::vector<double> spotDraws,
-                 const std::vector<double> &volPath,
+                 const std::vector<double> &vol,
                  std::vector<double> &spotPath) {
 
     auto size = spotDraws.size();
     double dt = option->T / static_cast<double>(size);
+    double r = option->r;
 
-    double k1, k2, k3, k4, A, B;
+    double k1, k2, k3, k4, k0star, A, B;
 
-    k1 = GAMMA1 * dt * (((kappa * rho) / epsilon) - 0.5) - (rho / epsilon);
-    k2 = GAMMA2 * dt * (((kappa * rho) / epsilon) - 0.5) + (rho / epsilon);
+    k1 = GAMMA1 * dt * (((kappa * rho) / eps) - 0.5) - (rho / eps);
+    k2 = GAMMA2 * dt * (((kappa * rho) / eps) - 0.5) + (rho / eps);
     k3 = GAMMA1 * dt * (1 - pow(rho, 2));
     k4 = GAMMA2 * dt * (1 - pow(rho, 2));
 
     A = k2 + 0.5 * k4;
+
     for (int i = 1; i < size; i++) {
-        B = (k1 + k3 / 2.0) * volPath[i - 1];
-        double k0star = calcMartingaleCorrection(martingaleCorrectionCoeffs[i - 1], A, B);
-        spotPath[i] = spotPath[i - 1] * exp(option->r * dt + k0star + k1 * volPath[i - 1] + k2 * volPath[i] +
-                                            (sqrt(k3 * volPath[i - 1] + k4 * volPath[i]) * spotDraws[i-1]));
+        B = (k1 + k3 / 2.0) * vol[i - 1];
+        k0star = calcMartingaleCorr(martingaleCorrection[i - 1], A, B);
+
+        double ds;
+        ds = r * dt + k0star + k1 * vol[i - 1] + k2 * vol[i] +
+             sqrt(k3 * vol[i - 1] + k4 * vol[i]) * spotDraws[i - 1];
+
+        spotPath[i] = spotPath[i - 1] * exp(ds);
     }
 }
 
 double HestonAndersenMartingale::
-calcMartingaleCorrection(std::vector<double> &coeffs,
-                         double A, double B) {
+calcMartingaleCorr(std::vector<double> &coeffs,
+                   double A, double B) {
     double psi, a, b2, beta, p;
     psi = coeffs[0];
     a = coeffs[1];

@@ -21,4 +21,4 @@ public:
     virtual ~MonteCarloSimulation();
 };
 
-#endif HESTON_MONTECARLOSIMULATION_H
+#endif //HESTON_MONTECARLOSIMULATION_H
