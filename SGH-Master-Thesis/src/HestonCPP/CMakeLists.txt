@@ -5,13 +5,13 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(BASEPATH "${CMAKE_SOURCE_DIR}")
 set(SOURCE_DIR "${PROJECT_SOURCE_DIR}/src")
 set(GEN_DIR "{PROJECT_SOURCE_DIR}/gen")
+set(CMAKE_CXX_FLAGS_DEBUG "-O2")
+set(CMAKE_C_FLAGS_DEBUG "-O2")
 include_directories("${BASEPATH}")
 
 # Directories configuration
 #set(PROJECT_BINARY_DIR "${PROJECT_SOURCE_DIR}/build")
 #set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
-#set(CMAKE_CXX_FLAGS_DEBUG "-O2")
-#set(CMAKE_C_FLAGS_DEBUG "-O2")
 
 find_package(Boost 1.55.0 COMPONENTS system filesystem REQUIRED)
 

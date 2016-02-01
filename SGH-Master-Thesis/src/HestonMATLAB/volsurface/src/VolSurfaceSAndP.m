@@ -10,7 +10,7 @@ clc
 clear all
 close all
 
-SPX=xlsread('SPX.xls');
+SPX=xlsread('../SPX.xls');
 S0=770.05;
 r=0.66/100;
 

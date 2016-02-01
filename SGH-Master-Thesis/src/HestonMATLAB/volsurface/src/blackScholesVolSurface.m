@@ -7,14 +7,16 @@
 %   and S0=770.05
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clc
-clear all 
 close all
+addpath('../../lib/');
+addpath('../lib/VolatilitySurface/');
 
-matFilename = sprintf('../../data/volatilitySurface.csv');
+
+matFilename = sprintf('../data/volatilitySurface.csv');
 matData = load(matFilename);
 
-S0=210.39;
-r=3/100;
+S0=207.93;
+r=3.19/100;
 
 Maturity=matData(3:end,3);          % maturity
 Strike=matData(3:end,1);            % moneyness
@@ -24,4 +26,4 @@ tic
 surface=VolatilitySurface(S0, r, Maturity, Strike, CallPrice);
 toc
 
-saveTightFigure('../../figures/blackScholesVolSurface.pdf');
+saveTightFigure('../figs/blackScholesVolSurface.pdf');

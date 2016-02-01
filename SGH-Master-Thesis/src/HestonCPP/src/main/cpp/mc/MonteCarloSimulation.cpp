@@ -11,62 +11,58 @@
 MonteCarloSimulation::MonteCarloSimulation(
         unsigned int simulationTrials,
         unsigned int timeSteps)
-        : simulationTrials(simulationTrials),
+        : simTrials(simulationTrials),
           timeSteps(timeSteps) {
 }
 
-void generate_normal_correlation_paths(double rho,
-                                       std::vector<double> &spot_normals, std::vector<double> &cor_normals) {
+void corellatedNormalPaths(double rho,
+                           std::vector<double> &spot_normals, std::vector<double> &cor_normals) {
     unsigned vals = spot_normals.size();
 
-    // Create the Standard Normal Distribution and random draw vectors
     StandardNormalDistribution snd;
     std::vector<double> snd_uniform_draws(vals, 0.0);
 
-    // Simple random number generation method based on RAND
     for (int i = 0; i < snd_uniform_draws.size(); i++) {
         snd_uniform_draws[i] = rand() / static_cast<double>(RAND_MAX);
     }
 
-    // Create standard normal random draws
     snd.random_draws(snd_uniform_draws, spot_normals);
 
-    // Create the correlated standard normal distribution
     CorrelatedSND csnd(rho, &spot_normals);
     std::vector<double> csnd_uniform_draws(vals, 0.0);
 
-    // Uniform generation for the correlated SND
     for (int i = 0; i < csnd_uniform_draws.size(); i++) {
         csnd_uniform_draws[i] = rand() / static_cast<double>(RAND_MAX);
     }
 
-    // Now create the -correlated- standard normal draw series
     csnd.random_draws(csnd_uniform_draws, cor_normals);
 }
 
 
-double MonteCarloSimulation::simulate(HestonMC *heston, Option *option) {
+double MonteCarloSimulation::simulate(HestonMC *heston,
+                                      Option *option) {
+    double payoffSum = 0.0;
 
-    std::vector<double> spot_draws(timeSteps, 0.0);
-    std::vector<double> vol_draws(timeSteps, 0.0);
-    std::vector<double> spot_prices(timeSteps, option->S_0);
-    std::vector<double> vol_prices(timeSteps, option->v_0);
+    std::vector<double> spotRandom(timeSteps, 0.0);
+    std::vector<double> volRandom(timeSteps, 0.0);
+    std::vector<double> spotPrices(timeSteps, option->S_0);
+    std::vector<double> volPrices(timeSteps, option->v_0);
 
+    double rho = heston->getRho();
 
-    // Monte Carlo options pricing
-    double payoff_sum = 0.0;
-    for (unsigned i = 0; i < simulationTrials; i++) {
-        generate_normal_correlation_paths(heston->getRho(), spot_draws, vol_draws);
-        heston->simulateVolPath(vol_draws, vol_prices);
-        heston->simulateSpotPath(spot_draws, vol_prices, spot_prices);
-        payoff_sum += option->pay_off->operator()(spot_prices[timeSteps - 1]);
+    for (auto i = 0; i < simTrials; i++) {
+        corellatedNormalPaths(rho, spotRandom, volRandom);
+        heston->simulateVolPath(volRandom, volPrices);
+        heston->simulateSpotPath(spotRandom, volPrices, spotPrices);
+        double expiryPrice = spotPrices[timeSteps - 1];
+        payoffSum += option->pay_off->operator()(expiryPrice);
     }
 
     double discount = option->getDiscountFactor();
-    double option_price = (payoff_sum / static_cast<double>(simulationTrials)) * discount;
-    std::cout << heston->getName() << ":\t" << option_price << std::endl;
-    return option_price;
+    double payoffAvg = payoffSum / static_cast<double>(simTrials);
 
+    double optionPrice = payoffAvg * discount;
+    return optionPrice;
 }
 
 MonteCarloSimulation::MonteCarloSimulation() {

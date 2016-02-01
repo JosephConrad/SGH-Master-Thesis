@@ -46,11 +46,13 @@ void makeSimulation(std::vector<double> params, int simulationTrials, int timeSt
 
     MonteCarloSimulation mc = MonteCarloSimulation(simulationTrials, timeSteps);
     mc.simulate(hestonEuler, option);
-    //mc.simulate(hestonAndersen, option);
-    //mc.simulate(hestonAndersenMartingale, option);
+    mc.simulate(hestonAndersen, option);
+    mc.simulate(hestonAndersenMartingale, option);
+    hestonExact->optionPrice(S_0, v_0, 0);
 
 
-    double impliedVol = 0.2;
+    double impliedVol = 0.05;
+    // TODO obliczyc zmiennosc implikowana dla opcji o podanych parametrach
     BlackScholesAnalytic *bsAnalytic = new BlackScholesAnalytic();
     MCBlackScholes *mcBlackScholes = new MCBlackScholes(T, K, S_0, impliedVol, r, 100000);
     std::cout << "BS SIMULATION:\t" << mcBlackScholes->simulate() << std::endl;
@@ -90,18 +92,23 @@ void calcVolatilitySmile(char *fname, std::vector<double> params, int simulation
 
     std::string line;
     std::ifstream inputStream(fname);
-    std::ofstream outputStream("./../output/hestonPrices.txt");
+    std::ofstream outputStream("../../output/hestonPrices.txt");
 
     while (getline(inputStream, line)) {
         std::vector<std::string> params;
         boost::split(params, line, boost::is_any_of(";"), boost::token_compress_on);
-        K = std::stod(params[0]);
+        double K1 = std::stod(params[0]);
 //        double strike = std::stod(params[1]);
-        T = std::stod(params[2]);
-        option = new Option(K, r, T, S_0, v_0, payOffCall);
+        double T1 = std::stod(params[2]);
+        PayOff *payOffCall = new PayOffCall(K1);
+        Option * option1 = new Option(K1, r, T1, S_0, v_0, payOffCall);
 
-        double hestonPrice = mc.simulate(hestonEuler, option);
-        outputStream << S_0 << ";" << K << ";" << r << ";" << T << ";" << hestonPrice << std::endl;
+        HestonEuler * hestonEuler1 = new HestonEuler(option1, kappa, theta, epsilon, rho);
+        double hestonPrice = mc.simulate(hestonEuler1, option1);
+        delete hestonEuler1;
+        delete option1;
+//        std::cout << S_0 << ";" << K1 << ";" << r << ";" << T1 << ";" << hestonPrice << std::endl;
+        outputStream << S_0 << ";" << K1 << ";" << r << ";" << T1 << ";" << hestonPrice << std::endl;
     }
 
     delete hestonEuler;
@@ -145,5 +152,5 @@ int main(int argc, char **argv) {
     int simulationTrials, timeSteps;
     processValuation(argv[1], params, simulationTrials, timeSteps);
     makeSimulation(params, simulationTrials, timeSteps);
-    calcVolatilitySmile(argv[2], params, simulationTrials, timeSteps);
+    //calcVolatilitySmile(argv[2], params, simTrials, timeSteps);
 }

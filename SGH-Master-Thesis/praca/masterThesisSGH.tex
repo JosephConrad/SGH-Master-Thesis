@@ -227,7 +227,7 @@ instrumentów pochodnych w celu ograniczenia ryzyka walutowego, może oznaczać 
 bankructwo. 
 \begin{figure}
   \centering  
-  \includegraphics[width=0.80\textwidth]{../figures/currencyUSDRUB.pdf}
+  \includegraphics[width=0.80\textwidth]{../output/figures/currencyUSDRUB.pdf}
   \caption{Kurs walutowy rosyjskiego rubla w stosunku do dolara amerykańskiego.}\label{fig:currencyRisk}
 \end{figure} 
  
@@ -498,7 +498,7 @@ przedstawicielem jest model Hestona.
 
 \begin{figure}
   \centering  
-  \includegraphics[width=0.80\textwidth]{../figures/volatilitySANDP.pdf}
+  \includegraphics[width=0.80\textwidth]{../output/figures/volatilitySANDP.pdf}
   \caption{Zmieność w czasie indeksu S\&P}\label{fig:vix}
 \end{figure} 
 
@@ -608,7 +608,7 @@ Co można przekształcić do następującej postaci:
   \int_t^{t+\Delta}  \sqrt{v(t)} dW^v(u) du  = \varepsilon^{-1} \left(v(t+\Delta) 
   - v(t) - \kappa \theta \Delta + \kappa \int_t^{t+\Delta}  v(u) du \right)
 \end{equation}
-Podstawiając to równanie do (\ref{eq:HestonlnS}) otrzymujemy:
+Podstawiając to równanie do równania (\ref{eq:HestonlnS}) otrzymujemy:
 
 \begin{equation}
 \begin{aligned}
@@ -618,6 +618,9 @@ Podstawiając to równanie do (\ref{eq:HestonlnS}) otrzymujemy:
 \int_t^{t+\Delta} v(u) du + \sqrt{1-\rho^2} \int_t^{t+\Delta} \sqrt{v(u)}dW(u)
 \end{aligned}
 \end{equation}
+
+Powyższe równanie przedstawie dokładny wzór na wartość aktywa 
+bazowego $\ln S(t + \Delta) $ mając daną wartość $\ln S(t)$.
 
 
 
@@ -975,7 +978,7 @@ nie zawsze da się wyznaczyć analitycznie.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.80\textwidth]{../figures/NLS.pdf}
+  \includegraphics[width=0.80\textwidth]{../output/figures/NLS.pdf}
   \caption{Przykład dopasowania funkcji wykładniczej do danych}
   \label{fig:volatilitySurface}
 \end{figure}
@@ -1188,18 +1191,6 @@ stają się one uwięzione w jednym punkcie.
 Przedstawiona idea rozwiązuje szereg problemów podczas rozwiązywania problemów optymalizacyjnych, a 
 najważniejszym z nich jest potencjalne istnienie wielu ekstremów lokalnych.
 
-
-Działanie algorytmu symulowanego wyżarzania można zobaczyć na schemacie nr 
-\ref{alg:simulatedAnnealing}. Poniżej pokrótce omówimy działanie algorytmu.
-Funkcja ma dwa argumenty: pierwszy argument dotyczy wysokości temperatury początkowej (i ewentualnie
-szybkości chłodzenia systemu), natomiast drugi rozwiązanie początkowe.
-Najważniejszą częścią algorytmu jest pętla 4-6. 
-Centralną rolę odgrywa tam reguła Metropolisa, która mówi czy bieżące rozwiązanie powinno być 
-zaakceptowane czy nie (najważniejszym parametrem jest bieżąca temperatura systemu). 
-Linie 7-10 to już tylko sprawdzenie warunku końcowego: jeżeli temperatura jest dostatecznie 
-niska to kończymy algorytm, ponieważ wiemy, że i tak nie znajdziemy bardziej optymalnego rozwiązania.
-
-
 \begin{algorithm}[H]
 \caption{Algorytm symulowanego wyżarzania}\label{euclid}
 
@@ -1219,6 +1210,17 @@ niska to kończymy algorytm, ponieważ wiemy, że i tak nie znajdziemy bardziej 
 \end{algorithmic}
 \label{alg:simulatedAnnealing}
 \end{algorithm}
+
+Działanie algorytmu symulowanego wyżarzania można zobaczyć na schemacie nr 
+\ref{alg:simulatedAnnealing}. Poniżej pokrótce omówimy działanie algorytmu.
+Funkcja ma dwa argumenty: pierwszy argument dotyczy wysokości temperatury początkowej (i ewentualnie
+szybkości chłodzenia systemu), natomiast drugi rozwiązanie początkowe.
+Najważniejszą częścią algorytmu jest pętla 4-6. 
+Centralną rolę odgrywa tam reguła Metropolisa, która mówi czy bieżące rozwiązanie powinno być 
+zaakceptowane czy nie (najważniejszym parametrem jest bieżąca temperatura systemu). 
+Linie 7-10 to już tylko sprawdzenie warunku końcowego: jeżeli temperatura jest dostatecznie 
+niska to kończymy algorytm, ponieważ wiemy, że i tak nie znajdziemy bardziej optymalnego rozwiązania.
+
 
 
 %===========================================================================
@@ -1304,11 +1306,11 @@ przekształcenia:
 \begin{equation}
   u_1 = x \sqrt{\frac{-2ln(s)}{s}}, u_2 = y \sqrt{\frac{-2ln(s)}{s}}
 \end{equation}
-Poniższy kod przedstawia implementację tego algorytmu:
+Poniższy kod przedstawia implementację tego algorytmu \cite{JoshiDesignPatterns}:
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/SimpleMonteCarlo/PolarGenerator.cpp}
+{../src/HestonCPP/src/main/cpp/random/PolarGenerator.cpp}
 \caption{Generowanie zmiennych o rozkładzie normalnym zgodnie z metodą biegunów}
 \label{lst:lambdaSyntax}
 \end{listing} 
@@ -1834,7 +1836,7 @@ opcji na indeks S\&P500, co przedstawia rysunek nr \ref{fig:volatilitySurface}.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.80\textwidth]{../figures/blackScholesVolSurface.pdf}
+  \includegraphics[width=0.80\textwidth]{../output/figures/blackScholesVolSurface.pdf}
   \caption{Płaszczyzna zmienności implikowanej dla indeksu $S\&P$500}
   \label{fig:volatilitySurface}
 \end{figure}
@@ -1868,20 +1870,19 @@ opcji o 3 różnych terminach wygaśnięcia:
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.80\textwidth]{../figures/calibrationInput.pdf}
+  \includegraphics[width=0.80\textwidth]{../output/figures/calibrationInput.pdf}
   \caption{Dane wejściowe do funkcji kalibrującej model Hestona do danych giełdowych}
   \label{fig:calibration}
 \end{figure}
 
 W wyniku kalibracji otrzymano następujące parametry:
 
-
 \begin{itemize}
-  \item $V(1) = 0.0534 $
-  \item $\kappa = 40.5962$
-  \item $\theta = 0.0098$
-  \item $\sigma = 0.0022$
-  \item $\rho = 0.4031$
+  \item $V(1) = 0.0369 $
+  \item $\kappa = 20.1115$
+  \item $\theta = 0.0000$
+  \item $\sigma = 0.5000$
+  \item $\rho = -0.9000$
 \end{itemize}
 
 
@@ -1943,7 +1944,7 @@ w krótszym okresie czasu będą mniej warte od tych z dłuższym okresem do wyg
 
 
 \begin{figure}
-  \includegraphics[width=1.00\textwidth]{../figures/hestonTimeToExpiry.pdf}
+  \includegraphics[width=1.00\textwidth]{../output/figures/hestonTimeToExpiry.pdf}
   \caption{Cena instrumentu bazowego w modelu Hestona w zależności od czasu do wygaśnięcia opcji}
   \label{fig:hestonTimeToExpiry}
 \end{figure}
@@ -2088,6 +2089,20 @@ opcji zgodną z modelem Hestona.
 \label{lst:MCHeston}
 \end{listing} 
 
+\section{Symulacja Monte Carlo}
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../src/HestonCPP/src/main/cpp/mc/MonteCarloSimulation.h}
+\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+\label{lst:MCHeston}
+\end{listing}
+ 
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../output/listings/MonteCarloSimulation.cpp}
+\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+\label{lst:MCHeston}
+\end{listing}
  
 
 

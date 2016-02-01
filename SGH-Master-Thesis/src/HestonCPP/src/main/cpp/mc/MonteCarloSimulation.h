@@ -1,22 +1,18 @@
-//
-// Created by Konrad Lisiecki on 13/01/16.
-//
-
 #ifndef HESTON_MONTECARLOSIMULATION_H
 #define HESTON_MONTECARLOSIMULATION_H
 
-
-#include <src/main/cpp/heston/header/HestonEuler.h>
+#include <src/main/cpp/heston/header/HestonMC.h>
 
 class MonteCarloSimulation {
 private:
 
-    unsigned int simulationTrials;
-    unsigned int timeSteps;
+    int simTrials;
+    int timeSteps;
 
 public:
 
-    MonteCarloSimulation(unsigned int simulationTrials, unsigned int timeSteps);
+    MonteCarloSimulation(int simulationTrials,
+                         int timeSteps);
 
     double simulate(HestonMC *heston, Option *option);
 
@@ -25,5 +21,4 @@ public:
     virtual ~MonteCarloSimulation();
 };
 
-
-#endif //HESTON_MONTECARLOSIMULATION_H
+#endif HESTON_MONTECARLOSIMULATION_H

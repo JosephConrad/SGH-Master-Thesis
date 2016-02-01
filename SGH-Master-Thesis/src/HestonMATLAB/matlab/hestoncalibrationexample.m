@@ -1,4 +1,4 @@
-%Author: Moeti Ncube
+                %Author: Moeti Ncube
 
 %Comments: This code calibrates the heston model to any dataset of the form
 %of the marketdata.txt file. It also simulates the heston model given the
@@ -26,7 +26,7 @@ M=50000;
 %Current Asset Price (Prompt Month Price) and Interest rate
 F0=207.93; r=0.03;
 
-x(6)=2*x(2)*x(3)-x(4)^2; %Feller condition
+% x(6)=2*x(2)*x(3)-x(4)^2; %Feller condition
 
 load optionInputChart.txt
 
