@@ -1,10 +1,10 @@
 #ifndef HESTON_HESTONMC_H
 #define HESTON_HESTONMC_H
 
-#include <src/main/cpp/heston/header/Heston.h>
 #include <cmath>
 #include <vector>
 #include <random>
+#include <src/main/cpp/heston/header/Heston.h>
 #include <src/main/cpp/option/option.h>
 
 class HestonMC : public Heston {

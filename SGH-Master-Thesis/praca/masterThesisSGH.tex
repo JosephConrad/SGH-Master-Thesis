@@ -1793,17 +1793,6 @@ Gdy zdyskontujemy $\hat{C}(T)$ na moment zerowy otrzymamy wzór na moment zerowy
 \end{listing} 
 
 
-Kod źródłowy nr \ref{lst:MCHeston} przedstawia główną funkcję użytą w tym celu. 
-Zastosowano w niej prostą metodę Monte Carlo wraz ze schematem dyskretyzacji Eulera. 
-Parametrami dla funkcji \textit{simulateHeston} są dwa wektory, pierwszy zawierający
-parametry modelu Hestona, natomiast drugi parametry opcji, której cenę chcemy wyznaczyć. 
-Główną częścią pokazanego algorytmu jest pętla w liniach 20-24, która stanowi faktyczną symulację
-Monte-Carlo. Najpierw generujemy w niej skorelowane ciągi losowe mające rozkład normalny, 
-a następnie na ich podstawie generujemy kolejno trajektorię zmienności oraz trajektorię aktywa
-bazowego. W linii 24 bierzemy wartość aktywa bazowego w momencie $T$ i na tej podstawie obliczamy dla
-tej wartości kwotę wypłaty opcji. Aby otrzymać wartość opcji, musimy wziąć średnią z wypłat i
-zdyskontować ją na moment zerowy, co jest widoczne w liniach 27-28.
-
 
 %===========================================================================
 %                       Model Hestona na przykładznie
@@ -2031,7 +2020,7 @@ z danych rynkowych.
 Wszystkie zaimplementowane moduły zostały wykonane na maszynie o następujących parametrach:
 
 
-\section{Schemat Andersena}
+\section{Model Hestona}
 Na schemacie \ref{fig:currencyRisk} widać poszczególne klasy zaimplementowane w 
 ramach modułu wyliczającego cenę opcji zgodną z modelem Hestona.
 Klasą bazową, po której wszystkie inne dziedziczą jest klasa \textit{Heston}.
@@ -2046,27 +2035,57 @@ o tyle klasa \textit{HestonMC} definiuje jedynie interfejs jaki muszą spełnia�
 dziedziczące.
 
 
-
 \begin{figure}
   \centering  
   \includegraphics[width=1.00\textwidth]{../output/diagramms/HestonDiagramm.pdf}
   \caption{Drzewo dziedziczenia dla modułu wyliczającego 
   cenę opcji wg różnych metodologii w modelu Hestona.}\label{fig:currencyRisk}
-\end{figure} 
+\end{figure}
+\cleardoublepage
+
+\section{Interfejs abstrakcyjnych klas \textit{Heston} oraz \textit{HestonMC}}
+W projekcie zostały zaimplementowane dwie abstrakcyjne klasy \textit{Heston} oraz \textit{HestonMC}.
+Pierwsza z nich jest bazową klasą dla całego drzewa
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../src/HestonCPP/src/main/cpp/heston/header/Heston.h}
+\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+\end{listing} 
+ 
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../src/HestonCPP/src/main/cpp/heston/header/HestonMC.h}
+\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+\end{listing} 
+\cleardoublepage
+
+
+
+
+\subsection{Schemat Eulera}
+
+W tym podrozdziale zostanie przedstawiony kod do wyceny opcji zgodnie z dyskretyzacją Eulera.
+Na rysunku przedstawiono plik źródłowy klasy\textit{HestonEuler}. Jest ona rozszerzeniem klasy 
+HestonMC, a więc udostępnia ona interfejs swoich nadklas. 
+
+
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/src/main/cpp/heston/header/HestonEuler.h}
-\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
-\label{lst:MCHeston}
+{../src/HestonCPP/src/main/cpp/heston/header/HestonEuler.h}
+\caption{Plik nagłówkowy klasy \textit{HestonEuler}.}
 \end{listing} 
-
+Kod źródłowy \label{lst:Eulercpp} przedstawia z kolei implementację 2 powyższych metod:
+\begin{enumerate}
+  \item \textit{HestonEuler::simulateVolPath}
+  \item \textit{HestonEuler::simulateSpotPath}
+\end{enumerate}
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/HestonCPP/src/main/cpp/heston/src/HestonEuler.cpp}
-\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
-\label{lst:MCHeston}
+\caption{Implementacja metod dla schematu Eulera.}
+\label{lst:Eulercpp} 
 \end{listing} 
 \cleardoublepage
 
@@ -2074,30 +2093,48 @@ dziedziczące.
 
 
 \subsection{Schemat Andersena}
-W tym punkcie podana zostanie implementacja schematu Andersena. Zostały podane dwa
+W tym punkcie podana zostanie implementacja kolejnego schematu dyskretyzacji, schematu 
+Andersena. Zostały podane dwa
 pliki: jeden to plik nagłówkowy, a drugie z implementacją odpowiednich metod.
-
+Klasa \textit{HestonAndersen} zawiera jedną dodatkową 
+metodę:
+\begin{itemize}
+   \item \textit{HestonAndersen::modifiedExpInvCDF}
+ \end{itemize} 
+Jest to funkcja, która wylicza wartość odwrotnej dystrybuanty dla zmodyfikowanego rozkładu 
+wykładniczego.
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../output/listings/HestonAndersen.h}
 \caption{Schemat generowania trajektorii procesu aktywa bazowego wraz z poprawką
 martyngałową}
-\label{lst:MCHeston}
-\end{listing}  
-
+\end{listing}
+Podobnie jak dla dyskretyzacji Eulera definiujemy metody 
+\begin{enumerate}
+  \item \textit{HestonEuler::simulateVolPath},
+  \item \textit{HestonEuler::simulateSpotPath}.
+\end{enumerate}
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../output/listings/HestonAndersen.cpp}
 \caption{Metoda wyliczająca poprawkę martyngałową}
-\label{lst:MCHeston}
 \end{listing}  
+Metoda \textit{HestonEuler::simulateVolPath} oblicza trajektorię procesu zmienności, 
+natomiast metoda \textit{HestonEuler::simulateSpotPath} wyznacza trajektorię procesu aktywa
+bazowego.
 
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../output/listings/HestonAndersen2.cpp}
 \caption{Metoda wyliczająca poprawkę martyngałową}
-\label{lst:MCHeston}
+\end{listing}   
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../output/listings/ModifiedExpInvCDF.cpp}
+\caption{Funkcja wyliczająca wartość odwrotnej dystrybuanty dla zmodyfikowanego rozkładu 
+wykładniczego}
 \end{listing}   
 \cleardoublepage
 
@@ -2115,17 +2152,19 @@ Definiuję się zmienną $k_0^*$, która zastępuje zmienną $k_0$ następująco
 {../output/listings/HestonAndersenMartingaleSpot.cpp}
 \caption{Schemat generowania trajektorii procesu aktywa bazowego wraz z poprawką
 martyngałową}
-\label{lst:MCHeston}
 \end{listing}  
 
-Poniżej podajemy implementację funkcji wyliczającej poprawkę martyngałową 
+Klasa \textit{HestonAndersenMartingale} jest podlasą klasy \textit{HestonAndersen}, 
+dlatego nie musimy implementować niektórych metod, jak np. metody wyliczają trajektorę procesu
+wariancji. 
+Klasa \textit{HestonAndersenMartingale} implementuje ponadto funckję do wyliczenia parametru $k_0^*$.
+Metoda to nosi nazwę Poniżej podajemy implementację funkcji wyliczającej poprawkę martyngałową 
 dla każdej punktu realizacji procesu aktywa bazowego.
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../output/listings/HestonAndersenMartingaleMart.cpp}
 \caption{Metoda wyliczająca poprawkę martyngałową}
-\label{lst:MCHeston}
 \end{listing}  
 \cleardoublepage
 
@@ -2141,19 +2180,16 @@ został przedstawiony poniżej.
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../output/listings/HestonExact.h}
 \caption{Metoda wyliczająca poprawkę martyngałową}
-\label{lst:MCHeston}
 \end{listing}  
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../output/listings/HestonExact1.cpp}
 \caption{Metoda wyliczająca poprawkę martyngałową}
-\label{lst:MCHeston}
 \end{listing}  
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../output/listings/HestonExact2.cpp}
 \caption{Metoda wyliczająca poprawkę martyngałową}
-\label{lst:MCHeston}
 \end{listing}  
 
 
@@ -2162,7 +2198,6 @@ został przedstawiony poniżej.
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/heston/src/main/cpp/heston/header/HestonAndersen.h}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
-\label{lst:MCHeston}
 \end{listing} 
 
 
@@ -2170,21 +2205,18 @@ został przedstawiony poniżej.
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/heston/src/main/cpp/heston/src/HestonAndersen.cpp}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
-\label{lst:MCHeston}
 \end{listing} 
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/heston/src/main/cpp/heston/src/Heston.cpp}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
-\label{lst:MCHeston}
 \end{listing} 
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/heston/src/main/cpp/heston/src/HestonEuler.cpp}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
-\label{lst:MCHeston}
 \end{listing} 
  
 \cleardoublepage
@@ -2193,49 +2225,71 @@ został przedstawiony poniżej.
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/heston/src/main/cpp/random/PolarGenerator.h}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
-\label{lst:MCHeston}
 \end{listing} 
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/heston/src/main/cpp/random/PolarGenerator.cpp}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
-\label{lst:MCHeston}
 \end{listing} 
 
 \cleardoublepage
 \section{Model Blacka-Scholesa}
-\begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/HestonCPP/src/main/cpp/bs/MCBlackScholes.cpp}
-\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
-\label{lst:MCHeston}
-\end{listing} 
-
+Kod źródłowy nr \ref{lst:BlackScholesh} przedstawia plik nagłówkowy dla implementacji 
+modelu Blacka-Scholesa. Implementacja ta jest użyta do porównania wartości opcji dla 
+modelu Blacka-Scholesa i modelu Hestona.
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/HestonCPP/src/main/cpp/bs/MCBlackScholes.h}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
-\label{lst:MCHeston}
+\label{lst:BlackScholesh}
+\end{listing} 
+Kod źródłowy \ref{lst:BlackScholescpp} przedstawia konstruktor klasy \textit{MCBlackScholes} 
+oraz implementację metody \textit{simulate}.
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../src/HestonCPP/src/main/cpp/bs/MCBlackScholes.cpp}
+\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+\label{lst:BlackScholescpp}
 \end{listing} 
 
 
 \cleardoublepage
 \section{Symulacje Monte Carlo}
 
+Kod źródłowy \ref{lst:MonteCarloh} przedstawia plik nagłówkowy dla implementacji symulacji 
+Monte Carlo dla modelu Hestona. Plik definiuje interfejs jaki musi spełniać
+implementacja symulacji Monte Carlo. Najważniejszą publiczną metoda jest metoda \textit{simulate}, 
+dla której jako parametr przekazujemy odpowiedni schemat dyskretyzacji modelu Hestona 
+oraz opcję do wyceny. 
+Ponadto zdefiniowany jest konstruktor klasy, który jako parametry przyjmuje dwie zmienne:
+\textit{simulationTrials} oraz \textit{timeSteps}.
+Pierwsza ze zmiennych definiuje ile razy wykonujemy pojedyncza symulacje, natomiast druga 
+definiuje liczbę kroków w pojedynczej symulacji. Innymi słowy, czas wygaśnięcia opcji 
+podzielny przez liczbę kroków definiuje nam jednostkowy przyrost czasu.
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/HestonCPP/src/main/cpp/mc/MonteCarloSimulation.h}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
-\label{lst:MCHeston}
+\label{lst:MonteCarloh}
 \end{listing} 
- 
+Kod źródłowy nr \ref{lst:MonteCarlocpp} przedstawia główną funkcję użytą w tym celu. 
+Zastosowano w niej prostą metodę Monte Carlo wraz ze schematem dyskretyzacji Eulera. 
+Parametrami dla funkcji \textit{simulateHeston} są dwa wektory, pierwszy zawierający
+parametry modelu Hestona, natomiast drugi parametry opcji, której cenę chcemy wyznaczyć. 
+Główną częścią pokazanego algorytmu jest pętla w liniach 20-24, która stanowi faktyczną symulację
+Monte-Carlo. Najpierw generujemy w niej skorelowane ciągi losowe mające rozkład normalny, 
+a następnie na ich podstawie generujemy kolejno trajektorię zmienności oraz trajektorię aktywa
+bazowego. W linii 24 bierzemy wartość aktywa bazowego w momencie $T$ i na tej podstawie obliczamy dla
+tej wartości kwotę wypłaty opcji. Aby otrzymać wartość opcji, musimy wziąć średnią z wypłat i
+zdyskontować ją na moment zerowy, co jest widoczne w liniach 27-28.
 
 \begin{listing}[H]
+\label{lst:MCHeston} 
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../output/listings/MonteCarloSimulation.cpp}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
-\label{lst:MCHeston}
+\label{lst:MonteCarlocpp}
 \end{listing}  
 
 

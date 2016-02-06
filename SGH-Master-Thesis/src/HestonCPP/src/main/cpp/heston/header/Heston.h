@@ -1,10 +1,5 @@
-//
-// Created by Konrad Lisiecki on 18/01/16.
-//
-
 #ifndef HESTON_HESTON_H
 #define HESTON_HESTON_H
-
 
 #include <src/main/cpp/option/option.h>
 #include <string>
@@ -28,9 +23,7 @@ public:
 
     virtual std::string getName() = 0;
 
-
     double getRho() const;
 };
-
 
 #endif //HESTON_HESTON_H

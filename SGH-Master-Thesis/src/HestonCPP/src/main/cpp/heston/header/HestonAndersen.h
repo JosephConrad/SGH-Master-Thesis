@@ -28,9 +28,6 @@ public:
 
     double modifiedExpInvCDF(double random, double p, double beta);
 
-    double calcMartingaleCorr(std::vector<double> &vector,
-                              double a, double d);
-
     std::string getName();
 };
 

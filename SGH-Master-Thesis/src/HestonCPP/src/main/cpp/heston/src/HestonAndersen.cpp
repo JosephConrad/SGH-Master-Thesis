@@ -17,8 +17,8 @@ HestonAndersen::simulateVolPath(const std::vector<double> &volDraws,
     auto size = volPath.size();
     double dt = option->T / static_cast<double>(size);
 
-    std::vector<std::vector<double> >
-            martingaleCorrection(size, {0.0, 0.0, 0.0, 0.0, 0.0});
+    std::vector<std::vector<double> > temp(size, {0.0, 0.0, 0.0, 0.0, 0.0});
+    martingaleCorrection = temp;
 
     double discount, m, eps2, psi, s2, a, b2, beta, p;
     discount = exp(-kappa * dt);
