@@ -1,5 +1,4 @@
-#ifndef HESTON_BOXMULLER_H
-#define HESTON_BOXMULLER_H
+#pragma once
 
 #include <stdlib.h>
 #include <time.h>
@@ -14,14 +13,10 @@ public:
     double genNorm();
 
 private:
-    PolarGenerator() {
-        srand(time(NULL));
-    };
+    PolarGenerator();
+    ~PolarGenerator();
 
     PolarGenerator(PolarGenerator const &) = delete;
 
     void operator=(PolarGenerator const &) = delete;
 };
-
-
-#endif //HESTON_BOXMULLER_H

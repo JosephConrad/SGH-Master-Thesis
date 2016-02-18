@@ -1313,47 +1313,37 @@ Polega ona na wybraniu losowego punktu $(x,y)$ z rozkładu jednostajnego spełni
 Wtedy liczby losowe o standardowym rozkładzie normalnym otrzymujemy stosując następujące 
 przekształcenia:
 \begin{equation}
-  u_1 = x \sqrt{\frac{-2ln(s)}{s}}, u_2 = y \sqrt{\frac{-2ln(s)}{s}}
+  u_1 = x \sqrt{\frac{-2 \ln(s)}{s}}, u_2 = y \sqrt{\frac{-2 \ln(s)}{s}}
 \end{equation}
-Poniższy kod przedstawia implementację tego algorytmu:
+Pseudokod \ref{lst:polarMethodLst} przedstawia zarys algorytmu generowania zmiennej losowej o standardowym rozkładzie
+normalnym przy pomocy wyżej opisanego schematu. 
 
-\begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/SimpleMonteCarlo/PolarGenerator.cpp}
-\caption{Generowanie zmiennych o rozkładzie normalnym zgodnie z metodą biegunów}
-\label{lst:lambdaSyntax}
-\end{listing} 
+\begin{algorithm}[H]
+\caption{Generowanie zmiennej losowej o standardowym rozkładzie normalnym zgodnie z metodą biegunów}
+\label{lst:polarMethodLst}
 
+\begin{algorithmic}[1]
 
+  \State do \{
+  \State \hspace{\algorithmicindent} $x = 2.0$ $\cdot$ Uniform(0,1)
+  \State \hspace{\algorithmicindent} $y = 2.0$ $\cdot$ Uniform(0,1)
+  \State \hspace{\algorithmicindent} $s = x^2 + y^2$
+  \State \}
+  \State while ($s \geq 1.0$)
+  \State return $x \cdot \sqrt{\frac{-2 \ln(s)}{s}}$
 
-% \section{Symulacja cen opcji w modelu Blacka-Scholesa}
-
-% Wiedząc jak generować zmienne losowe o ustalonym rozkładzie, w szczególności o rozkładzie normalnym, 
-% można przystąpić do symulacji ceny opcji zgodnej z modelem Blacka-Scholesa.
-% Implementacja metody Monte-Carlo została przedstawiona na kodzie źródłowym nr \ref{lst:MCBS}.
-
-
-% \begin{listing}[H]
-% \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-% {../src/heston/SimpleMonteCarlo/MCBlackScholes.cpp}
-% \caption{Symulacja Monte Carlo wyliczająca cenę opcji kupna (zgodnie z modelem Blacka-Scholesa) o zadanym zestawie parametrów \cite{Joshi}}
-% \label{lst:MCBS}
-% \end{listing} 
- 
+\end{algorithmic}
+\label{alg:polarMethod}
+\end{algorithm}
 
 
 
-% Głównym elementem funkcji \textit{MCBlackScholes::simulate()} jest pętla w liniach 24-27. 
-% Najpierw w każdym obrocie pętli generujemy cenę aktywa bazowego na moment wygaśnięcia opcji, kolejno 
-% obliczamy wypłatę z konkretnej realizacji i w przypadku gdy jest ona większa od zera dodajemy ją do 
-% globalnego licznika sumującego wszystkie wypłaty z poszczególnych symulacji. Jak zostało pokazane w 
-% podrozdziale \ref{sec:mc}, po podzieleniu przez liczbę symulacji i zdyskontowaniu na moment zerowy, 
-% otrzymamy mocno zgodny estymator ceny opcji.
+
 
 \subsection{Generowanie skorelowanych ruchów Browna}
 \label{sec:genRB}
 
-Ważną kwestią, która pojawia się w implementacji modelu Hestona, jest generowanie skorelowanych 
+Ważną kwestią, która pojawia się podczas implementacji modelu Hestona, jest generowanie skorelowanych 
 ruchów Browna.
 
 Dla przypadku dwuwymiarowego problem redukuje się do 
@@ -1467,7 +1457,8 @@ postać:
 
 \begin{equation}
   \label{eq:s2}
-  s^2 = \frac{\hat{v}(t)\varepsilon^2 e^{-\kappa \Delta}}{\kappa} (1 - e^{-\kappa \Delta}) + \frac{\theta \varepsilon^2}{2 \kappa}(1 - e^{-\kappa \Delta})^2
+  s^2 = \frac{\hat{v}(t)\varepsilon^2 e^{-\kappa \Delta}}{\kappa} (1 - e^{-\kappa \Delta}) 
+  + \frac{\theta \varepsilon^2}{2 \kappa}(1 - e^{-\kappa \Delta})^2
 \end{equation}
 \end{prop}
  
@@ -1479,7 +1470,9 @@ $\Psi$ zdefiniowany jako:
 
 \begin{equation}
  \label{eq:ksi}
- \Psi = \frac{s^2}{m^2} = \frac{\frac{\hat{v}(t)\varepsilon^2 e^{-\kappa \Delta}}{\kappa} (1 - e^{-\kappa \Delta}) + \frac{\theta \varepsilon^2}{2 \kappa}(1 - e^{-\kappa \Delta})^2}{(\theta + (\hat{v}(t) - \theta) e^{-\kappa \Delta})^2} 
+ \Psi = \frac{s^2}{m^2} = \frac{\frac{\hat{v}(t)\varepsilon^2 e^{-\kappa \Delta}}{\kappa} 
+ (1 - e^{-\kappa \Delta}) + \frac{\theta \varepsilon^2}{2 \kappa}(1 - e^{-\kappa \Delta})^2}
+ {(\theta + (\hat{v}(t) - \theta) e^{-\kappa \Delta})^2} 
 \end{equation}
 gdzie $m$ i $s^2$ zdefiniowane są przy pomocy równań \ref{eq:m} oraz \ref{eq:s2}.
 Dla wartości parametru $\Psi \leq 2.0$, definiuje się wartość zmiennej $\hat{v}(t + \Delta)$ pod 
@@ -1785,12 +1778,6 @@ Gdy zdyskontujemy $\hat{C}(T)$ na moment zerowy otrzymamy wzór na moment zerowy
 \end{equation}
 
 
-\begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/listings/MCHeston.cpp}
-\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
-\label{lst:MCHeston}
-\end{listing} 
 
 
 
@@ -2014,10 +2001,15 @@ W tym pierwszym zaimplementowano następujące moduły:
   \item generator liczb z rozkładu normalnego
   \item symulację Monte Carlo dla modelu Hestona
 \end{itemize}
-Z kolei w języku \textit{Matlab} zimplementowano kalibrację modelu Hestona cen opcji pochodzących
-z danych rynkowych.
+Z kolei w języku \textit{Matlab} zaimplementowano kalibrację modelu Hestona do cen opcji pochodzących
+z danych giełdowych.
 
 Wszystkie zaimplementowane moduły zostały wykonane na maszynie o następujących parametrach:
+\begin{enumerate}
+  \item procesorze \textit{Intel Core i5, 2.6 GHz}
+  \item pamięci \textit{8GB}
+  \item systemie operacyjnym \textit{OS X El Capitan 10.11.3}
+\end{enumerate}
 
 
 \section{Model Hestona}
@@ -2030,33 +2022,44 @@ z modelem Hestona:
   \item symulacji Monte Carlo (klasa \textit{HestonMC})
   \item wzoru zamkniętego (klasa \textit{HestonExact})
 \end{enumerate}
-O ile klasa \textit{HestonExact} zawiera w sobie implementację wzoru zamkniętego na cenę opcji,
-o tyle klasa \textit{HestonMC} definiuje jedynie interfejs jaki muszą spełniać klasy po niej 
+Klasa \textit{HestonExact} zawiera w sobie implementację wzoru zamkniętego na cenę opcji,
+Z kolei klasa \textit{HestonMC} definiuje jedynie interfejs jaki muszą spełniać klasy po niej 
 dziedziczące.
+Klasa \textit{HestonMC} jest nadklasą dla następujących klas:
+\begin{enumerate}
+  \item \textit{HestonAndersen} 
+  \item \textit{HestonEuler} 
+\end{enumerate}
+Na schemacie \ref{fig:currencyRisk} widać również dodatkową klasę
+\textit{HestonAndersenMartingale}. Jest to klasa implementująca 
+poprawkę martyngałową dla klasy \textit{HestonAndersen}.
 
 
 \begin{figure}
   \centering  
   \includegraphics[width=1.00\textwidth]{../output/diagramms/HestonDiagramm.pdf}
   \caption{Drzewo dziedziczenia dla modułu wyliczającego 
-  cenę opcji wg różnych metodologii w modelu Hestona.}\label{fig:currencyRisk}
+  cenę opcji wg różnych metodologii dla modelu Hestona.}\label{fig:currencyRisk}
 \end{figure}
 \cleardoublepage
 
 \section{Interfejs abstrakcyjnych klas \textit{Heston} oraz \textit{HestonMC}}
 W projekcie zostały zaimplementowane dwie abstrakcyjne klasy \textit{Heston} oraz \textit{HestonMC}.
-Pierwsza z nich jest bazową klasą dla całego drzewa
+Pierwsza z nich stanowi klasę bazową dla całej struktury drzewa dzedziczenia. 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/HestonCPP/src/main/cpp/heston/header/Heston.h}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
 \end{listing} 
- 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/HestonCPP/src/main/cpp/heston/header/HestonMC.h}
 \caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
 \end{listing} 
+Klasa (\textit{HestonMC})
+jest klasą bazową dla klas wykonujących symulację Monte Carlo zgodnie z 
+przyjętym schematem dyskretyzacji. Definuje ona dwie dodatkowe metody: \textit{simulateVolPath} oraz 
+\textit{simulateSpotPath}.
 \cleardoublepage
 
 
@@ -2171,7 +2174,7 @@ dla każdej punktu realizacji procesu aktywa bazowego.
 
 
 
-\subsection{Wycena opcji w modelu Hestona przy pomocy wzoru zamkniętego}
+\subsection{Wycena opcji przy pomocy wzoru zamkniętego}
 W tym rozdziale zostaną przedstawione kody źródłowe dla alternatywnego podejścia 
 wyceny opcji w modelu Hestona. Zamiast polegać na niedeterministycznej metodzie
 Monte Carlo, zostanie użyty wzór zamknięty. Plik nagłówkowy dla tej klasy
@@ -2193,46 +2196,37 @@ został przedstawiony poniżej.
 \end{listing}  
 
 
-
-\begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/src/main/cpp/heston/header/HestonAndersen.h}
-\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
-\end{listing} 
-
-
-\begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/src/main/cpp/heston/src/HestonAndersen.cpp}
-\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
-\end{listing} 
-
-\begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/src/main/cpp/heston/src/Heston.cpp}
-\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
-\end{listing} 
-
-\begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/src/main/cpp/heston/src/HestonEuler.cpp}
-\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
-\end{listing} 
- 
+%===========================================================================
+%                             Polar generator
+%===========================================================================
 \cleardoublepage
 \section{Generator liczb z rozkładu normalnego}
+Przedstawiony poniżej kod źródłowy przedstawia plik nagłówkowy definiujący interfejs 
+generatora liczb losowych z rozkładu normalnego. 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/src/main/cpp/random/PolarGenerator.h}
-\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+{../src/HestonCPP/src/main/cpp/random/PolarGenerator.h}
+\caption{Plik nagłówkowy klasy \textit{PolarGenerator}}
 \end{listing} 
-
+Klasa ta została utworzona zgodnie z kreacyjnym wzorcem projektowym \textit{singleton}. 
+Głowną zaletą tego wzorca jest to, że pozwalamy na utworzenie tylko jednego obiektu danej 
+klasy, co jest istotne w przypadku implementacji konstruktora klasy definiującej
+generator liczb pseudolosowych.
+Implementacja wzorca została wykonana zgodnie ze schematem podanym przez Meyersa \cite{Meyers}, 
+która jest bezpieczna w środowisku wielowątkowym (\textit{ang. thread-safe}).
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/heston/src/main/cpp/random/PolarGenerator.cpp}
-\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+{../src/HestonCPP/src/main/cpp/random/PolarGenerator.cpp}
+\caption{Implementacja interfejsu klasy \textit{PolarGenerator}}
+\label{lst:PolarGeneratorcpp}
 \end{listing} 
+Kod źródłowy nr \ref{lst:PolarGeneratorcpp} przedstawia implementację konstruktora oraz metody
+generującej liczby z rozkładu normalnego \textit{genNorm()}.
 
+
+%===========================================================================
+%                             Model Blacka-Scholesa
+%===========================================================================
 \cleardoublepage
 \section{Model Blacka-Scholesa}
 Kod źródłowy nr \ref{lst:BlackScholesh} przedstawia plik nagłówkowy dla implementacji 
@@ -2254,9 +2248,11 @@ oraz implementację metody \textit{simulate}.
 \end{listing} 
 
 
+%===========================================================================
+%                         Symulacja Monte Carlo
+%===========================================================================
 \cleardoublepage
 \section{Symulacje Monte Carlo}
-
 Kod źródłowy \ref{lst:MonteCarloh} przedstawia plik nagłówkowy dla implementacji symulacji 
 Monte Carlo dla modelu Hestona. Plik definiuje interfejs jaki musi spełniać
 implementacja symulacji Monte Carlo. Najważniejszą publiczną metoda jest metoda \textit{simulate}, 
