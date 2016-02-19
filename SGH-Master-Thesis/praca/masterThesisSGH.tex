@@ -16,6 +16,11 @@
 \usepackage{eucal}
 \usepackage[mathcal]{eucal}
 \usepackage[mathscr]{eucal}
+%===========================================================================
+%                         Used for table border
+%===========================================================================
+\usepackage{booktabs}
+
 \hypersetup{
     colorlinks,
     citecolor=black,
@@ -1980,7 +1985,7 @@ implementacyjnej. Ze względu na konieczność wieloparametrowej kalibracji mode
 model ten jest o wiele bardziej czasochłonny obliczeniowo, niż chociażby model Blacka-Scholesa.
 
 %===========================================================================
-%                             Appendix
+%                             Appendix - kody zrodlowe
 %===========================================================================
 \cleardoublepage
 \phantomsection
@@ -2288,6 +2293,53 @@ zdyskontować ją na moment zerowy, co jest widoczne w liniach 27-28.
 \label{lst:MonteCarlocpp}
 \end{listing}  
 
+%===========================================================================
+%                         Kalibracja do danych rynkowych
+%===========================================================================
+\cleardoublepage
+\section{Kalibracja do danych rynkowych}
+Kod źródłowy \ref{lst:MonteCarloh} przedstawia główny program wykonujący
+kalibrację do danych rynkowych.
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../src/HestonCPP/src/main/cpp/mc/MonteCarloSimulation.h}
+\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+\label{lst:MonteCarloh}
+\end{listing}
+
+
+
+
+%===========================================================================
+%                             Appendix wyniki numeryczne
+%===========================================================================
+\cleardoublepage
+\phantomsection
+\appendix
+
+\chapter{Wyniki przeprowadzonych symulacji}
+
+Poniższy rozdział przedstawia wyniki przedprowadzonych symulacji.
+
+
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lrrrrr}
+\toprule
+{} &         0 &         1 &         2 &         3 &         4 \\
+\midrule
+0 &  0.431029 &  0.723101 &  0.721143 &  0.635732 &  0.998491 \\
+1 &  0.098489 &  0.131179 &  0.085612 &  0.030708 &  0.483103 \\
+2 &  0.417695 &  0.553477 &  0.138537 &  0.481846 &  0.126004 \\
+3 &  0.784146 &  0.638273 &  0.073043 &  0.001917 &  0.662137 \\
+4 &  0.041723 &  0.679695 &  0.197862 &  0.028270 &  0.158687 \\
+\bottomrule
+\end{tabular}
+\caption{caption}
+\label{tab:desciption}
+\end{table}
 
 
 %===========================================================================
@@ -2296,6 +2348,9 @@ zdyskontować ją na moment zerowy, co jest widoczne w liniach 27-28.
 \cleardoublepage
 \phantomsection
 \addcontentsline{toc}{chapter}{Lista rysunków}{\listoffigures}
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{Lista tabel}{\listoftables}
 \cleardoublepage
 \phantomsection
 \addcontentsline{toc}{chapter}{Lista kodów źródłowych}{\listoflistings}

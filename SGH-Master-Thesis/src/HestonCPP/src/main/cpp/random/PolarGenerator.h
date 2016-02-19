@@ -14,7 +14,7 @@ public:
 
 private:
     PolarGenerator();
-    ~PolarGenerator();
+    ~PolarGenerator() {};
 
     PolarGenerator(PolarGenerator const &) = delete;
 
