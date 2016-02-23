@@ -1,12 +1,14 @@
 cmake_minimum_required(VERSION 2.8)
-project(heston)
+set(PROJECT_NAME_STR heston)
+project(${PROJECT_NAME_STR} C CXX)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(BASEPATH "${CMAKE_SOURCE_DIR}")
 set(SOURCE_DIR "${PROJECT_SOURCE_DIR}/src")
 set(GEN_DIR "{PROJECT_SOURCE_DIR}/gen")
-set(CMAKE_CXX_FLAGS_DEBUG "-O2")
-set(CMAKE_C_FLAGS_DEBUG "-O2")
+set(TEST_DIR "{PROJECT_SOURCE_DIR}/test")
+# set(CMAKE_CXX_FLAGS_DEBUG "-O2")
+# set(CMAKE_C_FLAGS_DEBUG "-O2")
 include_directories("${BASEPATH}")
 
 # Directories configuration
@@ -14,6 +16,7 @@ include_directories("${BASEPATH}")
 #set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 
 find_package(Boost 1.55.0 COMPONENTS system filesystem REQUIRED)
+find_package(Threads REQUIRED)
 
 # Build protocol buffers
 add_custom_command(
@@ -31,6 +34,25 @@ if(Boost_FOUND)
 
 endif()
 
+
+if(CMAKE_COMPILER_IS_GNUCXX)
+        add_definitions(-Wall -ansi -Wno-deprecated -pthread)
+endif()
+
+if(MSVC)
+        #vc 2012 fix for vararg templates
+        set(MSVC_COMPILER_DEFS "-D_VARIADIC_MAX=10")
+endif()
+
+#-------------------
+# set common include folder for module
+#-------------------
+set(COMMON_INCLUDES ${PROJECT_SOURCE_DIR}/include)
+set(EXT_PROJECTS_DIR ${PROJECT_SOURCE_DIR}/ext)
+
+#-------------------
+# Module source
+#-------------------
 if(Boost_FOUND)
         include_directories(${Boost_INCLUDE_DIRS})
         set(SOURCE_FILES heston)
@@ -65,6 +87,15 @@ if(Boost_FOUND)
                 src/main/cpp/heston/header/HestonAndersenMartingale.h
                 src/main/cpp/bs/BlackScholesAnalytic.cpp
                 src/main/cpp/bs/BlackScholesAnalytic.h
+                src/main/cpp/simulation/Simulation.cpp
+                src/main/cpp/simulation/Simulation.h
+#                src/main/cpp/config/config.cpp
+#                src/main/cpp/config/config.h
                 )
         target_link_libraries(heston ${Boost_LIBRARIES})
 endif()
+
+
+add_subdirectory(${EXT_PROJECTS_DIR}/gtest)
+
+add_subdirectory (src/test)

@@ -8,8 +8,7 @@
 #include <src/main/cpp/heston/header/HestonAndersen.h>
 #include <src/main/cpp/heston/header/HestonAndersenMartingale.h>
 #include <src/main/cpp/mc/MonteCarloSimulation.h>
-#include <src/main/cpp/bs/MCBlackScholes.h>
-#include <src/main/cpp/bs/BlackScholesAnalytic.h>
+#include <src/main/cpp/simulation/Simulation.h>
 
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
@@ -17,54 +16,68 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/tokenizer.hpp>
 
-void calcVolatilitySmile(char *string, std::vector<double> vector, int i, int i1);
-void pprint(const std::string str, double d);
 
 using boost::property_tree::ptree;
 using boost::property_tree::read_json;
 using boost::property_tree::write_json;
 
+void calcVolatilitySmile(char *string, std::vector<double> vector, int i, int i1);
 
-void makeSimulation(std::vector<double> params, int simulationTrials, int timeSteps) {
+void pprint(std::string str, double d, std::ofstream& ofstream) {
 
-    double S_0 = params[0];
-    double K = params[1];
-    double r = params[2];
-    double v_0 = params[3];
-    double T = params[4];
-    double rho = params[5];
-    double kappa = params[6];
-    double theta = params[7];
-    double epsilon = params[8];
+    // << str << ":\t" << d << std::endl;
+    ofstream << d << "\t";
+}
+
+
+void makeSimulation(Simulation &simulation, int &timeStep, std::ofstream& outputStream) {
+
+    double S_0 = simulation.asset;
+    double K = simulation.strike;
+    double r = simulation.riskFree;
+    double v_0 = simulation.volatility;
+    double T = simulation.expiry;
+    double rho = simulation.rho;
+    double kappa = simulation.kappa;
+    double theta = simulation.theta;
+    double epsilon = simulation.eps;
 
     PayOff *payOffCall = new PayOffCall(K);
     Option *option = new Option(K, r, T, S_0, v_0, payOffCall);
 
-    HestonEuler *hestonEuler = new HestonEuler(option, kappa, theta, epsilon, rho);
-    HestonAndersen *hestonAndersen = new HestonAndersen(option, kappa, theta, epsilon, rho);
-    HestonAndersen *hestonAndersenMartingale = new HestonAndersenMartingale(option, kappa, theta, epsilon, rho);
-    HestonExact *hestonExact = new HestonExact(option, kappa, theta, epsilon, rho);
+    HestonEuler *hestonEuler =
+            new HestonEuler(option, kappa, theta, epsilon, rho);
+    HestonAndersen *hestonAndersen =
+            new HestonAndersen(option, kappa, theta, epsilon, rho);
+    HestonAndersen *hestonAndersenMartingale =
+            new HestonAndersenMartingale(option, kappa, theta, epsilon, rho);
+    HestonExact *hestonExact =
+            new HestonExact(option, kappa, theta, epsilon, rho);
 
-    MonteCarloSimulation mc = MonteCarloSimulation(simulationTrials, timeSteps);
+    MonteCarloSimulation mc = MonteCarloSimulation(simulation.trials, timeStep);
+
     double priceEuler = mc.simulate(hestonEuler, option);
-    pprint("Heston Euler", priceEuler);
+    pprint(hestonEuler->getName(), priceEuler, outputStream);
+
     double priceAndersen = mc.simulate(hestonAndersen, option);
-    pprint("Heston Andersen", priceAndersen);
+    pprint(hestonAndersen->getName(), priceAndersen, outputStream);
+
     double priceMart = mc.simulate(hestonAndersenMartingale, option);
-    pprint("Heston Mart", priceMart);
-    double priceExact = hestonExact->optionPrice(S_0, v_0, 0);
-    pprint("Heston Exact", priceExact);
+    pprint(hestonAndersenMartingale->getName(), priceMart, outputStream);
+
+    double priceExact = hestonExact->optionPrice(S_0, v_0, 0.0);
+    pprint(hestonExact->getName(), priceExact, outputStream);
 
 
-    double impliedVol = 0.05;
-    // TODO obliczyc zmiennosc implikowana dla opcji o podanych parametrach
-    BlackScholesAnalytic *bsAnalytic = new BlackScholesAnalytic();
-    MCBlackScholes *mcBlackScholes = new MCBlackScholes(T, K, S_0, impliedVol, r, 100000);
-    pprint("BS SIMULATION", mcBlackScholes->simulate());
-
-    double call = bsAnalytic->call_price(S_0, K, r, impliedVol, T);
-    pprint("BS ANALYTIC", call);
-    pprint("IMPLIED VOL", bsAnalytic->impliedVolatility(S_0, T, call));
+//    double impliedVol = 0.05;
+//    // TODO obliczyc zmiennosc implikowana dla opcji o podanych parametrach
+//    BlackScholesAnalytic *bsAnalytic = new BlackScholesAnalytic();
+//    MCBlackScholes *mcBlackScholes = new MCBlackScholes(T, K, S_0, impliedVol, r, 100000);
+//    pprint("BS SIMULATION", mcBlackScholes->simulate());
+//
+//    double call = bsAnalytic->call_price(S_0, K, r, impliedVol, T);
+//    pprint("BS ANALYTIC", call);
+//    pprint("IMPLIED VOL", bsAnalytic->impliedVolatility(S_0, T, call));
 
     delete option;
     delete payOffCall;
@@ -74,12 +87,13 @@ void makeSimulation(std::vector<double> params, int simulationTrials, int timeSt
     delete hestonExact;
 }
 
-void pprint(const std::string str, double d) {
-    std::cout << str << ":\t" << d << std::endl;
-}
 
 
-void calcVolatilitySmile(char *fname, std::vector<double> params, int simulationTrials, int timeSteps) {
+void calcVolatilitySmile(char *fname,
+                         std::vector<double> params,
+                         int simulationTrials,
+                         int timeSteps) {
+
     double S_0 = params[0];
     double K = params[1];
     double r = params[2];
@@ -114,7 +128,7 @@ void calcVolatilitySmile(char *fname, std::vector<double> params, int simulation
         double hestonPrice = mc.simulate(hestonEuler1, option1);
         delete hestonEuler1;
         delete option1;
-        pprint("Heston Euler", hestonPrice);
+        //pprint("Heston Euler", hestonPrice, outputStream);
         outputStream << S_0 << ";" << K1 << ";" << r << ";" << T1 << ";" << hestonPrice << std::endl;
     }
 
@@ -122,41 +136,68 @@ void calcVolatilitySmile(char *fname, std::vector<double> params, int simulation
 }
 
 
-boost::property_tree::ptree loadConfig(std::string filename) {
-    static boost::property_tree::ptree pt;
-    boost::property_tree::read_json(filename, pt);
+ptree loadConfig(std::string filename) {
+
+    static ptree pt;
+    read_json(filename, pt);
+
     return pt;
 }
 
-std::vector<double> processOptionParams(const ptree::value_type &node) {
-    return {
+
+Simulation processOptionParams(const ptree::value_type &node) {
+
+    return Simulation(
             node.second.get<double>("asset"),
             node.second.get<double>("strike"),
             node.second.get<double>("riskFree"),
-            node.second.get<double>("volatility"),
             node.second.get<double>("expiry"),
-            node.second.get<double>("rho"),
+            node.second.get<double>("volatility"),
             node.second.get<double>("kappa"),
             node.second.get<double>("theta"),
-            node.second.get<double>("eps")
-    };
+            node.second.get<double>("eps"),
+            node.second.get<double>("rho"),
+            node.second.get<int>("trials"),
+            node.second.get<double>("truePrice"),
+            "desc"
+    );
 }
 
-void processValuation(char *fname, std::vector<double> &params, int &simulationTrials, int &timeSteps) {
+
+void processValuation(char *fname,
+                      std::vector<Simulation> &simulations) {
 
     const ptree &jsonTree = loadConfig(fname);
+
     for (const ptree::value_type &node: jsonTree.get_child("heston")) {
-        params = processOptionParams(node);
-        simulationTrials = node.second.get<int>("trials");
-        timeSteps = node.second.get<int>("timeSteps");
+        simulations.push_back(processOptionParams(node));
     }
 }
 
+void testCases(std::vector<Simulation> simulations) {
+
+    std::vector<int> timeSteps
+            = {500, 250, 200, 150, 100, 50, 30, 10};
+    std::ofstream outputStream("../../output/hestonSimulation.txt");
+
+
+    for (Simulation &simulation:simulations) {
+        for (int &timeStep: timeSteps) {
+            outputStream << std::to_string(timeStep) << "\t";
+            makeSimulation(simulation, timeStep, outputStream);
+            outputStream << std::endl;
+        }
+    }
+    outputStream.close();
+}
 
 int main(int argc, char **argv) {
-    std::vector<double> params;
-    int simulationTrials, timeSteps;
-    processValuation(argv[1], params, simulationTrials, timeSteps);
-    makeSimulation(params, simulationTrials, timeSteps);
-    calcVolatilitySmile(argv[2], params, simulationTrials, timeSteps);
+
+    std::vector<Simulation> simulations;
+    processValuation(argv[1], simulations);
+
+    testCases(simulations);
+    //calcVolatilitySmile(argv[2], params, simulationTrials, timeSteps);
+
+    return 0;
 }

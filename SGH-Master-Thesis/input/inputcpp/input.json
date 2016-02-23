@@ -1,6 +1,34 @@
 {
   "heston": [
     {
+      "asset": "100.0",
+      "strike": "100.0",
+      "riskFree": "0.0319",
+      "expiry": "1.00",
+      "volatility": "0.010201",
+      "kappa": "6.21",
+      "theta": "0.019",
+      "eps": "0.61",
+      "rho": "-0.7",
+      "trials": "1000",
+      "truePrice": "6.8061",
+      "desc": "QuantStart"
+    },
+    {
+      "asset": "100.0",
+      "strike": "100.0",
+      "riskFree": "0.05",
+      "expiry": "5.00",
+      "volatility": "0.09",
+      "kappa": "2.00",
+      "theta": "0.09",
+      "eps": "1.00",
+      "rho": "-0.3",
+      "trials": "1000",
+      "truePrice": "34.9998",
+      "description": "broadie"
+    },
+    {
       "asset": "207.93",
       "strike": "207.93",
       "riskFree": "0.0319",
@@ -10,9 +38,9 @@
       "theta": "0.0001",
       "eps": "0.5000",
       "rho": "-0.90",
-      "trials": "20000",
-      "timeSteps": "1000",
-      "truePrice": "9.51"
+      "trials": "1000",
+      "truePrice": "9.51",
+      "desc": "SnP index"
     }
   ]
 }
