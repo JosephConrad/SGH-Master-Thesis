@@ -3,7 +3,7 @@
 //
 #include <algorithm>
 
-#include <ext/gtest/gtest.h>
+#include <gtest/gtest.h>
 
 
 TEST(cpp_sorter_test, int_arr_sort)

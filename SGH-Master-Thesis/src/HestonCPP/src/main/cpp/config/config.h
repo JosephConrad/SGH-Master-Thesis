@@ -5,10 +5,11 @@
 #ifndef HESTON_CONFIG_H
 #define HESTON_CONFIG_H
 
-using boost::property_tree::ptree;
-
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
+
+using boost::property_tree::ptree;
+
 
 class Config {
 
@@ -23,7 +24,6 @@ public:
 private:
     ptree pt;
 
-
     Config();
     ~Config() {};
 
@@ -31,8 +31,6 @@ private:
 
     void operator=(Config const &) = delete;
 };
-
-
 
 
 #endif //HESTON_CONFIG_H
