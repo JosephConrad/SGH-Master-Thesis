@@ -19,7 +19,7 @@ public:
         return instance;
     }
 
-    std::string getCalibrationOutput();
+    std::string getSettings(std::string option);
 
 private:
     ptree pt;

@@ -1,7 +1,3 @@
-#include <fstream>
-#include <map>
-#include <iostream>
-
 #include <src/main/cpp/payoff/payoff.h>
 #include <src/main/cpp/heston/header/HestonEuler.h>
 #include <src/main/cpp/heston/header/HestonExact.h>
@@ -9,6 +5,8 @@
 #include <src/main/cpp/heston/header/HestonAndersenMartingale.h>
 #include <src/main/cpp/mc/MonteCarloSimulation.h>
 #include <src/main/cpp/simulation/Simulation.h>
+#include <src/main/cpp/config/Config.h>
+#include <src/main/cpp/tools/output/OutputAndConsole.h>
 
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
@@ -23,14 +21,13 @@ using boost::property_tree::write_json;
 
 void calcVolatilitySmile(char *string, std::vector<double> vector, int i, int i1);
 
-void pprint(std::string str, double d, std::ofstream& ofstream) {
 
-    // << str << ":\t" << d << std::endl;
-    ofstream << d << "\t";
+void pprint(std::string str, double d, OutputAndConsole &outputStream) {
+    outputStream << d << "\t";
 }
 
 
-void makeSimulation(Simulation &simulation, int &timeStep, std::ofstream& outputStream) {
+void makeSimulation(Simulation &simulation, int &timeStep, OutputAndConsole &outputStream) {
 
     double S_0 = simulation.asset;
     double K = simulation.strike;
@@ -88,9 +85,7 @@ void makeSimulation(Simulation &simulation, int &timeStep, std::ofstream& output
 }
 
 
-
-void calcVolatilitySmile(char *fname,
-                         std::vector<double> params,
+void calcVolatilitySmile(std::vector<double> params,
                          int simulationTrials,
                          int timeSteps) {
 
@@ -113,10 +108,10 @@ void calcVolatilitySmile(char *fname,
     mc.simulate(hestonEuler, option);
 
     std::string line;
-    std::ifstream inputStream(fname);
-    std::ofstream outputStream("../../output/hestonPrices.txt");
+    std::ifstream ifstream(Config::getInstance().getSettings("VolatilitySurface.input"));
+    std::ofstream ofstream(Config::getInstance().getSettings("VolatilitySurface.output"));
 
-    while (getline(inputStream, line)) {
+    while (getline(ifstream, line)) {
         std::vector<std::string> params;
         boost::split(params, line, boost::is_any_of(";"), boost::token_compress_on);
         double K1 = std::stod(params[0]);
@@ -126,10 +121,12 @@ void calcVolatilitySmile(char *fname,
 
         HestonEuler *hestonEuler1 = new HestonEuler(option1, kappa, theta, epsilon, rho);
         double hestonPrice = mc.simulate(hestonEuler1, option1);
+
+        ofstream << S_0 << ";" << K1 << ";" << r << ";" << T1 << ";" << hestonPrice << "\n";
+
         delete hestonEuler1;
         delete option1;
-        //pprint("Heston Euler", hestonPrice, outputStream);
-        outputStream << S_0 << ";" << K1 << ";" << r << ";" << T1 << ";" << hestonPrice << std::endl;
+        //pprint("Heston Euler", hestonPrice, ofstream);
     }
 
     delete hestonEuler;
@@ -140,7 +137,6 @@ ptree loadConfig(std::string filename) {
 
     static ptree pt;
     read_json(filename, pt);
-
     return pt;
 }
 
@@ -159,15 +155,14 @@ Simulation processOptionParams(const ptree::value_type &node) {
             node.second.get<double>("rho"),
             node.second.get<int>("trials"),
             node.second.get<double>("truePrice"),
-            "desc"
+            node.second.get<std::string>("description")
     );
 }
 
 
-void processValuation(char *fname,
-                      std::vector<Simulation> &simulations) {
+void processValuation(std::vector<Simulation> &simulations) {
 
-    const ptree &jsonTree = loadConfig(fname);
+    const ptree &jsonTree = loadConfig(Config::getInstance().getSettings("Simulation.input"));
 
     for (const ptree::value_type &node: jsonTree.get_child("heston")) {
         simulations.push_back(processOptionParams(node));
@@ -178,26 +173,24 @@ void testCases(std::vector<Simulation> simulations) {
 
     std::vector<int> timeSteps
             = {500, 250, 200, 150, 100, 50, 30, 10};
-    std::ofstream outputStream("../../output/hestonSimulation.txt");
-
+    OutputAndConsole output(Config::getInstance().getSettings("Simulation.output"));
 
     for (Simulation &simulation:simulations) {
         for (int &timeStep: timeSteps) {
-            outputStream << std::to_string(timeStep) << "\t";
-            makeSimulation(simulation, timeStep, outputStream);
-            outputStream << std::endl;
+            output << std::to_string(timeStep) << "\t";
+            makeSimulation(simulation, timeStep, output);
+            output << "\n";
         }
     }
-    outputStream.close();
 }
 
 int main(int argc, char **argv) {
 
     std::vector<Simulation> simulations;
-    processValuation(argv[1], simulations);
+    processValuation(simulations);
 
     testCases(simulations);
-    //calcVolatilitySmile(argv[2], params, simulationTrials, timeSteps);
+//    calcVolatilitySmile(params, simulationTrials, timeSteps);
 
     return 0;
 }

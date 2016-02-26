@@ -7,13 +7,19 @@ set(BASEPATH "${CMAKE_SOURCE_DIR}")
 set(SOURCE_DIR "${PROJECT_SOURCE_DIR}/src")
 set(GEN_DIR "{PROJECT_SOURCE_DIR}/gen")
 set(TEST_DIR "{PROJECT_SOURCE_DIR}/test")
+
+#############################
+#       Optimization
+#############################
 # set(CMAKE_CXX_FLAGS_DEBUG "-O2")
 # set(CMAKE_C_FLAGS_DEBUG "-O2")
-include_directories("${BASEPATH}")
 
-# Directories configuration
-#set(PROJECT_BINARY_DIR "${PROJECT_SOURCE_DIR}/build")
-#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
+
+include_directories("${BASEPATH}")
+include_directories("${BASEPATH}/..")
+
+set(PROJECT_BINARY_DIR "${PROJECT_SOURCE_DIR}/build")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 
 find_package(Boost 1.55.0 COMPONENTS system filesystem REQUIRED)
 find_package(Threads REQUIRED)
@@ -89,41 +95,85 @@ if(Boost_FOUND)
                 src/main/cpp/bs/BlackScholesAnalytic.h
                 src/main/cpp/simulation/Simulation.cpp
                 src/main/cpp/simulation/Simulation.h
-                src/main/cpp/config/config.cpp
-                src/main/cpp/config/config.h
-                )
+                src/main/cpp/config/Config.cpp
+                src/main/cpp/config/Config.h
+                src/main/cpp/tools/output/OutputAndConsole.cpp
+                src/main/cpp/tools/output/OutputAndConsole.h)
         target_link_libraries(heston ${Boost_LIBRARIES})
 endif()
 
 
-add_subdirectory(${EXT_PROJECTS_DIR}/gtest)
-
-add_definitions(${MSVC_COMPILER_DEFS})
-enable_testing()
-set(PROJECT_TEST_NAME ${PROJECT_NAME_STR}_test)
-include_directories(${GTEST_INCLUDE_DIRS} ${COMMON_INCLUDES})
+#add_subdirectory(${EXT_PROJECTS_DIR}/gtest)
+#
+#add_definitions(${MSVC_COMPILER_DEFS})
+#enable_testing()
+#set(PROJECT_TEST_NAME ${PROJECT_NAME_STR}_test)
+#include_directories(${GTEST_INCLUDE_DIRS} ${COMMON_INCLUDES})
 
 #file(GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/cpp/config/*.cpp)
-add_executable(${PROJECT_TEST_NAME} src/test/cpp/config/ConfigTest.cpp)
-add_dependencies(${PROJECT_TEST_NAME} googletest)
+#add_executable(${PROJECT_TEST_NAME} src/test/cpp/config/ConfigTest.cpp)
+#add_dependencies(${PROJECT_TEST_NAME} googletest)
+#
+#
+#if(NOT WIN32)
+#        target_link_libraries(${PROJECT_TEST_NAME}
+#                ${GTEST_LIBS_DIR}/libgtest.a
+#                ${GTEST_LIBS_DIR}/libgtest_main.a
+#                )
+#else()
+#        target_link_libraries(${PROJECT_TEST_NAME}
+#                debug ${GTEST_LIBS_DIR}/DebugLibs/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${CMAKE_FIND_LIBRARY_SUFFIXES}
+#                optimized ${GTEST_LIBS_DIR}/ReleaseLibs/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${CMAKE_FIND_LIBRARY_SUFFIXES}
+#                )
+#        target_link_libraries(${PROJECT_TEST_NAME}
+#                debug ${GTEST_LIBS_DIR}/DebugLibs/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main${CMAKE_FIND_LIBRARY_SUFFIXES}
+#                optimized ${GTEST_LIBS_DIR}/ReleaseLibs/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main${CMAKE_FIND_LIBRARY_SUFFIXES}
+#                )
+#endif()
 
-
-if(NOT WIN32)
-        target_link_libraries(${PROJECT_TEST_NAME}
-                ${GTEST_LIBS_DIR}/libgtest.a
-                ${GTEST_LIBS_DIR}/libgtest_main.a
-                )
-else()
-        target_link_libraries(${PROJECT_TEST_NAME}
-                debug ${GTEST_LIBS_DIR}/DebugLibs/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${CMAKE_FIND_LIBRARY_SUFFIXES}
-                optimized ${GTEST_LIBS_DIR}/ReleaseLibs/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${CMAKE_FIND_LIBRARY_SUFFIXES}
-                )
-        target_link_libraries(${PROJECT_TEST_NAME}
-                debug ${GTEST_LIBS_DIR}/DebugLibs/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main${CMAKE_FIND_LIBRARY_SUFFIXES}
-                optimized ${GTEST_LIBS_DIR}/ReleaseLibs/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main${CMAKE_FIND_LIBRARY_SUFFIXES}
-                )
-endif()
-
-target_link_libraries(${PROJECT_TEST_NAME} ${CMAKE_THREAD_LIBS_INIT})
-
-add_test(test1 ${PROJECT_TEST_NAME})
+#target_link_libraries(${PROJECT_TEST_NAME} ${CMAKE_THREAD_LIBS_INIT})
+#
+#
+#####################################################################
+##                   Download and install GoogleTest
+#####################################################################
+#include(ExternalProject)
+#ExternalProject_Add(gtest
+#        GIT_REPOSITORY https://github.com/google/googletest.git
+#        PREFIX "${CMAKE_CURRENT_BINARY_DIR}"
+#        INSTALL_COMMAND ""
+#        )
+#ExternalProject_Get_Property(gtest source_dir binary_dir)
+#
+#
+#set(COMMON_INCLUDES ${PROJECT_SOURCE_DIR}/include)
+#include_directories(${GTEST_INCLUDE_DIRS} ${COMMON_INCLUDES})
+#####################################################################
+## Define a test
+#add_executable(heston src/test/cpp/config/ConfigTest.cpp)
+#####################################################################
+#
+#
+#####################################################################
+## Configure the test to use GoogleTest
+##
+## If used often, could be made a macro.
+#####################################################################
+#
+#add_dependencies(heston gtest)
+#include_directories(/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/HestonCPP/build/debug/src/gtest/googletest/include)
+#include_directories(${source_dir}/include)
+#target_link_libraries(heston ${binary_dir}/libgtest.a)
+#target_link_libraries(heston ${binary_dir}/libgtest_main.a)
+#
+#
+#####################################################################
+## Just make the test runnable with
+##   $ make test
+#####################################################################
+#
+#enable_testing()
+#add_test(NAME heston
+#        COMMAND heston)
+#
+#

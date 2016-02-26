@@ -13,6 +13,8 @@ TEST(cpp_sorter_test, int_arr_sort)
     int sz = sizeof(arr)/sizeof(arr[0]);
 
 
-    for(int i=0; i<sz; i++)
-	EXPECT_EQ(arr[i], eq[i]);
+    for(int i=0; i<sz; i++){
+        EXPECT_EQ(arr[i], eq[i]);
+
+    }
 }

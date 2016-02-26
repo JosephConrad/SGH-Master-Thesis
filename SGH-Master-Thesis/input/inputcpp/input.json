@@ -12,7 +12,7 @@
       "rho": "-0.7",
       "trials": "1000",
       "truePrice": "6.8061",
-      "desc": "QuantStart"
+      "description": "QuantStart"
     },
     {
       "asset": "100.0",
@@ -40,7 +40,7 @@
       "rho": "-0.90",
       "trials": "1000",
       "truePrice": "9.51",
-      "desc": "SnP index"
+      "description": "SnP index"
     }
   ]
 }
