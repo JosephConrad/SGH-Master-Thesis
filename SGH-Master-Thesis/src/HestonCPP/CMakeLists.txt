@@ -16,7 +16,7 @@ set(TEST_DIR "{PROJECT_SOURCE_DIR}/test")
 
 
 include_directories("${BASEPATH}")
-include_directories("${BASEPATH}/..")
+include_directories("${BASEPATH}")
 
 set(PROJECT_BINARY_DIR "${PROJECT_SOURCE_DIR}/build")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
@@ -95,24 +95,23 @@ if(Boost_FOUND)
                 src/main/cpp/bs/BlackScholesAnalytic.h
                 src/main/cpp/simulation/Simulation.cpp
                 src/main/cpp/simulation/Simulation.h
-                src/main/cpp/config/Config.cpp
-                src/main/cpp/config/Config.h
+                src/main/cpp/tools/config/Config.cpp
+                src/main/cpp/tools/config/Config.h
                 src/main/cpp/tools/output/OutputAndConsole.cpp
                 src/main/cpp/tools/output/OutputAndConsole.h)
         target_link_libraries(heston ${Boost_LIBRARIES})
 endif()
 
 
-#add_subdirectory(${EXT_PROJECTS_DIR}/gtest)
 #
-#add_definitions(${MSVC_COMPILER_DEFS})
-#enable_testing()
-#set(PROJECT_TEST_NAME ${PROJECT_NAME_STR}_test)
-#include_directories(${GTEST_INCLUDE_DIRS} ${COMMON_INCLUDES})
+add_definitions(${MSVC_COMPILER_DEFS})
+enable_testing()
+set(PROJECT_TEST_NAME ${PROJECT_NAME_STR}_test)
+include_directories(${GTEST_INCLUDE_DIRS} ${COMMON_INCLUDES})
 
-#file(GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/cpp/config/*.cpp)
-#add_executable(${PROJECT_TEST_NAME} src/test/cpp/config/ConfigTest.cpp)
-#add_dependencies(${PROJECT_TEST_NAME} googletest)
+file(GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/cpp/config/*.cpp)
+add_executable(${PROJECT_TEST_NAME} src/test/cpp/config/ConfigTest.cpp)
+add_dependencies(${PROJECT_TEST_NAME} googletest)
 #
 #
 #if(NOT WIN32)
@@ -137,20 +136,20 @@ endif()
 #####################################################################
 ##                   Download and install GoogleTest
 #####################################################################
-#include(ExternalProject)
-#ExternalProject_Add(gtest
-#        GIT_REPOSITORY https://github.com/google/googletest.git
-#        PREFIX "${CMAKE_CURRENT_BINARY_DIR}"
-#        INSTALL_COMMAND ""
-#        )
-#ExternalProject_Get_Property(gtest source_dir binary_dir)
-#
-#
-#set(COMMON_INCLUDES ${PROJECT_SOURCE_DIR}/include)
-#include_directories(${GTEST_INCLUDE_DIRS} ${COMMON_INCLUDES})
+include(ExternalProject)
+ExternalProject_Add(gtest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        PREFIX "${CMAKE_CURRENT_BINARY_DIR}"
+        INSTALL_COMMAND ""
+        )
+ExternalProject_Get_Property(gtest source_dir binary_dir)
+
+
+set(COMMON_INCLUDES ${PROJECT_SOURCE_DIR}/include)
+include_directories(${GTEST_INCLUDE_DIRS} ${COMMON_INCLUDES})
 #####################################################################
 ## Define a test
-#add_executable(heston src/test/cpp/config/ConfigTest.cpp)
+#add_executable(heston_test src/test/cpp/config/ConfigTest.cpp)
 #####################################################################
 #
 #
@@ -161,8 +160,8 @@ endif()
 #####################################################################
 #
 #add_dependencies(heston gtest)
-#include_directories(/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/HestonCPP/build/debug/src/gtest/googletest/include)
-#include_directories(${source_dir}/include)
+include_directories(/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/HestonCPP/build/debug/src/gtest/googletest/include)
+include_directories(${source_dir}/include)
 #target_link_libraries(heston ${binary_dir}/libgtest.a)
 #target_link_libraries(heston ${binary_dir}/libgtest_main.a)
 #
@@ -172,8 +171,8 @@ endif()
 ##   $ make test
 #####################################################################
 #
-#enable_testing()
-#add_test(NAME heston
-#        COMMAND heston)
+enable_testing()
+add_test(NAME heston
+        COMMAND heston)
 #
 #

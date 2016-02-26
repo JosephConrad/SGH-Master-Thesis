@@ -5,12 +5,11 @@
 #include <src/main/cpp/heston/header/HestonAndersenMartingale.h>
 #include <src/main/cpp/mc/MonteCarloSimulation.h>
 #include <src/main/cpp/simulation/Simulation.h>
-#include <src/main/cpp/config/Config.h>
+#include <src/main/cpp/tools/config/Config.h>
 #include <src/main/cpp/tools/output/OutputAndConsole.h>
 
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
-#include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/tokenizer.hpp>
 
