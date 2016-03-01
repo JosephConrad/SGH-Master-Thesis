@@ -1,5 +1,6 @@
-mkdir -p build/debug
-cd build/debug
-cmake ../.. -DCMAKE_BUILD_TYPE=Debug -LAH
-make 
-cd ../..
+mkdir -p build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Debug -LAH
+cmake --build .
+ctest -VV
+cd ..
