@@ -162,6 +162,7 @@ find_package(Threads REQUIRED)
 
 set(COMMON_INCLUDES ${PROJECT_SOURCE_DIR}/include)
 set(EXT_PROJECTS_DIR ${PROJECT_SOURCE_DIR}/ext)
+set(PROJECT_BINARY_DIR "${PROJECT_SOURCE_DIR}/bin")
 
 add_subdirectory(${EXT_PROJECTS_DIR}/gtest)
 
