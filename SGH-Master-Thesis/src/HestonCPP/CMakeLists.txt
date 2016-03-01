@@ -180,6 +180,10 @@ include_directories(/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/He
 find_package(Threads REQUIRED)
 
 set(COMMON_INCLUDES ${PROJECT_SOURCE_DIR}/include)
+set(EXT_PROJECTS_DIR ${PROJECT_SOURCE_DIR}/ext)
+
+add_subdirectory(${EXT_PROJECTS_DIR}/gtest)
+
 #-------------------
 # Test
 #-------------------
