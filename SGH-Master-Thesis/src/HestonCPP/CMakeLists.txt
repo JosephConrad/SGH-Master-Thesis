@@ -133,25 +133,7 @@ endif()
 #target_link_libraries(${PROJECT_TEST_NAME} ${CMAKE_THREAD_LIBS_INIT})
 #
 #
-#####################################################################
-##                   Download and install GoogleTest
-#####################################################################
-include(ExternalProject)
-ExternalProject_Add(gtest
-        GIT_REPOSITORY https://github.com/google/googletest.git
-        PREFIX "${CMAKE_CURRENT_BINARY_DIR}"
-        INSTALL_COMMAND ""
-        )
-ExternalProject_Get_Property(gtest source_dir binary_dir)
 
-
-set(COMMON_INCLUDES ${PROJECT_SOURCE_DIR}/include)
-include_directories(${GTEST_INCLUDE_DIRS} ${COMMON_INCLUDES})
-#####################################################################
-## Define a test
-#add_executable(heston_test src/test/cpp/config/ConfigTest.cpp)
-#####################################################################
-#
 #
 #####################################################################
 ## Configure the test to use GoogleTest
@@ -160,7 +142,6 @@ include_directories(${GTEST_INCLUDE_DIRS} ${COMMON_INCLUDES})
 #####################################################################
 #
 #add_dependencies(heston gtest)
-include_directories(/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/HestonCPP/build/debug/src/gtest/googletest/include)
 #include_directories(${source_dir}/include)
 #target_link_libraries(heston ${binary_dir}/libgtest.a)
 #target_link_libraries(heston ${binary_dir}/libgtest_main.a)
@@ -184,6 +165,7 @@ set(EXT_PROJECTS_DIR ${PROJECT_SOURCE_DIR}/ext)
 
 add_subdirectory(${EXT_PROJECTS_DIR}/gtest)
 
+
 #-------------------
 # Test
 #-------------------
@@ -191,7 +173,7 @@ add_definitions(${MSVC_COMPILER_DEFS})
 enable_testing()
 set(PROJECT_TEST_NAME ${PROJECT_NAME_STR}_test)
 include_directories(${GTEST_INCLUDE_DIRS} ${COMMON_INCLUDES})
-include_directories(${PROJECT_SOURCE_DIR}/build/ext/gtest/src/googletest/googletest/include)
+include_directories(${PROJECT_SOURCE_DIR}/build/src/gtest/googletest/include)
 
 file(GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/src/test/cpp/config/*.cpp)
 add_executable(${PROJECT_TEST_NAME} ${TEST_SRC_FILES})
