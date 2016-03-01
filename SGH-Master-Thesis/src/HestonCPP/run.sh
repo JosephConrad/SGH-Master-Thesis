@@ -1,2 +1,2 @@
 # run
-build/debug/heston
+build/heston

@@ -19,7 +19,7 @@ include_directories("${BASEPATH}")
 include_directories("${BASEPATH}")
 
 set(PROJECT_BINARY_DIR "${PROJECT_SOURCE_DIR}/build")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
+#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 
 find_package(Boost 1.55.0 COMPONENTS system filesystem REQUIRED)
 find_package(Threads REQUIRED)
@@ -162,7 +162,6 @@ find_package(Threads REQUIRED)
 
 set(COMMON_INCLUDES ${PROJECT_SOURCE_DIR}/include)
 set(EXT_PROJECTS_DIR ${PROJECT_SOURCE_DIR}/ext)
-set(PROJECT_BINARY_DIR "${PROJECT_SOURCE_DIR}/bin")
 
 add_subdirectory(${EXT_PROJECTS_DIR}/gtest)
 
