@@ -2,7 +2,6 @@
 // Created by Konrad Lisiecki on 22/02/16.
 //
 #include <algorithm>
-
 #include <gtest/gtest.h>
 
 
