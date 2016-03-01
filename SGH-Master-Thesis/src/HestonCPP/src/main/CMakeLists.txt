@@ -1,11 +1,12 @@
 include_directories("${BASEPATH}")
 
+set(COMMON_INCLUDES ${PROJECT_SOURCE_DIR}/include)
+set(EXT_PROJECTS_DIR ${PROJECT_SOURCE_DIR}/ext)
 set(PROJECT_BINARY_DIR "${PROJECT_SOURCE_DIR}/build")
 
 find_package(Boost 1.55.0 COMPONENTS system filesystem REQUIRED)
 find_package(Threads REQUIRED)
 
-# Build protocol buffers
 add_custom_command(
         OUTPUT ${GEN_DIR}/execute.pb.cc ${GEN_DIR}/execute.pb.h
         COMMAND protoc -I=${PROTO_DIR} --cpp_out=${GEN_DIR} ${PROTO_DIR}/execute.proto
@@ -13,7 +14,6 @@ add_custom_command(
 )
 
 if(Boost_FOUND)
-
     message(STATUS "Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")
     message(STATUS "Boost_LIBRARIES: ${Boost_LIBRARIES}")
     message(STATUS "Boost_VERSION: ${Boost_VERSION}")
@@ -21,22 +21,9 @@ if(Boost_FOUND)
 
 endif()
 
-
 if(CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-Wall -ansi -Wno-deprecated -pthread)
 endif()
-
-if(MSVC)
-    #vc 2012 fix for vararg templates
-    set(MSVC_COMPILER_DEFS "-D_VARIADIC_MAX=10")
-endif()
-
-#-------------------
-# set common include folder for module
-#-------------------
-set(COMMON_INCLUDES ${PROJECT_SOURCE_DIR}/include)
-set(EXT_PROJECTS_DIR ${PROJECT_SOURCE_DIR}/ext)
-
 
 #-------------------
 # Module source
