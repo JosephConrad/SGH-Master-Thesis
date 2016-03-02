@@ -10,7 +10,7 @@ set(EXT_PROJECTS_DIR ${PROJECT_SOURCE_DIR}/ext)
 add_subdirectory(${EXT_PROJECTS_DIR}/gtest)
 
 #-------------------
-# Test9
+# Test
 #-------------------
 add_definitions(${MSVC_COMPILER_DEFS})
 enable_testing()
