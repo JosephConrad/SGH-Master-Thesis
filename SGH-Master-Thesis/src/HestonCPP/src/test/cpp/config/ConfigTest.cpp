@@ -5,6 +5,8 @@
 #include <gtest/gtest.h>
 #include <src/main/cpp/tools/config/Config.h>
 
+
+
 TEST(cpp_sorter_test, int_arr_sort) {
     int arr[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     int eq[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -17,5 +19,5 @@ TEST(cpp_sorter_test, int_arr_sort) {
 }
 
 TEST(tools_test, config_test) {
-    EXPECT_EQ(Config::getInstance().getSettings("Log.logfile"), "logs/log.txt");
+    EXPECT_EQ(Config::getInstance().getSettings("Log.logFile"), "logs/log.txt");
 }
