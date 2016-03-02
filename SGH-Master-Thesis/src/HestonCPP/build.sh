@@ -1,3 +1,5 @@
+set -e
+
 mkdir -p build
 cp config.ini build/
 cd build
