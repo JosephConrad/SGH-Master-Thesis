@@ -8,17 +8,9 @@
 #include <src/main/cpp/tools/config/Config.h>
 #include <src/main/cpp/tools/output/OutputAndConsole.h>
 
-#include <boost/algorithm/string/classification.hpp>
-#include <boost/algorithm/string/split.hpp>
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/tokenizer.hpp>
+#include <src/main/cpp/tools/json/JsonReader.h>
 
-
-using boost::property_tree::ptree;
-using boost::property_tree::read_json;
-using boost::property_tree::write_json;
-
-void calcVolatilitySmile(char *string, std::vector<double> vector, int i, int i1);
 
 
 void pprint(std::string str, double d, OutputAndConsole &outputStream) {
@@ -41,26 +33,27 @@ void makeSimulation(Simulation &simulation, int &timeStep, OutputAndConsole &out
     PayOff *payOffCall = new PayOffCall(K);
     Option *option = new Option(K, r, T, S_0, v_0, payOffCall);
 
-    HestonEuler *hestonEuler =
-            new HestonEuler(option, kappa, theta, epsilon, rho);
-    HestonAndersen *hestonAndersen =
-            new HestonAndersen(option, kappa, theta, epsilon, rho);
-    HestonAndersen *hestonAndersenMartingale =
-            new HestonAndersenMartingale(option, kappa, theta, epsilon, rho);
-    HestonExact *hestonExact =
-            new HestonExact(option, kappa, theta, epsilon, rho);
 
     MonteCarloSimulation mc = MonteCarloSimulation(simulation.trials, timeStep);
 
+    HestonEuler *hestonEuler =
+            new HestonEuler(option, kappa, theta, epsilon, rho);
     double priceEuler = mc.simulate(hestonEuler, option);
     pprint(hestonEuler->getName(), priceEuler, outputStream);
 
+    HestonAndersen *hestonAndersen =
+            new HestonAndersen(option, kappa, theta, epsilon, rho);
     double priceAndersen = mc.simulate(hestonAndersen, option);
     pprint(hestonAndersen->getName(), priceAndersen, outputStream);
 
+    HestonAndersen *hestonAndersenMartingale =
+            new HestonAndersenMartingale(option, kappa, theta, epsilon, rho);
     double priceMart = mc.simulate(hestonAndersenMartingale, option);
     pprint(hestonAndersenMartingale->getName(), priceMart, outputStream);
 
+
+    HestonExact *hestonExact =
+            new HestonExact(option, kappa, theta, epsilon, rho);
     double priceExact = hestonExact->optionPrice(S_0, v_0, 0.0);
     pprint(hestonExact->getName(), priceExact, outputStream);
 
@@ -84,94 +77,11 @@ void makeSimulation(Simulation &simulation, int &timeStep, OutputAndConsole &out
 }
 
 
-void calcVolatilitySmile(std::vector<double> params,
-                         int simulationTrials,
-                         int timeSteps) {
-
-    double S_0 = params[0];
-    double K = params[1];
-    double r = params[2];
-    double v_0 = params[3];
-    double T = params[4];
-    double rho = params[5];
-    double kappa = params[6];
-    double theta = params[7];
-    double epsilon = params[8];
-
-    PayOff *payOffCall = new PayOffCall(K);
-    Option *option = new Option(K, r, T, S_0, v_0, payOffCall);
-
-    HestonEuler *hestonEuler = new HestonEuler(option, kappa, theta, epsilon, rho);
-
-    MonteCarloSimulation mc = MonteCarloSimulation(simulationTrials, timeSteps);
-    mc.simulate(hestonEuler, option);
-
-    std::string line;
-    std::ifstream ifstream(Config::getInstance().getSettings("VolatilitySurface.input"));
-    std::ofstream ofstream(Config::getInstance().getSettings("VolatilitySurface.output"));
-
-    while (getline(ifstream, line)) {
-        std::vector<std::string> params;
-        boost::split(params, line, boost::is_any_of(";"), boost::token_compress_on);
-        double K1 = std::stod(params[0]);
-        double T1 = std::stod(params[2]);
-        PayOff *payOffCall = new PayOffCall(K1);
-        Option *option1 = new Option(K1, r, T1, S_0, v_0, payOffCall);
-
-        HestonEuler *hestonEuler1 = new HestonEuler(option1, kappa, theta, epsilon, rho);
-        double hestonPrice = mc.simulate(hestonEuler1, option1);
-
-        ofstream << S_0 << ";" << K1 << ";" << r << ";" << T1 << ";" << hestonPrice << "\n";
-
-        delete hestonEuler1;
-        delete option1;
-        //pprint("Heston Euler", hestonPrice, ofstream);
-    }
-
-    delete hestonEuler;
-}
-
-
-ptree loadConfig(std::string filename) {
-
-    static ptree pt;
-    read_json(filename, pt);
-    return pt;
-}
-
-
-Simulation processOptionParams(const ptree::value_type &node) {
-
-    return Simulation(
-            node.second.get<double>("asset"),
-            node.second.get<double>("strike"),
-            node.second.get<double>("riskFree"),
-            node.second.get<double>("expiry"),
-            node.second.get<double>("volatility"),
-            node.second.get<double>("kappa"),
-            node.second.get<double>("theta"),
-            node.second.get<double>("eps"),
-            node.second.get<double>("rho"),
-            node.second.get<int>("trials"),
-            node.second.get<double>("truePrice"),
-            node.second.get<std::string>("description")
-    );
-}
-
-
-void processValuation(std::vector<Simulation> &simulations) {
-
-    const ptree &jsonTree = loadConfig(Config::getInstance().getSettings("Simulation.input"));
-
-    for (const ptree::value_type &node: jsonTree.get_child("heston")) {
-        simulations.push_back(processOptionParams(node));
-    }
-}
-
 void testCases(std::vector<Simulation> simulations) {
 
     std::vector<int> timeSteps
-            = {500, 250, 200, 150, 100, 50, 30, 10};
+            = {1000, 500, 250, 200, 150, 100, 50, 30, 10};
+    std::reverse(timeSteps.begin(), timeSteps.end());
     OutputAndConsole output(Config::getInstance().getSettings("Simulation.output"));
 
     for (Simulation &simulation:simulations) {
@@ -186,7 +96,8 @@ void testCases(std::vector<Simulation> simulations) {
 int main(int argc, char **argv) {
 
     std::vector<Simulation> simulations;
-    processValuation(simulations);
+    JsonReader jsonReader;
+    jsonReader.processValuation(simulations, "Simulation.input");
 
     testCases(simulations);
 //    calcVolatilitySmile(params, simulationTrials, timeSteps);

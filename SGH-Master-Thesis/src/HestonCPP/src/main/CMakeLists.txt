@@ -67,6 +67,10 @@ if(Boost_FOUND)
             src/main/cpp/tools/config/Config.cpp
             src/main/cpp/tools/config/Config.h
             src/main/cpp/tools/output/OutputAndConsole.cpp
-            src/main/cpp/tools/output/OutputAndConsole.h)
+            src/main/cpp/tools/output/OutputAndConsole.h
+            src/main/cpp/volatilitysmile/VolatilitySmile.cpp
+            src/main/cpp/volatilitysmile/VolatilitySmile.h
+            src/main/cpp/tools/json/JsonReader.h
+            src/main/cpp/tools/json/JsonReader.cpp)
     target_link_libraries(heston ${Boost_LIBRARIES})
 endif()

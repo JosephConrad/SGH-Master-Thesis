@@ -5,10 +5,19 @@
 #ifndef HESTON_CONFIG_H
 #define HESTON_CONFIG_H
 
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/ini_parser.hpp>
+#include <string>
+#include <functional>
 
-using boost::property_tree::ptree;
+namespace boost
+{
+    namespace property_tree
+    {
+        template < class Key, class Data, class KeyCompare >
+        class basic_ptree;
+
+        typedef basic_ptree< std::string, std::string, std::less<std::string> > ptree;
+    }
+}
 
 
 class Config {
@@ -22,7 +31,7 @@ public:
     std::string getSettings(std::string option);
 
 private:
-    ptree pt;
+    std::shared_ptr<boost::property_tree::ptree> configFile_;
 
     Config();
     ~Config() {};

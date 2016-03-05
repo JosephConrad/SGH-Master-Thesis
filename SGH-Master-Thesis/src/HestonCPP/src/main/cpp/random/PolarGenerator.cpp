@@ -3,7 +3,8 @@
 
 
 PolarGenerator::PolarGenerator() {
-    srand(time(NULL));
+    //srand(time(NULL));
+    srand(0);
 };
 
 double PolarGenerator::genNorm() {

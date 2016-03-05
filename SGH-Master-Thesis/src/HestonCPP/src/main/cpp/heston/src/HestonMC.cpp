@@ -9,8 +9,8 @@ HestonMC::HestonMC(
         double rho)
         : Heston(option, kappa, theta, epsilon, rho) {
 
-    //generator.seed(0); // to generate the same random paths
-    generator.seed(time(NULL));
+    generator.seed(0); // to generate the same random paths
+    // generator.seed(time(NULL));
 }
 
 void HestonMC::simulateVolPath(const std::vector<double> &volDraws,
