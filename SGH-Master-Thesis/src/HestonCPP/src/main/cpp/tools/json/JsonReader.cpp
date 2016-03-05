@@ -41,7 +41,7 @@ Simulation JsonReader::processOptionParams(const ptree::value_type &node) {
 void JsonReader::processValuation(std::vector<Simulation> &simulations,
                                   std::string configFilePath) {
 
-    loadConfig(Config::getInstance().getSettings());
+    loadConfig(Config::getInstance().getSettings(configFilePath));
 
     for (const auto &node: jsonTree_->get_child("heston")) {
         simulations.push_back(processOptionParams(node));
