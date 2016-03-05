@@ -43,12 +43,12 @@ Simulation JsonReader::processOptionParams(const ptree::value_type &node) {
 
 void JsonReader::processValuation(std::vector<Simulation> &simulations) {
 
-    for (const auto &node: jsonTree_->get_child("heston")) {
-        simulations.push_back(processOptionParams(node));
+    for (ptree::value_type &simulation: jsonTree_->get_child("heston")) {
+        simulations.push_back(processOptionParams(simulation));
     }
 }
 
-void JsonReader::getTimeSteps(std::vector<int> &timeSteps){t
+void JsonReader::getTimeSteps(std::vector<int> &timeSteps){
 
     for (ptree::value_type &timeStep : jsonTree_->get_child("timeSteps"))
     {
