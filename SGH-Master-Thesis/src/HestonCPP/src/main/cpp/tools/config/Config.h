@@ -7,6 +7,7 @@
 
 #include <string>
 #include <functional>
+#include <memory>
 
 namespace boost
 {
