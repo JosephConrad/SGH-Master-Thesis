@@ -13,6 +13,9 @@ MonteCarloSimulation::MonteCarloSimulation(
         int timeSteps)
         : simTrials(simulationTrials),
           timeSteps(timeSteps) {
+
+//    srand(time(NULL));
+    srand(0);
 }
 
 void corellatedNormalPaths(double rho, std::vector<double> &spot_normals,
@@ -58,7 +61,6 @@ double MonteCarloSimulation::simulate(HestonMC *heston,
         double expiryPrice = spotPrices[timeSteps - 1];
         payoffSum += option->pay_off->operator()(expiryPrice);
     }
-
 
 
     double discount = option->getDiscountFactor();

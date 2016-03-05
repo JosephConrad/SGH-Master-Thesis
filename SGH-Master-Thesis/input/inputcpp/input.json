@@ -1,7 +1,7 @@
 {
   "timeSteps": [
     10,
-    30
+    10
   ],
   "heston": [
     {
