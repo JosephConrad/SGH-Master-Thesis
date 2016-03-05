@@ -13,9 +13,12 @@ using boost::property_tree::read_json;
 JsonReader::JsonReader(){}
 
 
-void JsonReader::loadConfig(std::string filename) {
+void JsonReader::loadConfig(std::string configFilePath) {
+
+    std::string jsonFile = Config::getInstance().getSettings(configFilePath);
+
     jsonTree_ = std::shared_ptr<ptree>(new ptree());
-    read_json(filename, *jsonTree_);
+    read_json(jsonFile, *jsonTree_);
 }
 
 
@@ -38,12 +41,17 @@ Simulation JsonReader::processOptionParams(const ptree::value_type &node) {
 }
 
 
-void JsonReader::processValuation(std::vector<Simulation> &simulations,
-                                  std::string configFilePath) {
-
-    loadConfig(Config::getInstance().getSettings(configFilePath));
+void JsonReader::processValuation(std::vector<Simulation> &simulations) {
 
     for (const auto &node: jsonTree_->get_child("heston")) {
         simulations.push_back(processOptionParams(node));
+    }
+}
+
+void JsonReader::getTimeSteps(std::vector<int> &timeSteps){t
+
+    for (ptree::value_type &timeStep : jsonTree_->get_child("timeSteps"))
+    {
+        timeSteps.push_back(std::stoi(timeStep.second.data()));
     }
 }

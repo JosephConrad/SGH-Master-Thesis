@@ -1,4 +1,8 @@
 {
+  "timeSteps": [
+    10,
+    30
+  ],
   "heston": [
     {
       "asset": "100.0",
@@ -10,7 +14,7 @@
       "theta": "0.019",
       "eps": "0.61",
       "rho": "-0.7",
-      "trials": "10000",
+      "trials": "100000",
       "truePrice": "6.8061",
       "description": "QuantStart"
     }

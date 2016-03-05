@@ -41,15 +41,15 @@ void makeSimulation(Simulation &simulation, int &timeStep, OutputAndConsole &out
     double priceEuler = mc.simulate(hestonEuler, option);
     pprint(hestonEuler->getName(), priceEuler, outputStream);
 
-    HestonAndersen *hestonAndersen =
-            new HestonAndersen(option, kappa, theta, epsilon, rho);
-    double priceAndersen = mc.simulate(hestonAndersen, option);
-    pprint(hestonAndersen->getName(), priceAndersen, outputStream);
-
-    HestonAndersen *hestonAndersenMartingale =
-            new HestonAndersenMartingale(option, kappa, theta, epsilon, rho);
-    double priceMart = mc.simulate(hestonAndersenMartingale, option);
-    pprint(hestonAndersenMartingale->getName(), priceMart, outputStream);
+//    HestonAndersen *hestonAndersen =
+//            new HestonAndersen(option, kappa, theta, epsilon, rho);
+//    double priceAndersen = mc.simulate(hestonAndersen, option);
+//    pprint(hestonAndersen->getName(), priceAndersen, outputStream);
+//
+//    HestonAndersen *hestonAndersenMartingale =
+//            new HestonAndersenMartingale(option, kappa, theta, epsilon, rho);
+//    double priceMart = mc.simulate(hestonAndersenMartingale, option);
+//    pprint(hestonAndersenMartingale->getName(), priceMart, outputStream);
 
 
     HestonExact *hestonExact =
@@ -70,18 +70,16 @@ void makeSimulation(Simulation &simulation, int &timeStep, OutputAndConsole &out
 
     delete option;
     delete payOffCall;
-    delete hestonAndersen;
-    delete hestonAndersenMartingale;
+//    delete hestonAndersen;
+//    delete hestonAndersenMartingale;
     delete hestonEuler;
     delete hestonExact;
 }
 
 
-void testCases(std::vector<Simulation> simulations) {
+void testCases(std::vector<Simulation>& simulations,
+               std::vector<int>& timeSteps) {
 
-    std::vector<int> timeSteps
-            = {1000, 500, 250, 200, 150, 100, 50, 30, 10};
-    std::reverse(timeSteps.begin(), timeSteps.end());
     OutputAndConsole output(Config::getInstance().getSettings("Simulation.output"));
 
     for (Simulation &simulation:simulations) {
@@ -96,10 +94,13 @@ void testCases(std::vector<Simulation> simulations) {
 int main(int argc, char **argv) {
 
     std::vector<Simulation> simulations;
+    std::vector<int> timeSteps;
     JsonReader jsonReader;
-    jsonReader.processValuation(simulations, "Simulation.input");
+    jsonReader.loadConfig("Simulation.input");
+    jsonReader.processValuation(simulations);
+    jsonReader.getTimeSteps(timeSteps);
 
-    testCases(simulations);
+    testCases(simulations, timeSteps);
 //    calcVolatilitySmile(params, simulationTrials, timeSteps);
 
     return 0;

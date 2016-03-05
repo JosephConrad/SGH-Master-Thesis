@@ -59,6 +59,8 @@ double MonteCarloSimulation::simulate(HestonMC *heston,
         payoffSum += option->pay_off->operator()(expiryPrice);
     }
 
+
+
     double discount = option->getDiscountFactor();
     double payoffAvg = payoffSum / static_cast<double>(simTrials);
 
