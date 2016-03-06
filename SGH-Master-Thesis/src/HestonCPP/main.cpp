@@ -10,10 +10,13 @@
 
 #include <boost/property_tree/json_parser.hpp>
 #include <src/main/cpp/tools/json/JsonReader.h>
+#include <iomanip>
 
 
 
-void pprint(std::string str, double d, OutputAndConsole &outputStream) {
+void pprint(double d, OutputAndConsole &outputStream) {
+    outputStream << std::fixed;
+    outputStream << std::setprecision(3);
     outputStream << d << "\t";
 }
 
@@ -29,6 +32,8 @@ void makeSimulation(Simulation &simulation, int &timeStep, OutputAndConsole &out
     double kappa = simulation.kappa;
     double theta = simulation.theta;
     double epsilon = simulation.eps;
+    double trueOptionPrice = simulation.truePrice;
+
 
     PayOff *payOffCall = new PayOffCall(K);
     Option *option = new Option(K, r, T, S_0, v_0, payOffCall);
@@ -36,26 +41,30 @@ void makeSimulation(Simulation &simulation, int &timeStep, OutputAndConsole &out
 
     MonteCarloSimulation mc = MonteCarloSimulation(simulation.trials, timeStep);
 
-    HestonEuler *hestonEuler =
+
+    HestonMC *hestonEuler =
             new HestonEuler(option, kappa, theta, epsilon, rho);
     double priceEuler = mc.simulate(hestonEuler, option);
-    pprint(hestonEuler->getName(), priceEuler, outputStream);
+    pprint(priceEuler, outputStream);
+    pprint(priceEuler - trueOptionPrice, outputStream);
 
-//    HestonAndersen *hestonAndersen =
-//            new HestonAndersen(option, kappa, theta, epsilon, rho);
-//    double priceAndersen = mc.simulate(hestonAndersen, option);
-//    pprint(hestonAndersen->getName(), priceAndersen, outputStream);
-//
-//    HestonAndersen *hestonAndersenMartingale =
-//            new HestonAndersenMartingale(option, kappa, theta, epsilon, rho);
-//    double priceMart = mc.simulate(hestonAndersenMartingale, option);
-//    pprint(hestonAndersenMartingale->getName(), priceMart, outputStream);
+    HestonMC *hestonAndersen =
+            new HestonAndersen(option, kappa, theta, epsilon, rho);
+    double priceAndersen = mc.simulate(hestonAndersen, option);
+    pprint(priceAndersen, outputStream);
+    pprint(priceAndersen - trueOptionPrice, outputStream);
 
+    HestonMC *hestonAndersenMartingale =
+            new HestonAndersenMartingale(option, kappa, theta, epsilon, rho);
+    double priceMart = mc.simulate(hestonAndersenMartingale, option);
+    pprint(priceMart, outputStream);
+    pprint(priceMart - trueOptionPrice, outputStream);
 
     HestonExact *hestonExact =
             new HestonExact(option, kappa, theta, epsilon, rho);
     double priceExact = hestonExact->optionPrice(S_0, v_0, 0.0);
-    pprint(hestonExact->getName(), priceExact, outputStream);
+    pprint(priceExact, outputStream);
+
 
 
 //    double impliedVol = 0.05;
@@ -82,6 +91,7 @@ void testCases(std::vector<Simulation>& simulations,
 
     OutputAndConsole output(Config::getInstance().getSettings("Simulation.output"));
 
+    output << "\tEUL\t\te\t\tAND\t\te\t\tMAR\t\te\t\tEX\n";
     for (Simulation &simulation:simulations) {
         for (int &timeStep: timeSteps) {
             output << std::to_string(timeStep) << "\t";

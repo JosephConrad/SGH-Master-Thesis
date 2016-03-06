@@ -14,8 +14,6 @@ MonteCarloSimulation::MonteCarloSimulation(
         : simTrials(simulationTrials),
           timeSteps(timeSteps) {
 
-//    srand(time(NULL));
-    srand(0);
 }
 
 void corellatedNormalPaths(double rho, std::vector<double> &spot_normals,
