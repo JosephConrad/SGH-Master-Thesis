@@ -7,15 +7,14 @@
 
 #include <string>
 #include <boost/property_tree/ptree_fwd.hpp>
+#include <vector>
 
 using boost::property_tree::ptree;
 
 class Simulation {
 public:
-    Simulation(const char string[4]);
 
     double asset;
-    double strike;
     double riskFree;
     double expiry;
     double volatility;
@@ -26,13 +25,14 @@ public:
 
     int trials;
 
+    std::vector<double> strikePrices;
     double truePrice;
     std::string description;
 
 
-    Simulation(double asset, double strike, double riskFree, double expiry,
-               double volatility, double kappa, double theta, double eps,
-               double rho, int trials, double truePrice,
+    Simulation(double asset, std::vector<double> strikePrices, double riskFree,
+               double expiry, double volatility, double kappa, double theta,
+               double eps, double rho, int trials, double truePrice,
                const std::string &description);
 
     virtual ~Simulation() { };

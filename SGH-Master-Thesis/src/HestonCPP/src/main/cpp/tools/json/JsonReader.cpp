@@ -10,7 +10,7 @@
 using boost::property_tree::ptree;
 using boost::property_tree::read_json;
 
-JsonReader::JsonReader(){}
+JsonReader::JsonReader() { }
 
 
 void JsonReader::loadConfig(std::string configFilePath) {
@@ -26,7 +26,11 @@ Simulation JsonReader::processOptionParams(const ptree::value_type &node) {
 
     return Simulation(
             node.second.get<double>("asset"),
-            node.second.get<double>("strike"),
+            std::vector<double> {
+                    node.second.get<double>("strikeLow"),
+                    node.second.get<double>("strikeHigh"),
+                    node.second.get<double>("strike"),
+            },
             node.second.get<double>("riskFree"),
             node.second.get<double>("expiry"),
             node.second.get<double>("volatility"),
@@ -48,10 +52,9 @@ void JsonReader::processValuation(std::vector<Simulation> &simulations) {
     }
 }
 
-void JsonReader::getTimeSteps(std::vector<int> &timeSteps){
+void JsonReader::getTimeSteps(std::vector<int> &timeSteps) {
 
-    for (ptree::value_type &timeStep : jsonTree_->get_child("timeSteps"))
-    {
+    for (ptree::value_type &timeStep : jsonTree_->get_child("timeSteps")) {
         timeSteps.push_back(std::stoi(timeStep.second.data()));
     }
 }

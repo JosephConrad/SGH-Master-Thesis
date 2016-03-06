@@ -5,12 +5,12 @@
 #include "Simulation.h"
 
 
-Simulation::Simulation(double asset, double strike, double riskFree, double expiry,
-                       double volatility, double kappa, double theta, double eps,
-                       double rho, int trials, double truePrice,
+Simulation::Simulation(double asset, std::vector<double> strikePrices, double riskFree,
+                       double expiry, double volatility, double kappa, double theta,
+                       double eps, double rho, int trials, double truePrice,
                        const std::string &description)
         : asset(asset),
-          strike(strike),
+          strikePrices(strikePrices),
           riskFree(riskFree),
           expiry(expiry),
           volatility(volatility),

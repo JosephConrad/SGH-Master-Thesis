@@ -3,9 +3,9 @@
     10,
     30,
     50,
-    200,
     100,
     150,
+    200,
     250,
     500
   ],
@@ -13,6 +13,8 @@
     {
       "asset": "100.0",
       "strike": "100.0",
+      "strikeLow": "80.0",
+      "strikeHigh": "130.0",
       "riskFree": "0.0319",
       "expiry": "1.00",
       "volatility": "0.010201",
@@ -27,6 +29,8 @@
     {
       "asset": "100.0",
       "strike": "100.0",
+      "strikeLow": "80.0",
+      "strikeHigh": "130.0",
       "riskFree": "0.05",
       "expiry": "5.00",
       "volatility": "0.09",
@@ -34,13 +38,15 @@
       "theta": "0.09",
       "eps": "1.00",
       "rho": "-0.3",
-      "trials": "1000",
+      "trials": "100000",
       "truePrice": "34.9998",
       "description": "broadie"
     },
     {
       "asset": "207.93",
       "strike": "207.93",
+      "strikeLow": "170.00",
+      "strikeHigh": "250.00",
       "riskFree": "0.0319",
       "expiry": "1.0",
       "volatility": "0.0369",
@@ -48,7 +54,7 @@
       "theta": "0.0001",
       "eps": "0.5000",
       "rho": "-0.90",
-      "trials": "1000",
+      "trials": "100000",
       "truePrice": "9.51",
       "description": "SnP index"
     }

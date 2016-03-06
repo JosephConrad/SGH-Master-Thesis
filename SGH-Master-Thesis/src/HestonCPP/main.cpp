@@ -12,6 +12,7 @@
 #include <src/main/cpp/tools/json/JsonReader.h>
 #include <iomanip>
 
+static const std::string DELIMITER = ";";
 
 
 void pprint(double d, OutputAndConsole &outputStream) {
@@ -20,11 +21,9 @@ void pprint(double d, OutputAndConsole &outputStream) {
     outputStream << d << "\t";
 }
 
-
-void makeSimulation(Simulation &simulation, int &timeStep, OutputAndConsole &outputStream) {
+void simulate(Simulation &simulation, double K, int timeStep, OutputAndConsole &outputStream) {
 
     double S_0 = simulation.asset;
-    double K = simulation.strike;
     double r = simulation.riskFree;
     double v_0 = simulation.volatility;
     double T = simulation.expiry;
@@ -34,12 +33,11 @@ void makeSimulation(Simulation &simulation, int &timeStep, OutputAndConsole &out
     double epsilon = simulation.eps;
     double trueOptionPrice = simulation.truePrice;
 
+    MonteCarloSimulation mc = MonteCarloSimulation(simulation.trials, timeStep);
+
 
     PayOff *payOffCall = new PayOffCall(K);
     Option *option = new Option(K, r, T, S_0, v_0, payOffCall);
-
-
-    MonteCarloSimulation mc = MonteCarloSimulation(simulation.trials, timeStep);
 
 
     HestonMC *hestonEuler =
@@ -79,10 +77,21 @@ void makeSimulation(Simulation &simulation, int &timeStep, OutputAndConsole &out
 
     delete option;
     delete payOffCall;
-//    delete hestonAndersen;
-//    delete hestonAndersenMartingale;
+    delete hestonAndersen;
+    delete hestonAndersenMartingale;
     delete hestonEuler;
     delete hestonExact;
+
+}
+
+void makeSimulation(Simulation &simulation, int &timeStep,
+                    OutputAndConsole &outputStream) {
+
+    for (double &K: simulation.strikePrices) {
+        outputStream << "\tK = " << std::to_string(K) << "\n";
+        simulate(simulation, K, timeStep, outputStream);
+    }
+
 }
 
 
