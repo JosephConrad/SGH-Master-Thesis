@@ -104,6 +104,8 @@ void testCases(std::vector<Simulation> &simulations,
 
 int main(int argc, char **argv) {
 
+    Config::getInstance().loadConfig(argv[1]);
+
     std::vector<Simulation> simulations;
     std::vector<int> timeSteps;
     JsonReader jsonReader;

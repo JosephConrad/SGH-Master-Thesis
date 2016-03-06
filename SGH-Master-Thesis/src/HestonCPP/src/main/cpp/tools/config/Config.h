@@ -30,6 +30,7 @@ public:
     }
 
     std::string getSettings(std::string option);
+    void loadConfig(std::string configName);
 
 private:
     std::shared_ptr<boost::property_tree::ptree> configFile_;

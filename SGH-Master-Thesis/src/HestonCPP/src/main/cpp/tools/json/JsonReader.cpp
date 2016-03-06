@@ -28,8 +28,8 @@ Simulation JsonReader::processOptionParams(const ptree::value_type &node) {
             node.second.get<double>("asset"),
             std::vector<double> {
                     node.second.get<double>("strikeLow"),
-                    node.second.get<double>("strikeHigh"),
                     node.second.get<double>("strike"),
+                    node.second.get<double>("strikeHigh"),
             },
             node.second.get<double>("riskFree"),
             node.second.get<double>("expiry"),

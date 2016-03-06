@@ -1,4 +1,4 @@
 # run
 set -e 
 
-build/heston
+build/heston config.dev.ini

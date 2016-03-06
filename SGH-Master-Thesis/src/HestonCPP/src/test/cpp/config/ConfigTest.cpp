@@ -19,5 +19,6 @@ TEST(cpp_sorter_test, int_arr_sort) {
 }
 
 TEST(tools_test, config_test) {
+    Config::getInstance().loadConfig("config.dev.ini");
     EXPECT_EQ(Config::getInstance().getSettings("Log.logFile"), "logs/log.txt");
 }
