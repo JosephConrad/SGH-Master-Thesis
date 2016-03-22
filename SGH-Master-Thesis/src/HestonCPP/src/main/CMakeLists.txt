@@ -54,12 +54,14 @@ if(Boost_FOUND)
             src/main/cpp/heston/src/Heston.cpp
             src/main/cpp/heston/src/HestonAndersen.cpp
             src/main/cpp/heston/src/HestonMC.cpp
+            src/main/cpp/heston/src/HestonExactLittleTrap.cpp
             src/main/cpp/heston/header/HestonAndersen.h
             src/main/cpp/heston/header/HestonMC.h
             src/main/cpp/heston/header/HestonExact.h
             src/main/cpp/heston/header/Heston.h
             src/main/cpp/heston/header/HestonEuler.h
             src/main/cpp/heston/header/HestonAndersenMartingale.h
+            src/main/cpp/heston/header/HestonExactLittleTrap.h
             src/main/cpp/bs/BlackScholesAnalytic.cpp
             src/main/cpp/bs/BlackScholesAnalytic.h
             src/main/cpp/simulation/Simulation.cpp

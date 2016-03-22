@@ -10,6 +10,7 @@
 
 #include <boost/property_tree/json_parser.hpp>
 #include <src/main/cpp/tools/json/JsonReader.h>
+#include <src/main/cpp/heston/header/HestonExactLittleTrap.h>
 
 static const std::string DELIMITER = ";";
 
@@ -42,26 +43,31 @@ void makeSimulation(Simulation &simulation, double K, int timeStep, OutputAndCon
             new HestonExact(option, kappa, theta, epsilon, rho);
     double priceExact = hestonExact->optionPrice(S_0, v_0, 0.0);
 
+    HestonExactLittleTrap *hestonExactLittleTrap =
+            new HestonExactLittleTrap(option, kappa, theta, epsilon, rho);
+    double priceExactLittleTrap = hestonExactLittleTrap->optionPrice(S_0, v_0, 0.0);
+
     HestonMC *hestonEuler =
             new HestonEuler(option, kappa, theta, epsilon, rho);
     double priceEuler = mc.simulate(hestonEuler, option);
     pprint(priceEuler, outputStream);
-    pprint(priceEuler - priceExact, outputStream);
+    pprint(priceEuler - priceExactLittleTrap, outputStream);
 
     HestonMC *hestonAndersen =
             new HestonAndersen(option, kappa, theta, epsilon, rho);
     double priceAndersen = mc.simulate(hestonAndersen, option);
     pprint(priceAndersen, outputStream);
-    pprint(priceAndersen - priceExact, outputStream);
+    pprint(priceAndersen - priceExactLittleTrap, outputStream);
 
     HestonMC *hestonAndersenMartingale =
             new HestonAndersenMartingale(option, kappa, theta, epsilon, rho);
     double priceMart = mc.simulate(hestonAndersenMartingale, option);
     pprint(priceMart, outputStream);
-    pprint(priceMart - priceExact, outputStream);
+    pprint(priceMart - priceExactLittleTrap, outputStream);
 
 
-    pprint(priceExact, outputStream);
+//    pprint(priceExact, outputStream);
+    pprint(priceExactLittleTrap, outputStream);
 
 
 
@@ -81,7 +87,7 @@ void makeSimulation(Simulation &simulation, double K, int timeStep, OutputAndCon
     delete hestonAndersenMartingale;
     delete hestonEuler;
     delete hestonExact;
-
+    delete hestonExactLittleTrap;
 }
 
 void testCases(std::vector<Simulation> &simulations,
@@ -89,7 +95,7 @@ void testCases(std::vector<Simulation> &simulations,
 
     OutputAndConsole output(Config::getInstance().getSettings("Simulation.output"));
 
-    output << "\tEUL\t\te\t\tAND\t\te\t\tMAR\t\te\t\tEX\n";
+    output << "\tEUL\t\te\t\tAND\t\te\t\tMAR\t\te\t\tEXACT\n";
     for (Simulation &simulation:simulations) {
         for (double &K: simulation.strikePrices) {
             output << "\tK = " << std::to_string(K) << "\n";

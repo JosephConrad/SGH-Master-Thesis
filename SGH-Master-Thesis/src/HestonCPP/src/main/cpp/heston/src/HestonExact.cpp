@@ -19,7 +19,10 @@ double HestonExact::optionPrice(double St, double vt, double t) {
 //    std::cout << P1 << std::endl;
     double P2 = calc_P(St, vt, t, K, 2);
 //    std::cout << P2 << std::endl;
-    return option->S_0 * P1 - K * P2 * option->getDiscountFactor(t);
+    double result = option->S_0 * P1 - K * P2 * option->getDiscountFactor(t);
+    double temp1 = option->S_0 * P1;
+    double temp2 = K * P2 * option->getDiscountFactor(t);
+    return result;
 }
 
 double HestonExact::calc_P(double St, double vt, double t,
@@ -50,15 +53,20 @@ dcomp HestonExact::calc_f(double xt, double vt, double t,
 }
 
 dcomp HestonExact::calc_C(double tau, double phi, int j) {
-    dcomp aa, ab, ac, ad, d, g, x;
+    dcomp G, d, g, x;
     g = calc_g(phi, j);
     d = calc_d(phi, j);
     x = calc_x(phi, j);
-    aa = option->r * phi * DCOMP * tau;
-    ab = (a / pow(eps, 2));
-    ac = (x + d) * tau;
-    ad = 2.0 * log((1.0 - g * exp(d * tau)) / (1.0 - g));
-    return aa + ab * (ac - ad);
+    G = calc_G(tau, phi, j);
+    return (option->r * phi * DCOMP * tau)
+           + (a / pow(eps, 2)) * ((x + d) * tau - 2.0 * log(G));
+}
+
+dcomp HestonExact::calc_G(double tau, double phi, int j) {
+    dcomp d, g;
+    g = calc_g(phi, j);
+    d = calc_d(phi, j);
+    return (1.0 - g * exp(d * tau)) / (1.0 - g);
 }
 
 dcomp HestonExact::calc_D(double tau, double phi, int j) {

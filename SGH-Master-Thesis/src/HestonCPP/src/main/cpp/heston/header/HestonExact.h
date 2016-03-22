@@ -16,7 +16,7 @@ typedef std::complex<double> dcomp;
 
 class HestonExact : public Heston {
 
-private:
+protected:
     const double LAMBDA = 0.0;
     const double DPHI = 0.01;
     const double INTEGRAL_RIGHT = 50.0;
@@ -34,11 +34,12 @@ public:
 
     double calc_P(double x, double v, double t, double lgK, double j);
     dcomp calc_f(double x, double d, double t, double phi, double j);
-    dcomp calc_C(double tau, double phi, int j);
+    virtual dcomp calc_C(double tau, double phi, int j);
+    virtual dcomp calc_G(double tau, double phi, int j);
+    virtual dcomp calc_D(double tau, double phi, int j);
     dcomp calc_g(double phi, int j);
     dcomp calc_d(double phi, int j);
     dcomp calc_x(double phi, int j);
-    dcomp calc_D(double tau, double phi, int j);
     double integralFun(double xt, double vt, double t,
                        double phi, double lnK, double j);
     double optionPrice(double xt, double vt, double t);
