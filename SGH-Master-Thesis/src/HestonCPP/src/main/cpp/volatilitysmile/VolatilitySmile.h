@@ -7,15 +7,14 @@
 
 
 #include <vector>
+#include <src/main/cpp/simulation/Simulation.h>
 
 class VolatilitySmile {
 
 public:
     VolatilitySmile();
 
-    ~VolatilitySmile();
-
-    void calcVolatilitySmile(std::vector<double> params,
+    void calcVolatilitySmile(Simulation simulation,
                              int simulationTrials,
                              int timeSteps);
 };

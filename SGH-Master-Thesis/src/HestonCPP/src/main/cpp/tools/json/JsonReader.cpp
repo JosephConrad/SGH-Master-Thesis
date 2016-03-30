@@ -52,9 +52,9 @@ void JsonReader::processValuation(std::vector<Simulation> &simulations) {
     }
 }
 
-void JsonReader::getTimeSteps(std::vector<int> &timeSteps) {
+void JsonReader::getVector(std::vector<int> &timeSteps, std::string nodeName) {
 
-    for (ptree::value_type &timeStep : jsonTree_->get_child("timeSteps")) {
+    for (ptree::value_type &timeStep : jsonTree_->get_child(nodeName)) {
         timeSteps.push_back(std::stoi(timeStep.second.data()));
     }
 }

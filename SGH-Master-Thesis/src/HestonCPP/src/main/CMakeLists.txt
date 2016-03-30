@@ -38,8 +38,8 @@ if(Boost_FOUND)
             src/main/cpp/heston/src/HestonEuler.cpp
             src/main/cpp/payoff/payoff.h
             src/main/cpp/payoff/payoff.cpp
-            src/main/cpp/statistics/statistics.h
-            src/main/cpp/statistics/statistics.cpp
+            src/main/cpp/statistics/StatisticalDistribution.h
+            src/main/cpp/statistics/StatisticalDistribution.cpp
             src/main/cpp/correlated/correlated_snd.h
             src/main/cpp/correlated/correlated_snd.cpp
             src/main/cpp/bs/MCBlackScholes.cpp
@@ -73,6 +73,8 @@ if(Boost_FOUND)
             src/main/cpp/volatilitysmile/VolatilitySmile.cpp
             src/main/cpp/volatilitysmile/VolatilitySmile.h
             src/main/cpp/tools/json/JsonReader.h
-            src/main/cpp/tools/json/JsonReader.cpp)
+            src/main/cpp/tools/json/JsonReader.cpp
+            src/main/cpp/statistics/BasicStatistics.cpp
+            src/main/cpp/statistics/BasicStatistics.h)
     target_link_libraries(heston ${Boost_LIBRARIES})
 endif()

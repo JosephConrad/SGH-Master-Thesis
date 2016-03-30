@@ -11,12 +11,16 @@
 class HestonExactLittleTrap : public HestonExact {
 
 public:
-    HestonExactLittleTrap(Option *option, double kappa, double theta,
-                          double epsilon, double rho);
+    HestonExactLittleTrap(Option *option, double kappa,
+                          double theta, double epsilon,
+                          double rho);
 
     virtual dcomp calc_C(double tau, double phi, int j);
+
     virtual dcomp calc_G(double tau, double phi, int j);
+
     virtual dcomp calc_D(double tau, double phi, int j);
+
     std::string getName();
 };
 

@@ -18,6 +18,11 @@
 \usepackage[mathscr]{eucal}
 \usepackage{csvsimple}
 %===========================================================================
+%                         Needed to use >{\bfseries}
+%===========================================================================
+\usepackage{array}
+
+%===========================================================================
 %                         Used for table border
 %===========================================================================
 \usepackage{booktabs}
@@ -39,6 +44,7 @@
 \def\l@lstlisting#1#2{\@dottedtocline{1}{1.5em}{3em}{#1}{#2}}
 \makeatother
 
+\renewcommand{\listalgorithmname}{Spis algorytmów}
 \makeatletter
 \renewcommand{\ALG@name}{Algorytm}
 \makeatother
@@ -131,8 +137,8 @@ jeśli chodzi o dokładność i szybkość działania symulacji.
 
 
 Ostatni rozdział to już próba empirycznego zbadania zachowania modelu Hestona. Zostanie w nim 
-porównana wartość opcji na indeks \textit{S\&P500} wyznaczona w oparciu o model Blacka-Scholesa i model 
-Hestona.
+porównana wartość dwóch opcji testowych oraz opcji na indeks \textit{S\&P500} wyznaczonych w oparciu o  
+różne schamty dyskretyzacji.
 
 
 
@@ -620,7 +626,8 @@ Podstawiając to równanie do równania (\ref{eq:HestonlnS}) otrzymujemy:
 \begin{equation}
 \begin{aligned}
 \label{eq:HestonLnSDiscretization}
-\ln S(t + \Delta) = & \ln S(t) + r \Delta + \frac{\rho}{\varepsilon} (v(t + \Delta)  - v(t) - \kappa \theta \Delta) + \\
+\ln S(t + \Delta) = & \ln S(t) + r \Delta + \frac{\rho}{\varepsilon} 
+(v(t + \Delta)  - v(t) - \kappa \theta \Delta) + \\
 & \Big( \frac{\kappa \rho}{\varepsilon} - \frac{1}{2} \Big)
 \int_t^{t+\Delta} v(u) du + \sqrt{1-\rho^2} \int_t^{t+\Delta} \sqrt{v(u)}dW(u)
 \end{aligned}
@@ -646,7 +653,7 @@ gdzie:
 
 \begin{equation}
 \label{eq:HestonProb}
-  P_j (x, v, T; ln[K]) = \frac{1}{2} + \frac{1}{\pi} \int_{0}^{\infty} Re \bigg[ \frac{e^{-i \cdot \phi ln[K]} f_j(x, v, T; \phi) }{i \phi} d \phi \bigg]
+  P_j (x, v, T; ln[K]) = \frac{1}{2} + \frac{1}{\pi} \int_{0}^{\infty} Re \bigg[ \frac{e^{-i \cdot \phi ln[K]} f_j(x, v, T; \phi) }{i \phi} \bigg] d \phi 
 \end{equation}
 
 \begin{equation}
@@ -658,9 +665,9 @@ Funkcje charakterystyczne mają postać:
 \label{eq:HestonCharacteristic}
   \begin{aligned}
 f_j(x, v, T; \phi) &= e^{C_j(T-t; \phi) + D_j(T-t; \phi)v + i \phi x} \\
-C_j (\tau; \phi)     &= r \phi i \tau + \frac{a}{\sigma^2} \bigg\{ (b_j - \rho \sigma \phi i + d) \tau - 2 \cdot ln \bigg[ \frac{1 - ge^{dr}}{1-g} \bigg] \bigg\} \\
-D_j (r; \phi)        &= \frac{b_j- \rho \sigma \phi i + d}{\sigma^2} \bigg[ \frac{1 - e^{d_j \tau}}{1 - g_je^{d\tau}} \bigg]   \\
-g_j                &= \frac{b_j - \rho \sigma \phi i + d}{b_j - \rho \sigma \phi i - d} \\
+C_j (\tau; \phi)     &= r \phi i \tau + \frac{a}{\sigma^2} \bigg\{ (b_j - \rho \sigma \phi i + d_j) \tau - 2 \cdot ln \bigg[ \frac{1 - g_j e^{d_j r}}{1-g_j} \bigg] \bigg\} \\
+D_j (r; \phi)        &= \frac{b_j- \rho \sigma \phi i + d_j}{\sigma^2} \bigg[ \frac{1 - e^{d_j \tau}}{1 - g_j e^{d_j \tau}} \bigg]   \\
+g_j                &= \frac{b_j - \rho \sigma \phi i + d_j}{b_j - \rho \sigma \phi i - d_j} \\
 d_j                &= \sqrt{(\rho \sigma \phi i  - b_j)^2 - \sigma^2(2 u_j \phi  i  - \phi^2)}.
   \end{aligned}
 \end{equation}
@@ -713,10 +720,94 @@ sin(\omega l (K))
 \end{equation}
 Jedynym ograniczeniem powyższego układu jest fakt, że równania 
 (\ref{eq:HestonCharacteristicFirst}) - (\ref{eq:HestonCharacteristic}) pozwalają wyznaczyć wartość opcji w 
-dowolnym momencie jej trwania, natomiast równania 
-(\ref{eq:AttariCharacteristicFirst}) - (\ref{eq:AttariCharacteristic}) pozwalają wycenić 
-opcję tylko na moment zerowy.
+dowolnym momencie jej trwania. Równania 
+(\ref{eq:AttariCharacteristicFirst}) - (\ref{eq:AttariCharacteristic}) z kolei nie mają tej własności, 
+pozwalają wycenić opcję jedynie na moment zerowy.
 
+
+
+
+
+\subsection{Mała pułapka Hestona} % (fold)
+\label{sub:mala_pulapka_hestona}
+W pewnych przypadkach podany wzór na wycenę opcji może charakteryzować się dużą niestabilnością
+numeryczną. Główną przyczyną niestabilności jest istnienie wielu załamań i 
+nieciągłości całkowanej funkcji. Zjawisko to zostało zauważone po raz pierwszy
+przez Albrechera i znane jest w literaturze pod nazwą \textbf{małej pułapki Hestona} (\textit{ang. 
+The little Heston trap}) \cite{albrecher2006little}.
+
+\begin{figure}
+\centering
+  \includegraphics[width=0.80\textwidth]{../output/figures/AlbrecherHeston.png}
+  \caption{Porównanie wyglądu fragmentu funkcji $P_j$ dla oryginalnej 
+           postaci modelu Hestona i Albrechera. Źródło: \cite{rouah2013heston}.}
+  \label{fig:AlbrecherHeston}
+\end{figure}
+W przypadku modelu Hestona funkcją, która zawiera wyrażenie podcałkowe, jest $P_j$. 
+Wyrażenie to ma postać:
+
+\begin{equation}
+\label{eq:HestonProb}
+  F_j(\phi) = Re \bigg[ \frac{e^{-i \cdot \phi ln[K]} f_j(x, v, T; \phi) }{i \phi} \bigg], 
+\end{equation}
+gdzie: $\phi > 0$.
+
+Powyższy fragment dla pewnych danych może charakteryzować się dużą nieregularnością. 
+Dla przykładu, na rysunku \ref{fig:AlbrecherHeston} przedstawiono wykres 
+funkcji $P_j$ ilustrujący to zjawisko. Zestaw parametrów, dla których funkcja $P_j$
+zachowuje się w ten sposób, jest następujący \cite{rouah2013heston}:
+\begin{itemize}
+  \item $\kappa = 1.5768$,
+  \item $\sigma = 0.5751$,
+  \item $\rho = −0.5711$,
+  \item $\theta = 0.0398$,
+  \item $v_0 =0.0175$.
+\end{itemize}
+
+Jak widać, funkcja zapisana w oryginalnej postaci 
+modelu Hestona charakteryzuje się nieciągłością dla punktu $\phi \approx 3,6$. 
+Natomiast funkcja zdefiniowana w alternatywnej postaci jest funkcją ciągłą i nie wykazuje
+bardzo dużych załamań swoich wartości.
+
+
+Aby otrzymać postać zaproponowaną przez Albrechera należy zastąpić 
+niektóre części oryginalnego wzoru ekwiwalentynymi wyrażeniami.
+Zmiana ta powoduje, że funkcja jest bardziej gładka i nie charakteryzuje się tak dużymi
+załamaniami.
+
+Pierwszym wyrażeniem wymagającym poprawy jest $D_j$ w równaniu (\ref{eq:HestonCharacteristic}). 
+Zastępujemy je przez:
+
+
+\begin{equation}
+\label{eq:HestonLittleTrapD}
+  \begin{aligned}
+D_j (r; \phi)  &= \frac{b_j- \rho \sigma \phi i - d_j}
+                  {\sigma^2} \bigg[ \frac{1 - e^{-d_j \tau}}{1 - c_j e^{-d_j \tau}} \bigg],  
+  \end{aligned}
+\end{equation} 
+gdzie:
+
+\begin{equation}
+\label{eq:HestonLittleTrapCj}
+  \begin{aligned}
+c_j  &= \frac{1}{g_j} = \frac{b_j - \rho \sigma \phi i - d_j}{b_j - \rho \sigma \phi i + d_j}. \\
+  \end{aligned}
+\end{equation}
+Wyrażenie $C_j$ należy natomiast zamienić następującym równaniem:
+
+\begin{equation}
+\label{eq:HestonLittleTrapC}
+  \begin{aligned}
+C_j (\tau; \phi)     &= r \phi i \tau + \frac{a}{\sigma^2} 
+                    \bigg\{ (b_j - \rho \sigma \phi i - d_j) \tau - 
+                    2 \cdot ln \bigg[ \frac{1 - c_j e^{-d_j r}}{1-c_j} \bigg] \bigg\}.
+  \end{aligned}
+\end{equation}
+Wyrażenie $c_j$ w powyższym wzorze jest zdefiniowane 
+w ten sam sposób jak w równaniu (\ref{eq:HestonLittleTrapCj}).
+
+% subsection mała_pułapka_hestona (end)
 
 \section{Współczynniki greckie\index{Współczynniki greckie}}
 
@@ -1214,13 +1305,14 @@ najważniejszym z nich jest potencjalne istnienie wielu ekstremów lokalnych.
   \State Zainicjuj temperaturę początkową $T_0$;
   \State Zainicjuj rozwiązanie początkowe $x_0$;
   \State Dla każdego poziomu temperatury $T_K$:
-  \State  \hspace{\algorithmicindent} Zdefiniuj funkcję $\pi_k(x) = e^{- \frac{G(x)}{T_k}}$
-  \State  \hspace{\algorithmicindent}    Wykonaj $n$ iteracji:
-  \State    \hspace{\algorithmicindent} \hspace{\algorithmicindent}       Zaakceptuj nowe rozwiązanie $x_{k+1}$ z pr-stwem $min(1, \frac{\pi_k{x_{k+1}}}\pi_k{{x_{k}}}$);
-  \State Jeżeli $T_{k+1} < T_{min}$:
-  \State  \hspace{\algorithmicindent}    Zakończ algorytm;
-  \State W przeciwnym przypadku:
-  \State   \hspace{\algorithmicindent}   Skocz do linii 3 z temperaturą $T_{k+1}$ oraz rozwiązaniem $x_{k+1}$;
+  \State \hspace{\algorithmicindent} Zdefiniuj funkcję $\pi_k(x) = e^{- \frac{G(x)}{T_k}}$
+  \State \hspace{\algorithmicindent} Wykonaj $n$ iteracji:
+  \State \hspace{\algorithmicindent} \hspace{\algorithmicindent} Zaakceptuj nowe rozwiązanie 
+          $x_{k+1}$ z pr-stwem $min(1, \frac{\pi_k{x_{k+1}}}\pi_k{{x_{k}}}$);
+  \State  Jeżeli $T_{k+1} < T_{min}$:
+  \State  \hspace{\algorithmicindent} Zakończ algorytm;
+  \State  W przeciwnym przypadku:
+  \State  \hspace{\algorithmicindent}  Skocz do linii 3 z temperaturą $T_{k+1}$ oraz rozwiązaniem $x_{k+1}$;
 
 \end{algorithmic}
 \label{alg:simulatedAnnealing}
@@ -1322,7 +1414,7 @@ przekształcenia:
   u_1 = x \sqrt{\frac{-2 \ln(s)}{s}}, u_2 = y \sqrt{\frac{-2 \ln(s)}{s}}
 \end{equation}
 Pseudokod \ref{lst:polarMethodLst} przedstawia zarys algorytmu generowania zmiennej losowej o standardowym rozkładzie
-normalnym przy pomocy wyżej opisanego schematu. 
+normalnym przy pomocy wyżej opisanego schematu \cite{joshi2008c++}. 
 
 \begin{algorithm}[H]
 \caption{Generowanie zmiennej losowej o standardowym rozkładzie normalnym zgodnie z metodą biegunów}
@@ -1754,7 +1846,7 @@ niezerową wartość stopy procentowej otrzymujemy:
 \begin{equation}
 \begin{aligned}
 \label{eq:HestonInterestMartingale} 
-\hat{S}(t + \Delta) &= \hat{S}(t) * exp(r \Delta\\ 
+\hat{S}(t + \Delta) &= \hat{S}(t) * exp(r \Delta+\\ 
                     &+ K_0^* + K_1 \hat{v}(t) 
                     + K_2 \hat{v}(t+\Delta)
                     + \sqrt{K_3 \hat{v}(t) +  K_4 \hat{v}(t+\Delta)} \cdot Z)
@@ -1780,6 +1872,7 @@ gdzie: $\hat{C}(T)$ oznacza aproksymację ceny opcji na moment $T$.
 
 Gdy zdyskontujemy $\hat{C}(T)$ na moment zerowy otrzymamy wzór na moment zerowy:
 \begin{equation}
+\label{eq:monteCarloMean}
   \hat{C}(0) = \frac{E \left[ (\hat{S}(T) - K)^{+} \right]}{e^{rT}} 
 \end{equation}
 
@@ -1790,155 +1883,492 @@ Gdy zdyskontujemy $\hat{C}(T)$ na moment zerowy otrzymamy wzór na moment zerowy
 %===========================================================================
 %                       Model Hestona na przykładznie
 %===========================================================================
-\chapter{Wycena opcji na indeks S\&P500}\label{r:sp}
+\chapter{Wyniki numeryczne}\label{r:sp}
 
 
 W poprzednich rozdziałach zostały przedstawione zostały formalne aspekty związane z modelami 
-Blacka-Scholesa i Hestona, ten rozdział będzie poświęcony sprawdzeniu, jak w praktyce przedstawione 
-modele się zachowują.
-Jako instrument finansowy, na podstawie którego będziemy testować właściwości wymienionych modeli, 
-wybrano indeks S\&P500. 
-
-\section{Wycena opcji przy pomocy modelu Blacka-Scholesa}
-
-Zanim przejdziemy do wyceny opcji  przy pomocy modelu Hestona oraz kalibracji
-parametrów tego modelu, warto, w celach porównawczych zbadać wartość opcji 
-wyznaczonej przy pomocy modelu Blacka-Scholesa. 
+Blacka-Scholesa i Hestona.
+Ten rozdział będzie poświęcony sprawdzeniu, jak w praktyce wygląda kalibracja modelu Hestona.
+Porównane będą również schematy dyskretyzacji procesów zmienności i aktywa bazowego.
+Zostanie przedstwione numeryczne porównanie różnych schematów dyskretyzacji w oparciu
+o dwie wybrane opcje.
+W kolejnej częsci rozdziału będziemy testować właściwości wymienionych modeli na przykładzie 
+rzeczywistego indeksu giełdowego.
+Będzie to indeks S\&P500. 
 
 
-Dlatego też, porównamy otrzymaną wartość w modelu Blacka-Scholesa z ceną na rynku.
-W celach porównawczych wybrano opcję o takiej samej cenie wykonania jak aktualna wartość indeksu 
-S\&P500 o momencie wygaśnięcia przypadającym na dzień 16 grudnia 2016 roku. 
-Rynkowa cena na tę opcję wynosi $13.08$ USD, natomiast otrzymana zgodnie z modelem Blacka-Scholesa 
-wynosi $14.16$ USD.
 
-Jak widać, ceny te nieznacznie różnią się wartością, jednak należy wziąć pod uwagę fakt, że nawet 
-małe różnice w przyjętych parametrach mogą powodować różnice w cenie. 
+\section{Porównanie różnych metod implementacji modelu Hestona}
+W tej sekcji zostaną przedstawione przypadki testowe, na bazie których dokonamy
+oceny schematów dyskretyzacji. W kolejnej części przedstawiony zostanie schemat 
+otrzymanie zmienności implikowanej dla testowanych opcji. Na ich podstawie zostanie
+wyznaczona płaszczyzna zmienności. 
 
-Np. stopę wolną od ryzyka w pracy oszacowano na poziomie 3$\%$, zgodnie z rentownością 30-letnich 
-obligacji wystawionych przez rząd Stanów Zjednoczonych. Niewykluczone, ze rentowność dla której cena 
-opcji na rynku przyjmuje taką wartość jest nieznacznie inna.
+\subsection{Dane testowe}
+Oceny właściwości schematów dyskretyzacji przedstawionych w rozdziale \ref{chap:hestonModel}
+dokonamy na podstawie dwóch przypadków testowych, które pochodzą od 
+Broadie \cite{Broadie}.
+Zostały one przedstawione w tabeli \ref{tab:testOptionsComparison}.
 
-Ponadto, jak zostało wspomniane w rozdziale dotyczącym wyceny opcji w modelu Blacka-Scholesa,
-jedynym nieznanym parametrem w modelu jest zmienność, którą otrzymujemy podstawiając
-dane rynkowe. 
+\begin{table}[htbp]
+\centering
+\begin{tabular}{l r r}
+\toprule
+{} & Opcja nr 1 & Opcja nr 2  \\
+\midrule
+  $S$         & 100.0 & 100.0 \\
+  $K$         & 100.0 & 100.0 \\
+  $K_{low}$   & 80.0 & 80.0 \\
+  $K_{high}$  & 130.0 & 130.0 \\
+  $r$         & 0.05 & 0.0319 \\
+  $T$         & 5.00 & 1.00 \\
+  $v_0$         & 0.09 & 0.010201 \\
+  $\kappa$    & 2.00 & 6.21 \\
+  $\theta$    & 0.09 & 0.019 \\
+  $\epsilon$  & 1.00 & 0.61 \\
+  $\rho$      & -0.3 & -0.7 \\
+\bottomrule
+\end{tabular}
+\caption{Opcje na podstawie których zostaną porównane schematy dyskretyzacji przedstawione
+w rozdziale \ref{chap:hestonModel} \cite{Broadie}}
+\label{tab:testOptionsComparison}
+\end{table}
 
+Opcja nr 1 charakteryzuje się długim terminem do wygaśnięcia równym okresowi 5 lat. Dla opcji
+nr wynosi on 1 rok. Istotną zmienną różniącą obie opcji jest również zmienność początkowa 
+wynosząca odpowiednio $0.09$ oraz $0.010201$. Proces aktywa bazowego jest ujemnie skorelowany
+z procesem zmienności w obu przypadkach, jednak siła tego skorelowania wynosi $-0.3$ dla 
+pierwszego przypadku oraz $-0.7$ dla drugiego.
+
+\subsection{Porównanie schematów dyskretyzacji}
+\label{sub:simulationNumericResult}
+W tym rozdziale zostanie porównanie następujących schematów dyskretyzacji z rozdziału \ref{chap:hestonModel}:
+\begin{itemize}
+  \item schemat Eulera (\textbf{EUL} z tabeli \ref{tab:option1Comparison} oraz \ref{tab:option2Comparison})
+  \item schemat Andersena (\textbf{AND})
+  \item schemat Andersena z poprawką martyngałową (\textbf{MAR})
+\end{itemize}
+Tabela \ref{tab:option1Comparison} przedstawia wyniki symulacji 
+dla opcji nr 1. Pierwsza kolumna $\Delta$ oznacza
+liczbę kroków czasowych (\textit{ang. time steps}) na który 
+jest podzielony okres $[0, K]$. Drugi parametr $N$ oznacza liczbę
+losowych trajektorii (\textit{ang. sample path}) procesu stochastycznego. 
+Wartość ceny opcji dla każdej symulacji Monte Carlo, 
+którą oznaczaono odpowiednio przez EUL, AND oraz MAR 
+zostały wyliczone zgodnie ze wzorem z równania (\ref{eq:monteCarloMean}):
+\begin{equation}
+  \hat{C}(0) = \frac{E \left[ (\hat{S}(T) - K)^{+} \right]}{e^{rT}}
+\end{equation}
+gdzie: $\hat{C}(0)$ oznacza wartość opcji otrzymaną przez zastosowanie symulacji Monte Carlo.
+
+Wyznaczona w ten sposów warotść opcji jest jednak podatna na dwa rodzaje błędów:
+\begin{itemize}
+  \item \textbf{błąd statystyczny}, który zgodnie z centralnym twierdzeniem granicznym 
+    (\textit{ang. central limit theorem}) wynosi:
+  \begin{equation}
+    SE = \frac{\sigma_f}{\sqrt{N}}
+  \end{equation}
+
+  \item \textbf{obciążenie zwięzane z zastosowanie dyskretyzacji} (\textit{ang. discretization bias}):
+  \begin{equation}
+    e = C(0) - \hat{C}(0),
+  \end{equation}
+  gdzie: $C(0)$ oznacza prawdziwą wartość opcji.
+\end{itemize}
+
+\begin{table}[ht!]
+\centering
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l l| >{\bfseries}rrr @{\hskip 0.5in} >{\bfseries}rrr @{\hskip 0.5in} >{\bfseries}r r r}
+\toprule
+{} & {} & EUL & Bias & SE & AND & Bias & SE & MAR & Bias & SE \\
+\midrule
+$\Delta$ & $N$ & {}  & {} & {} & K=80 \\
+\midrule
+10 & 1000 & 43.377 & -1.433 & 1.784 & 39.762 & -5.048 & 1.664 & 41.438 & -3.372 & 1.695 \\
+20 & 4000 & 44.924 & 0.114 & 0.968 & 44.629 & -0.181 & 0.977 & 43.484 & -1.326 & 0.995 \\
+40 & 16000 & 44.017 & -0.793 & 0.469 & 43.635 & -1.175 & 0.476 & 44.201 & -0.609 & 0.473 \\
+80 & 64000 & 44.315 & -0.495 & 0.237 & 44.571 & -0.239 & 0.240 & 44.794 & -0.016 & 0.243 \\
+160 & 256000 & 44.697 & -0.113 & 0.121 & 44.483 & -0.328 & 0.120 & 44.712 & -0.098 & 0.120 \\
+320 & 1024000 & 44.865 & 0.054 & 0.061 & 44.869 & 0.059 & 0.061 & 44.835 & 0.025 & 0.061 \\
+\midrule
+{} & {} & {}  & {} & {} & K=100 \\
+\midrule
+10 & 1000 & 31.828 & -3.138 & 1.777 & 34.475 & -0.491 & 2.085 & 33.426 & -1.540 & 1.668 \\
+20 & 4000 & 33.102 & -1.864 & 0.884 & 32.098 & -2.868 & 0.840 & 32.485 & -2.481 & 0.833 \\
+40 & 16000 & 35.052 & 0.086 & 0.465 & 33.844 & -1.122 & 0.444 & 33.949 & -1.017 & 0.440 \\
+80 & 64000 & 34.784 & -0.182 & 0.229 & 34.680 & -0.286 & 0.228 & 34.342 & -0.624 & 0.222 \\
+160 & 256000 & 34.782 & -0.184 & 0.113 & 34.710 & -0.256 & 0.114 & 34.790 & -0.176 & 0.113 \\
+320 & 1024000 & 34.954 & -0.012 & 0.057 & 35.034 & 0.068 & 0.057 & 34.992 & 0.026 & 0.058 \\
+\midrule
+{} & {} & {} & {} & {} & K=130 \\
+\midrule
+10 & 1000 & 22.457 & -1.209 & 1.654 & 21.220 & -2.446 & 1.511 & 19.924 & -3.741 & 1.291 \\
+20 & 4000 & 23.316 & -0.349 & 0.775 & 21.987 & -1.678 & 0.734 & 22.473 & -1.193 & 0.840 \\
+40 & 16000 & 23.201 & -0.464 & 0.436 & 23.626 & -0.040 & 0.406 & 22.888 & -0.778 & 0.397 \\
+80 & 64000 & 23.290 & -0.375 & 0.205 & 23.449 & -0.216 & 0.202 & 22.857 & -0.808 & 0.195 \\
+160 & 256000 & 23.431 & -0.234 & 0.100 & 23.404 & -0.261 & 0.101 & 23.500 & -0.166 & 0.101 \\
+320 & 1024000 & 23.578 & -0.087 & 0.051 & 23.576 & -0.089 & 0.051 & 23.648 & -0.017 & 0.051 \\
+\bottomrule
+\end{tabular}
+}
+\caption{Porównanie schematów dyskretyzacji na przykładzie opcji nr 1}
+\label{tab:option1Comparison}
+\end{table}
+
+Błędy te zostały obliczone dla każdej symulacji danego schematu dyskretyzacji
+i oznaczono ja następująco:
+\begin{itemize}
+  \item $Bias$ - błąd związany z wyborem danego schematu dyskretyzacji
+  \item $SE$ - błąd statystyczny 
+\end{itemize}
+
+
+\begin{table}[ht!]
+\centering
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l l| >{\bfseries}rrr @{\hskip 0.5in} >{\bfseries}rrr @{\hskip 0.5in} >{\bfseries}r r r}
+\toprule
+{} & {} & EUL & Bias & SE & AND & Bias & SE & MAR & Bias & SE \\
+\midrule
+$\Delta$ & $N$ & {}  & {} & {} & K=80 \\
+\midrule
+10 & 1000 & 22.549 & -0.328 & 0.353 & 22.130 & -0.747 & 0.348 & 23.001 & 0.125 & 0.346 \\
+20 & 4000 & 23.179 & 0.303 & 0.182 & 22.596 & -0.280 & 0.180 & 22.547 & -0.330 & 0.183 \\
+40 & 16000 & 22.745 & -0.132 & 0.090 & 22.857 & -0.019 & 0.090 & 22.942 & 0.065 & 0.090 \\
+80 & 64000 & 22.958 & 0.081 & 0.045 & 22.847 & -0.030 & 0.045 & 22.842 & -0.035 & 0.045 \\
+160 & 256000 & 22.950 & 0.073 & 0.023 & 22.927 & 0.050 & 0.023 & 22.942 & 0.066 & 0.023 \\
+320 & 1024000 & 22.971 & 0.094 & 0.011 & 22.962 & 0.086 & 0.011 & 22.955 & 0.078 & 0.011 \\
+\midrule
+{} & {} & {} & {} & {} & K=100 \\
+\midrule
+10 & 1000 & 6.542 & -0.231 & 0.228 & 6.544 & -0.229 & 0.218 & 6.323 & -0.450 & 0.222 \\
+20 & 4000 & 6.822 & 0.049 & 0.115 & 6.481 & -0.292 & 0.114 & 6.485 & -0.288 & 0.113 \\
+40 & 16000 & 6.671 & -0.102 & 0.058 & 6.793 & 0.020 & 0.058 & 6.754 & -0.019 & 0.058 \\
+80 & 64000 & 6.788 & 0.015 & 0.029 & 6.698 & -0.075 & 0.029 & 6.697 & -0.076 & 0.029 \\
+160 & 256000 & 6.792 & 0.019 & 0.015 & 6.787 & 0.014 & 0.015 & 6.780 & 0.007 & 0.015 \\
+320 & 1024000 & 6.805 & 0.032 & 0.007 & 6.797 & 0.024 & 0.007 & 6.796 & 0.023 & 0.007 \\
+\midrule
+{} & {} & {} & {} & {} & K=130 \\
+\midrule
+10 & 1000 & 0.029 & -0.051 & 0.013 & 0.000 & -0.080 & 0.000 & 0.004 & -0.076 & 0.003 \\
+20 & 4000 & 0.015 & -0.065 & 0.004 & 0.018 & -0.062 & 0.006 & 0.011 & -0.069 & 0.003 \\
+40 & 16000 & 0.021 & -0.059 & 0.003 & 0.019 & -0.061 & 0.003 & 0.016 & -0.064 & 0.003 \\
+80 & 64000 & 0.019 & -0.061 & 0.001 & 0.019 & -0.061 & 0.001 & 0.020 & -0.060 & 0.002 \\
+160 & 256000 & 0.021 & -0.059 & 0.001 & 0.021 & -0.059 & 0.001 & 0.021 & -0.059 & 0.001 \\
+320 & 1024000 & 0.022 & -0.058 & 0.000 & 0.022 & -0.058 & 0.000 & 0.022 & -0.058 & 0.000 \\
+\bottomrule
+\end{tabular}
+}
+\caption{Porównanie schematów dyskretyzacji na przykładzie opcji nr 2}
+\label{tab:option2Comparison}
+\end{table}
+
+Analizując wyniki otrzymane w wyniku symulacji (przedstawione w tabeli 
+\ref{tab:option1Comparison}) można wyciągnąć następujące wnioski :
+\begin{itemize}
+  \item wraz ze wzrstającą liczbą wylosowanych trajektorii $N$ dla danej
+  symulacji maleje zarówna błąd statystyczny jak i obciążenie związane z zastosowaniem 
+  danego schematu dyskretyzacji. 
+  \item wartość błedu statystycznego maleje w tempie $\bigO{\sqrt{N}}$, co jest
+  zgodne z treścią centralnego twierdznia granicznego.
+  \item zastosowanie poprawki martyngałowej dla schematu Andersena zwiększa
+  dokładność dla każdej symulacji dla $\Delta = 320$ oraz $N = 1024000$.
+  \item Dla dużych wartości $\Delta$ oraz $N$ wszystkie trzy schematu dyskretyzacji 
+  wykazują dużą dokładność i regularność przy wycenie opcji.
+\end{itemize}
+
+Rzeczywista cena opcji $C(0)$ została wyznaczone w oparciu o implementację
+wzoru uwzględniającą poprawkę związaną z \textbf{małą pułapką Hestona}.
+Implementacja nie uwzględniaja tej poprawki wykazywałą się niestabilnością numerczyną 
+dla niektórych przypadków. Poniższa tabela przedstawia rzeczywistą cenę dla
+opcji nr 1 i opcji nr 2:
+\begin{table}[htbp]
+\centering 
+\begin{tabular}{@{\hskip 0.5in}l |  @{\hskip 0.5in}r  @{\hskip 0.5in}r  }
+\toprule
+$K$ & opcja nr 1 & opcja nr 2\\
+\midrule
+80 & 44.8102 & 22.8766 \\
+100 & 34.9661 & 6.7730 \\
+130 & 23.6653 & 0.0800 \\
+\bottomrule
+\end{tabular}
+\caption{Ceny opcji testowych otrzymanych w wyniki implementacji 
+         poprawki związanej z \textit{małą pułapką Hestona}}
+\label{tab:littleTrapOption1}
+\end{table}
+
+\subsection{Zmienność implikowana}
+W tym podrozdziale zostanie przedstawiona płaszczyzna zmienności dla opcji nr 1.
+Aby wygenerować płaszczyznę zmienności należy najpierw wygenerować ceny opcji
+dla modelu Hestona. Będą one generowane dla różnych wartości czasu do wygaśnięcia 
+oraz ceny wykonania opcji. Następnie, dla otrzymanego zestawu cen opcji wg modelu 
+Hestona należy wyznaczyć zmienność implikowaną zgodną z modelem Blacka-Scholesa.
+Do tego celu posłuży zaimplementowana w pakiecie \textit{Matlab} funkcja \textit{blsimpv}:
+
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{matlab}
+{../output/listings/blsimpv.m}
+\caption{Nagłówek funkcji \textit{blsimpv}}
+\label{lst:lsqnonlin}
+\end{listing}
+Całą procedurę wyznaczenia płaszczyzny zmienności przedstawia kod źródłowy nr \ref{alg:volSurface}:
+\begin{algorithm}[H]
+\caption{Wyznaczenie płaszczyzny zmienności}\label{euclid}
+\begin{algorithmic}[1]
+  \State dla każdego $T \in T_{set}$ \{
+  \State \hspace{\algorithmicindent} dla każdego $K \in K_{set}$ \{
+  \State \hspace{\algorithmicindent} \hspace{\algorithmicindent} wyznacz cenę opcji 
+          przy pomocy modelu Hestona $C$
+  \State \hspace{\algorithmicindent} \hspace{\algorithmicindent} wyznacz zmienność dla 
+          każdej opcji $V_{implBS} = blsimpv(S_0, T, K, C, r)$
+  \State \hspace{\algorithmicindent} \}
+  \State \} 
+\end{algorithmic}
+\label{alg:volSurface}
+\end{algorithm}
 Na podstawie danych wyliczono również płaszczyznę zmienności dla 
-opcji na indeks S\&P500, co przedstawia rysunek nr \ref{fig:volatilitySurface}. 
+opcji dla opcji nr 1, co przedstawia rysunek nr \ref{fig:hestonVolSurfaceExample1}. 
 
-\begin{figure}
+\begin{figure}[ht!]
   \centering
-  \includegraphics[width=0.80\textwidth]{../output/figures/blackScholesVolSurface.pdf}
-  \caption{Płaszczyzna zmienności implikowanej dla indeksu $S\&P$500}
-  \label{fig:volatilitySurface}
+  \includegraphics[width=0.80\textwidth]{../src/HestonMATLAB/impliedvol/figs/hestonVolSurfaceExample1.pdf}
+  \caption{Płaszczyzna zmienności implikowanej dla opcji nr 1}
+  \label{fig:hestonVolSurfaceExample1}
 \end{figure}
 
+
 Dla opcji o bliskim terminie do wygaśnięcia bardzo dobrze jest widoczny
-tak zwany uśmiech zmienności (\textit{ang. volatility smile}). Stwierdzenie uśmiech 
-odnosi się do faktu, że dla opcji \textit{in-the-money} oraz \textit{out-the-money}
-zmienność implikowana jest o wiele wyższa niż dla opcji \textit{at-the-money} (dla opcji o krótkim
-terminie do wykupu).
-Jest to zarazem kolejny dowód na to, że założenie o stałości zmienności w modelu Blacka-Scholesa jest 
-rzeczywiście niespełnione.
+tak zwany grymas zmienności (\textit{ang. volatility smirk}). Stwierdzenie grymas 
+odnosi się do faktu, że dla opcji \textit{in-the-money} zmienność implikowana jest o 
+wiele wyższa niż dla opcji \textit{at-the-money}, a te z kolei mają zmienność 
+implikowane o wiele wyższe niż \textit{out-the-money}.
+W rozdziale \ref{chap:introduction} powiedzieliśmy, że jednym z założeń
+modelu Blacka-Scholesa jest założenie o stałej wartości zmienności w czasie. 
+Jest to kolejny dowód na to, że model Blacka-Scholesa nie bierze pod uwagę
+istotnych cech rynku, które kształtują ceny instrumentów finanowych, w tym opcji.
 
 
-\section{Kalibracja}
+
+
+\section{Wycena europejskiej opcji kupna na indeks S\&P500}
+
+W poprzednim podrozdziale zbadano ogólne właściwości schematów dyskretyzacji przedstawionych
+w rozdziale \ref{chap:monteCarlo}. Sprawdzono również jak kształtuje się płaszczyzna 
+zmienności dla modelu Hestona. 
+W tym zbadamy jak opiane narzędzia sprawdzają się przy wycenie opcji na rzeczywisty indeks 
+giełdowy S\&P500.
+Pierwszym krokiem będzie znalezienie parametrów modelu Hestona. Otrzymamy to w wyniku 
+kalibracji modelu do danych rynkowych, zgodnie z teorią 
+przedstawioną w rozdziale \ref{chap:chapterModelCalibration}.
+Nastepnie zbadamy zachowanie różnych schematów dyskretyzacji oraz kształt płaszczyzny
+zmienności wygenerowanej przez model.
+
+
+
+
+\subsection{Kalibracja}
 
 Zmienność implikowaną użytą w równaniu Blacka-Scholesa 
 bardzo łatwo wyznaczyć mając dane podstawowe parametry 
 opcji. Jednak, jak opisano w czwartym rozdziale, 
-kalibracja (wyznaczenie optymalnych) parametrów modelu Hestona jest skomplikowana i jest
-zadaniem optymalizacyjnym.  
-
-Kalibracji dokonamy przy pomocy dostępnej w programie \textit{Matlab} funkcji \textit{lsqnonlin}, 
+kalibracja parametrów modelu Hestona jest skomplikowana i jest
+zadaniem optymalizacyjnym. Kalibracji dokonamy przy pomocy dostępnej w 
+programie \textit{Matlab} funkcji \textit{lsqnonlin}, 
 opisanej w rozdziale \ref{chap:chapterModelCalibration}.
-Jednak, aby użyć tej funkcji potrzebujemy giełdowych danych wejściowych.
 
 
-Rysunek \ref{fig:calibration} przedstawia, zrzutowane na wykresie, dane, które
+Tabela \ref{tab:calibration} przedstawia dane, które
 zostały użyte w celu kalibracji modelu (jak widać, zostały użyte ceny 
 opcji o 3 różnych terminach wygaśnięcia: 
-6, 13 oraz 20 dni.)
+6, 13 oraz 20 dni.). W tabeli przyjęto następujące oznaczenia: $K$ oznacza cenę wykonania opcji
+oraz $T$, które określa czas do wygaśnięcia opcji.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.80\textwidth]{../output/figures/calibrationInput.pdf}
-  \caption{Dane wejściowe do funkcji kalibrującej model Hestona do danych giełdowych}
-  \label{fig:calibration}
-\end{figure}
+\begin{table}[ht!]
+\centering 
+\begin{tabular}{@{\hskip 0.5in}r @{\hskip 0.5in}r | @{\hskip 0.5in}r @{\hskip 0.5in}r | @{\hskip 0.5in}r @{\hskip 0.5in}r }
+\toprule
+{} K & T & K & T & K & T \\
+\midrule
+205.00 & 6 & 205.00 & 13 & 205.00 & 20 \\
+205.50 & 6 & 205.50 & 13 & 205.50 & 20 \\
+206.00 & 6 & 206.00 & 13 & 206.00 & 20 \\
+206.50 & 6 & 206.50 & 13 & 206.50 & 20 \\
+207.00 & 6 & 207.00 & 13 & 207.00 & 20 \\
+207.50 & 6 & 207.50 & 13 & 207.50 & 20 \\
+208.00 & 6 & 208.00 & 13 & 208.00 & 20 \\
+208.50 & 6 & 208.50 & 13 & 208.50 & 20 \\
+209.00 & 6 & 209.00 & 13 & 209.00 & 20 \\
+209.50 & 6 & 209.50 & 13 & 209.50 & 20 \\
+210.00 & 6 & 210.00 & 13 & 210.00 & 20 \\
+210.50 & 6 & 210.50 & 13 & 210.50 & 20 \\
+\bottomrule
+\end{tabular}
+\caption{Dane wejściowe do funkcji kalibrującej model Hestona do danych giełdowych}}
+\label{tab:calibration}
+\end{table}
 
 W wyniku kalibracji otrzymano następujące parametry:
 
 \begin{itemize}
-  \item $V(1) = 0.0369 $
+  \item $V(0) = 0.0369 $
   \item $\kappa = 20.1115$
   \item $\theta = 0.0000$
   \item $\sigma = 0.5000$
   \item $\rho = -0.9000$
 \end{itemize}
+Mając wyznaczone zadane parametry modelu, można przejść do wyceny opcji, 
+stosując metodę Monte Carlo.
 
 
-Mając wyznaczone zadane parametry modelu, można przejść do wyceny opcji, stosując metodę Monte Carlo.
 
 
-\section{Symulacja Monte Carlo ceny europejskiej opcji kupna na indeks S\&P500}
+\subsection{Wyznaczenie ceny opcji}
 
 Po znalezieniu odpowiedniej wartości nieznanych paramentów modelu Hestona, można 
-przejść do symulacji Monte Carlo wyznaczającej cenę opcji o zadanych właściwościach.
-
-W tym rozdziale wycenimy opcję kupna o następujących właściwościach:
-\begin{enumerate}
-  \item cena początkowa aktywa bazowego = $207.93$
-  \item cena wykupu opcji = $207.93$ 
-  \item roczna stopa wolna od ryzyka = $0.03$
-  \item początkowa zmienność =  $0.15$
-  \item czas do wygaśnięcia opcji = 412 dni
-\end{enumerate}
- 
-Na poniższym rysunku widać wynik symulacji ceny opcji dla kilkuset losowo wybranych przebiegów.
-Z definicji Monte Carlo wynika, że poprawnym estymatorem ceny
-opcji jest średnia średnia ze wszystkich przebiegów.
-Na rysunku zaznaczono również poziomą linią wartość punktu startowego, tzn. wartość 
-aktywa bazowego w momencie zerowym.
-
+przejść do symulacji Monte Carlo wyznaczającej ceny opcji na indeks S\&P500.
+W tym rozdziale wycenimy opcję kupna o następujących właściwościach: 
+   $S         = 207.93   
+   ,K         = 207.93  
+   ,K_{low}   = 170.0  
+   ,K_{high}  = 240.0   
+   ,r         = 0.0319  
+   ,T         = 1.00   
+   ,v_0       = 0.0369  
+   ,\kappa    = 20.2082  
+   ,\theta    = 0.0001  
+   ,\epsilon  = 0.5000  
+   ,\rho      = -0.90$.
 \begin{figure}
 \centering
-  \includegraphics[width=0.80\textwidth]{../chartHeston.png}
+  \includegraphics[width=0.80\textwidth]{../output/figures/chartHeston.png}
   \caption{Trajektorie procesu cen instrumentu bazowego}
   \label{fig:hestonAssetPaths}
 \end{figure}
 
+Na powyższym rysunku \ref{fig:hestonAssetPaths} widać wynik symulacji ceny opcji dla losowo wybranych przebiegów.
+Z definicji Monte Carlo wynika, że poprawnym estymatorem ceny
+opcji jest średnia średnia ze wszystkich przebiegów.
+Na rysunku zaznaczono również poziomą linią wartość punktu startowego, tzn. wartość 
+aktywa bazowego w momencie zerowym. Wyraźnie widać, że śrenia cena aktywa 
+bazowego kształtuje się powyżej ceny wykupu opcji.
 
-Z wykonania symulacji dla metody Hestona wynika, że średnia cena opcji z czasem do wygaśnięcia 
-jednego roku wynosi $13.61$ USD, 
-co jest znacznie bliższe wartości wycenianej przez rynek ($13.08$ USD) w porównaniu do modelu BS. 
-Przypomnijmy, że dla modelu Blacka-Scholesa, cena ta wynosiła $14.16$ USD.
+Tak jak w poprzednim podrozdziale, również w tym wyznaczono 
+prawdziwą cenę opcji używając
+modułu \textit{HestonExactLittleTrap}. Wyniki przedstawiono w tabeli
+\ref{tab:littleTrapOption2}:
+
+\begin{table}[ht!]
+\centering 
+\begin{tabular}{@{\hskip 0.5in}l |  @{\hskip 0.5in}r }
+\toprule
+$K$ & opcja nr 1 \\
+\midrule
+170.00 & 42.6957 \\
+207.93 & 8.2123 \\
+240.00 & 0.2102 \\
+\bottomrule
+\end{tabular}
+\caption{Cena opcji na indeks S\&P500 otzymana w wyniki implementacji 
+         poprawki związanej z \textit{małą pułapką Hestona}}
+\label{tab:littleTrapOption2}
+\end{table}
+Przyjmując takie same oznaczenia jak w podrozdziale 
+\ref{sub:simulationNumericResult} wyniki symulacji dla opcji na indeks 
+S\&P500 przedstawiają się w następujący sposób:
+\begin{table}[ht!]
+\centering
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l l| >{\bfseries}rrr @{\hskip 0.5in} >{\bfseries}rrr @{\hskip 0.5in} >{\bfseries}r r r}
+\toprule
+{} & {} & EUL & Bias & SE & AND & Bias & SE & MAR & Bias & SE \\
+\midrule
+$\Delta$ & $N$ & {}  & {} & {} & K=170 \\
+\midrule
+10 & 1000 & 42.164 & -0.532 & 0.414 & 38.178 & -4.517 & 0.244 & 42.620 & -0.076 & 0.220 \\
+20 & 4000 & 43.156 & 0.460 & 0.157 & 41.667 & -1.029 & 0.140 & 42.814 & 0.119 & 0.137 \\
+40 & 16000 & 42.966 & 0.271 & 0.074 & 42.807 & 0.111 & 0.069 & 43.116 & 0.421 & 0.068 \\
+80 & 64000 & 43.210 & 0.514 & 0.035 & 43.178 & 0.482 & 0.035 & 43.254 & 0.558 & 0.035 \\
+160 & 256000 & 43.238 & 0.542 & 0.018 & 43.243 & 0.547 & 0.017 & 43.252 & 0.556 & 0.017 \\
+320 & 1024000 & 43.250 & 0.554 & 0.009 & 43.271 & 0.575 & 0.009 & 43.268 & 0.572 & 0.009 \\
+\midrule
+{} & {} & {}  & {} & {} & K=207.93 \\
+\midrule
+10 & 1000 & 8.805 & 0.593 & 0.307 & 3.908 & -4.305 & 0.130 & 7.056 & -1.156 & 0.161 \\
+20 & 4000 & 8.003 & -0.210 & 0.113 & 6.642 & -1.571 & 0.083 & 7.523 & -0.690 & 0.086 \\
+40 & 16000 & 8.023 & -0.190 & 0.050 & 7.644 & -0.569 & 0.045 & 7.827 & -0.385 & 0.046 \\
+80 & 64000 & 7.959 & -0.254 & 0.024 & 7.936 & -0.276 & 0.023 & 7.979 & -0.233 & 0.023 \\
+160 & 256000 & 7.999 & -0.213 & 0.012 & 7.989 & -0.223 & 0.012 & 7.989 & -0.223 & 0.012 \\
+320 & 1024000 & 8.005 & -0.207 & 0.006 & 8.010 & -0.202 & 0.006 & 8.015 & -0.198 & 0.006 \\
+\midrule
+{} & {} & {} & {} & {} & K=240 \\
+\midrule
+10 & 1000 & 0.175 & -0.036 & 0.045 & 0.000 & -0.210 & 0.000 & 0.000 & -0.210 & 0.000 \\
+20 & 4000 & 0.017 & -0.193 & 0.006 & 0.000 & -0.210 & 0.000 & 0.000 & -0.210 & 0.000 \\
+40 & 16000 & 0.000 & -0.210 & 0.000 & 0.000 & -0.210 & 0.000 & 0.000 & -0.210 & 0.000 \\
+80 & 64000 & 0.000 & -0.210 & 0.000 & 0.000 & -0.210 & 0.000 & 0.000 & -0.210 & 0.000 \\
+160 & 256000 & 0.000 & -0.210 & 0.000 & 0.000 & -0.210 & 0.000 & 0.000 & -0.210 & 0.000 \\
+320 & 1024000 & 0.000 & -0.210 & 0.000 & 0.000 & -0.210 & 0.000 & 0.000 & -0.210 & 0.000 \\
+\bottomrule
+\end{tabular}
+}
+\caption{Porównanie schematów dyskretyzacji na przykładzie opcji na indeks S\&P500}
+\label{tab:optionDiscretizationSP}
+\end{table}
+
+Jak wynika z powyższej tabeli, dla wszystkich trzech metody dyskretyzacji 
+otrzymujemy podobne wyniki. Jedynie dla niskiej wartości $\Delta$ oraz $N$ rysuje się 
+przewaga dyskretyzacji Eulra: wyznaczona tym sposobem wartość opcji jest dużo
+dokładniejsza niż dla dyskretyzacji metodami Andersena.
 
 
-\section{Współczynniki greckie dla indeksu S\&P500}
 
-Na koniec rozdziału przedstawimy zachowanie się modelu Hestona dla jednego, wybranego współczynnika 
+\subsection{Płaszczyzna zmienności implikowanej}
+
+W podrozdziale \ref{sub:simulationNumericResult} wyznaczono płaszczyznę
+zmienności implikowanej dla zadanego zbioru cen wykupu oraz terminów do wygaśnięcia. 
+Podobną procedurę przeprowadzono dla opcji na indeks
+S\&P. W rezultacie otrzymano:
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.80\textwidth]{../src/HestonMATLAB/impliedvol/figs/hestonVolSurfaceExampleSAndP.pdf}
+  \caption{Płaszczyzna zmienności implikowanej dla indeksu $S\&P$500}
+  \label{fig:volatilitySurface}
+\end{figure}
+Dla opcji o bliskim terminie do wygaśnięcia ponownie widzimy silny \textit{grymas} 
+zmienności. Dla opcji o dalekim terminie wykupu, np. $T=3$ jest on 
+bardzo nieznaczny.
+
+\subsection{Współczynniki greckie}
+
+Na koniec podrozdziału przedstawimy zachowanie się modelu Hestona dla jednego, wybranego współczynnika 
 greckiego, a mianowicie dla $\Theta$.
 
 \textit{Theta}, jako współczynnik cen opcji w zależności od upływającego czasu:
 \begin{equation}
   \Theta = - \frac{\delta V}{\delta T}
 \end{equation}
-
 Rysunek \ref{fig:hestonTimeToExpiry} przedstawia zachowanie się cen opcji wraz z rosnącym czasem do 
 wygaśnięcia opcji. Dla pierwszego wykresu czas do wygaśnięcia wynosi pół roku, natomiast dla 
 ostatniego wynosi 6 lat. 
 
-Jak można zauważyć, wraz z spadającym czasem do wygaśnięcia maleje potencjalny rozrzut cen aktywa 
-bazowego w momencie wygaśnięcia opcji.
-Jest to zgodne z intuicją. Opcje, których cena jest zależna od zmienności instrumentu bazowego, 
-w krótszym okresie czasu będą mniej warte od tych z dłuższym okresem do wygaśnięcia.
-
-\begin{figure}
+\begin{figure}[ht!]
   \includegraphics[width=1.00\textwidth]{../output/figures/hestonTimeToExpiry.pdf}
   \caption{Cena instrumentu bazowego w modelu Hestona w zależności od czasu do wygaśnięcia opcji}
   \label{fig:hestonTimeToExpiry}
 \end{figure}
+
+
+Jak można zauważyć, wraz ze spadającym czasem do wygaśnięcia maleje potencjalny rozrzut cen aktywa 
+bazowego w momencie wygaśnięcia opcji.
+Jest to zgodne z intuicją. Opcje, których cena jest zależna od zmienności instrumentu bazowego, 
+w krótszym okresie czasu będą mniej warte od tych z dłuższym okresem do wygaśnięcia.
+
+
+
+
 
 
 %===========================================================================
@@ -1967,15 +2397,17 @@ Blacka-Scholesa jest to zadanie algebraiczne.
 
 Szczegółowo opisano również, w jaki sposób należy zastosować symulację Monte Carlo do 
 wygenerowania ceny opcji zgodnej z modelem Hestona. Krytycznym punktem okazał się być
-proces dyskretyzacji procesu losowego. Przedstawiono dwa schematy: pierwszy - naiwny, nazwany
-dyskretyzacją Eulera oraz drugi - bardziej dokładny, którego wynikiem było powstanie 
-algorytmu Andersena. 
+proces dyskretyzacji procesu losowego. Przedstawiono trzy schematy: pierwszy - naiwny, nazwany
+dyskretyzacją Eulera, drugi - bardziej dokładny, którego wynikiem było powstanie 
+algorytmu Andersena oraz trzeci, który jest ulepszeniem wspomnianego algorytmu 
+Andersena
 
 Z badań empirycznych jasno wynika, że założenie o stałości zmienności w czasie nie jest 
-prawdziwe dla danych rzeczywistych. Ponadto, przeprowadzono wycenę opcji na indeks 
-S\&P500 dla obydwu metod: modelu Blacka-Scholesa oraz modelu Hestona. 
-W porównaniu do rynkowej ceny opcji o zadanych właściwościach, obydwie metody się 
-sprawdzają, jednak większą dokładność osiągnął model Hestona.
+prawdziwe dla danych rzeczywistych. Ponadto, przeprowadzono wycenę opcji 
+dla modelu Hestona stosując różne schematy dyskretyzacji.
+Wszystkie trzy metody dyskretyzacji się 
+sprawdzają, jednak największą dokładność osiąga schemat Andersena wraz
+z poprawką martynagałową.
 
 
 Podsumowując, można stwierdzić, że model Hestona jest o wiele bardziej zaawansowanym
@@ -1983,7 +2415,7 @@ narzędziem do wyceny opcji niż model Blacka-Scholesa. Uwzględniając zróżni
 w czasie sprawia, że cena opcji jest bardziej dokładna. Cena jaką za to płacimy,
 jest o wiele większe skomplikowanie modelu, zarówno w sferze koncepcyjnej, jak i 
 implementacyjnej. Ze względu na konieczność wieloparametrowej kalibracji modelu, 
-model ten jest o wiele bardziej czasochłonny obliczeniowo, niż chociażby model Blacka-Scholesa.
+model ten jest o wiele bardziej czasochłonny obliczeniowo, w porównaniu do np. modelu Blacka-Scholesa.
 
 %===========================================================================
 %                             Appendix - kody zrodlowe
@@ -2021,24 +2453,31 @@ Wszystkie zaimplementowane moduły zostały wykonane na maszynie o następujący
 \section{Model Hestona}
 Na schemacie \ref{fig:currencyRisk} widać poszczególne klasy zaimplementowane w 
 ramach modułu wyliczającego cenę opcji zgodną z modelem Hestona.
-Klasą bazową, po której wszystkie inne dziedziczą jest klasa \textit{Heston}.
-Jest ona bezpośrednią nadklasą dla klas definiujących różne podejścia do wyceny opcji zgodnej
-z modelem Hestona:
+Klasą bazową, po której wszystkie inne dziedziczą, jest klasa \textit{Heston}.
+Jest ona bezpośrednią nadklasą dla innych klas definiujących 
+odmienne podejścia do wyceny opcji zgodnej z modelem Hestona:
 \begin{enumerate}
   \item symulacji Monte Carlo (klasa \textit{HestonMC})
   \item wzoru zamkniętego (klasa \textit{HestonExact})
 \end{enumerate}
-Klasa \textit{HestonExact} zawiera w sobie implementację wzoru zamkniętego na cenę opcji,
+
+Klasa \textit{HestonExact} zawiera w sobie implementację wzoru zamkniętego na cenę opcji.
+Dziedziczy po niej klasa \textit{HestonExactLittleTrap}.
+Implementuje one poprawkę dla małej pułapki Hestona. Dzięki tej klasie 
+otrzymujemy implementację wzoru zamkniętego na cenę opcji, która jest w o wiele
+mniejszym stopniu podatna na błędy numeryczne.
+
 Z kolei klasa \textit{HestonMC} definiuje jedynie interfejs jaki muszą spełniać klasy po niej 
 dziedziczące.
-Klasa \textit{HestonMC} jest nadklasą dla następujących klas:
+Abstrakcyjna \textit{HestonMC} jest z kolei klasą bazową dla następujących klas:
 \begin{enumerate}
   \item \textit{HestonAndersen} 
   \item \textit{HestonEuler} 
 \end{enumerate}
 Na schemacie \ref{fig:currencyRisk} widać również dodatkową klasę
 \textit{HestonAndersenMartingale}. Jest to klasa implementująca 
-poprawkę martyngałową dla klasy \textit{HestonAndersen}.
+poprawkę martyngałową dla modelu Hestona, którą przedstawiono 
+w rozdziale \ref{chap:monteCarlo}.
 
 
 \begin{figure}
@@ -2047,30 +2486,30 @@ poprawkę martyngałową dla klasy \textit{HestonAndersen}.
   \caption{Drzewo dziedziczenia dla modułu wyliczającego 
   cenę opcji wg różnych metodologii dla modelu Hestona.}\label{fig:currencyRisk}
 \end{figure}
-\cleardoublepage
 
+\clearpage
 \section{Interfejs abstrakcyjnych klas \textit{Heston} oraz \textit{HestonMC}}
 W projekcie zostały zaimplementowane dwie abstrakcyjne klasy \textit{Heston} oraz \textit{HestonMC}.
 Pierwsza z nich stanowi klasę bazową dla całej struktury drzewa dzedziczenia. 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/HestonCPP/src/main/cpp/heston/header/Heston.h}
-\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+\caption{Pilk nagłówkowy dla klasy \textit{Heston}}
 \end{listing} 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/HestonCPP/src/main/cpp/heston/header/HestonMC.h}
-\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+\caption{Pilk nagłówkowy dla klasy definiującej interfejs symulacji Monte Carlo}
 \end{listing} 
 Klasa (\textit{HestonMC})
 jest klasą bazową dla klas wykonujących symulację Monte Carlo zgodnie z 
 przyjętym schematem dyskretyzacji. Definuje ona dwie dodatkowe metody: \textit{simulateVolPath} oraz 
 \textit{simulateSpotPath}.
-\cleardoublepage
 
 
 
 
+\clearpage
 \subsection{Schemat Eulera}
 
 W tym podrozdziale zostanie przedstawiony kod do wyceny opcji zgodnie z dyskretyzacją Eulera.
@@ -2095,12 +2534,12 @@ Kod źródłowy \label{lst:Eulercpp} przedstawia z kolei implementację 2 powyż
 {../src/HestonCPP/src/main/cpp/heston/src/HestonEuler.cpp}
 \caption{Implementacja metod dla schematu Eulera.}
 \label{lst:Eulercpp} 
-\end{listing} 
-\cleardoublepage
+\end{listing}
 
 
 
 
+\clearpage
 \subsection{Schemat Andersena}
 W tym punkcie podana zostanie implementacja kolejnego schematu dyskretyzacji, schematu 
 Andersena. Zostały podane dwa
@@ -2126,31 +2565,33 @@ Podobnie jak dla dyskretyzacji Eulera definiujemy metody
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../output/listings/HestonAndersen.cpp}
-\caption{Metoda wyliczająca poprawkę martyngałową}
+\caption{Metoda \textit{simulateVolPath} z jednoczsnym wyznaczeniem poprawki martyngałowej}
 \end{listing}  
 Metoda \textit{HestonEuler::simulateVolPath} oblicza trajektorię procesu zmienności, 
 natomiast metoda \textit{HestonEuler::simulateSpotPath} wyznacza trajektorię procesu aktywa
 bazowego.
-
-
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../output/listings/HestonAndersen2.cpp}
-\caption{Metoda wyliczająca poprawkę martyngałową}
+\caption{Metoda \textit{simulateSpotPath} wyznaczająca trajektorię aktywa bazowego.}
 \end{listing}   
+Dla porządku podana została również definicja metody zwracającej wartość odwrotnej 
+dystrybuanty dla zmodyfikowanego rozkładu wykładniczego. Metoda jest widoczna na kodzie źródłowym 
+\ref{lst:ModifiedExpInvCDF}.
 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../output/listings/ModifiedExpInvCDF.cpp}
 \caption{Funkcja wyliczająca wartość odwrotnej dystrybuanty dla zmodyfikowanego rozkładu 
 wykładniczego}
-\end{listing}   
-\cleardoublepage
+\label{lst:ModifiedExpInvCDF} 
+\end{listing}
 
 
 
 
 
+\clearpage
 \subsection{Schemat Andersena z poprawką Martyngałową}
 W poprzednim punkcie zaimplementowano schemat Andersena. 
 Niestety, proces aktywa bazowego w tym schemacie nie jest martyngałem.
@@ -2174,12 +2615,11 @@ dla każdej punktu realizacji procesu aktywa bazowego.
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../output/listings/HestonAndersenMartingaleMart.cpp}
 \caption{Metoda wyliczająca poprawkę martyngałową}
-\end{listing}  
-\cleardoublepage
+\end{listing}
 
 
 
-
+\clearpage
 \subsection{Wycena opcji przy pomocy wzoru zamkniętego}
 W tym rozdziale zostaną przedstawione kody źródłowe dla alternatywnego podejścia 
 wyceny opcji w modelu Hestona. Zamiast polegać na niedeterministycznej metodzie
@@ -2188,31 +2628,50 @@ został przedstawiony poniżej.
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../output/listings/HestonExact.h}
-\caption{Metoda wyliczająca poprawkę martyngałową}
+\caption{Plik nagłówkowy dla klasy \textit{HestonExact}}
 \end{listing}  
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../output/listings/HestonExact1.cpp}
-\caption{Metoda wyliczająca poprawkę martyngałową}
+\caption{Implementacja metod klasy \textit{HestonExact}, część 1.}
 \end{listing}  
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../output/listings/HestonExact2.cpp}
-\caption{Metoda wyliczająca poprawkę martyngałową}
+\caption{Implementacja metod klasy \textit{HestonExact}, część 2.}
+\end{listing}
+
+
+
+
+\clearpage
+\subsection{Implementacja modułu \textit{HestonExactLittleTrap}}
+Seckja ta przedstawia kod źródłowy dla opisanej w rozdziale, implementacji wzoru zamkniętego
+na wycenę opcji. 
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../output/listings/HestonExactLittleTrap.h}
+\caption{Plik nagłówkowy dla klasy \textit{HestonExactLittleTrap}.}
 \end{listing}  
+\begin{listing}[H]
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
+{../output/listings/HestonExactLittleTrap.cpp}
+\caption{Implementacja metod dla klasy \textit{HestonExactLittleTrap}.}
+\end{listing}  
+
 
 
 %===========================================================================
 %                             Polar generator
 %===========================================================================
-\cleardoublepage
+\clearpage
 \section{Generator liczb z rozkładu normalnego}
 Przedstawiony poniżej kod źródłowy przedstawia plik nagłówkowy definiujący interfejs 
 generatora liczb losowych z rozkładu normalnego. 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/HestonCPP/src/main/cpp/random/PolarGenerator.h}
-\caption{Plik nagłówkowy klasy \textit{PolarGenerator}}
+\caption{Plik nagłówkowy klasy \textit{PolarGenerator}.}
 \end{listing} 
 Klasa ta została utworzona zgodnie z kreacyjnym wzorcem projektowym \textit{singleton}. 
 Głowną zaletą tego wzorca jest to, że pozwalamy na utworzenie tylko jednego obiektu danej 
@@ -2223,17 +2682,17 @@ która jest bezpieczna w środowisku wielowątkowym (\textit{ang. thread-safe}).
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/HestonCPP/src/main/cpp/random/PolarGenerator.cpp}
-\caption{Implementacja interfejsu klasy \textit{PolarGenerator}}
+\caption{Implementacja interfejsu klasy \textit{PolarGenerator}.}
 \label{lst:PolarGeneratorcpp}
 \end{listing} 
 Kod źródłowy nr \ref{lst:PolarGeneratorcpp} przedstawia implementację konstruktora oraz metody
-generującej liczby z rozkładu normalnego \textit{genNorm()}.
+generującej liczby z rozkładu normalnego \textit{genNorm()} \cite{joshi2008c++}.
 
 
 %===========================================================================
 %                             Model Blacka-Scholesa
 %===========================================================================
-\cleardoublepage
+\clearpage
 \section{Model Blacka-Scholesa}
 Kod źródłowy nr \ref{lst:BlackScholesh} przedstawia plik nagłówkowy dla implementacji 
 modelu Blacka-Scholesa. Implementacja ta jest użyta do porównania wartości opcji dla 
@@ -2241,7 +2700,7 @@ modelu Blacka-Scholesa i modelu Hestona.
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/HestonCPP/src/main/cpp/bs/MCBlackScholes.h}
-\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+\caption{Interfejs klasy wyliczającej wartość opcji wg modelu Blacka-Scholesa.}
 \label{lst:BlackScholesh}
 \end{listing} 
 Kod źródłowy \ref{lst:BlackScholescpp} przedstawia konstruktor klasy \textit{MCBlackScholes} 
@@ -2249,7 +2708,7 @@ oraz implementację metody \textit{simulate}.
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/HestonCPP/src/main/cpp/bs/MCBlackScholes.cpp}
-\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+\caption{Implementacja klasy \textit{MCBlackScholes}.}
 \label{lst:BlackScholescpp}
 \end{listing} 
 
@@ -2257,7 +2716,7 @@ oraz implementację metody \textit{simulate}.
 %===========================================================================
 %                         Symulacja Monte Carlo
 %===========================================================================
-\cleardoublepage
+\clearpage
 \section{Symulacje Monte Carlo}
 Kod źródłowy \ref{lst:MonteCarloh} przedstawia plik nagłówkowy dla implementacji symulacji 
 Monte Carlo dla modelu Hestona. Plik definiuje interfejs jaki musi spełniać
@@ -2272,7 +2731,7 @@ podzielny przez liczbę kroków definiuje nam jednostkowy przyrost czasu.
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/HestonCPP/src/main/cpp/mc/MonteCarloSimulation.h}
-\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+\caption{Plik nagłówkowy dla symulacji Monte Carlo}
 \label{lst:MonteCarloh}
 \end{listing} 
 Kod źródłowy nr \ref{lst:MonteCarlocpp} przedstawia główną funkcję użytą w tym celu. 
@@ -2290,73 +2749,25 @@ zdyskontować ją na moment zerowy, co jest widoczne w liniach 27-28.
 \label{lst:MCHeston} 
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../output/listings/MonteCarloSimulation.cpp}
-\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+\caption{Symulacja Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
 \label{lst:MonteCarlocpp}
 \end{listing}  
 
 %===========================================================================
 %                         Kalibracja do danych rynkowych
 %===========================================================================
-\cleardoublepage
+\clearpage
 \section{Kalibracja do danych rynkowych}
 Kod źródłowy \ref{lst:MonteCarloh} przedstawia główny program wykonujący
 kalibrację do danych rynkowych.
 
 \begin{listing}[H]
-\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
-{../src/HestonCPP/src/main/cpp/mc/MonteCarloSimulation.h}
-\caption{Metoda Monte Carlo dla modelu Hestona  \cite{HallsMoore}}
+\inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{matlab}
+{../output/listings/calibration.m}
+\caption{Skrypt kalibrujący model Hestona do danych rynkowych}
 \label{lst:MonteCarloh}
 \end{listing}
 
-
-
-
-%===========================================================================
-%                             Appendix wyniki numeryczne
-%===========================================================================
-\cleardoublepage
-\phantomsection
-\appendix
-
-\chapter{Wyniki przeprowadzonych symulacji}
-
-Poniższy rozdział przedstawia wyniki przedprowadzonych symulacji.
-
-\begin{table}[htbp]
-\centering
-\begin{tabular}{lrrrrr}
-\toprule
-{} &  500 &   6.74973 &   6.80647 &   6.81121 &   8.44991 \\
-\midrule
-0  &  250 &   6.67124 &   6.85153 &   6.81647 &   8.44991 \\
-1  &  200 &   6.83865 &   6.77817 &   6.82660 &   8.44991 \\
-2  &  150 &   6.63345 &   6.84858 &   6.85428 &   8.44991 \\
-3  &  100 &   6.73396 &   6.77222 &   6.81849 &   8.44991 \\
-4  &   50 &   6.61328 &   6.57659 &   6.60319 &   8.44991 \\
-5  &   30 &   6.68642 &   6.72968 &   6.74412 &   8.44991 \\
-6  &   10 &   6.35001 &   6.47263 &   6.24196 &   8.44991 \\
-7  &  500 &  36.17590 &  36.11660 &  33.89330 &  35.33290 \\
-8  &  250 &  35.60600 &  34.51300 &  35.79700 &  35.33290 \\
-9  &  200 &  34.00110 &  34.71120 &  34.55620 &  35.33290 \\
-10 &  150 &  34.26050 &  35.35470 &  35.29990 &  35.33290 \\
-11 &  100 &  34.24080 &  34.68710 &  35.29590 &  35.33290 \\
-12 &   50 &  33.00240 &  34.51250 &  34.52500 &  35.33290 \\
-13 &   30 &  35.17320 &  34.87670 &  34.33390 &  35.33290 \\
-14 &   10 &  32.81370 &  32.36760 &  31.82070 &  35.33290 \\
-15 &  500 &   8.07707 &   8.03216 &   8.00030 &   8.04498 \\
-16 &  250 &   8.05999 &   8.04874 &   8.10905 &   8.04498 \\
-17 &  200 &   8.06357 &   7.97690 &   7.93545 &   8.04498 \\
-18 &  150 &   8.03599 &   8.02978 &   8.07944 &   8.04498 \\
-19 &  100 &   7.97958 &   7.84094 &   7.85451 &   8.04498 \\
-20 &   50 &   7.96275 &   7.80595 &   7.88293 &   8.04498 \\
-21 &   30 &   7.99528 &   7.41098 &   7.66893 &   8.04498 \\
-22 &   10 &   8.52388 &   3.86428 &   7.05175 &   8.04498 \\
-\bottomrule
-\end{tabular}
-\caption{caption}
-\label{tab:ref}
-\end{table}
 
 
 %===========================================================================
@@ -2364,16 +2775,16 @@ Poniższy rozdział przedstawia wyniki przedprowadzonych symulacji.
 %===========================================================================
 \cleardoublepage
 \phantomsection
-\addcontentsline{toc}{chapter}{Lista rysunków}{\listoffigures}
+\addcontentsline{toc}{chapter}{Spis rysunków}{\listoffigures}
 \cleardoublepage
 \phantomsection
-\addcontentsline{toc}{chapter}{Lista tabel}{\listoftables}
+\addcontentsline{toc}{chapter}{Spis tabel}{\listoftables}
 \cleardoublepage
 \phantomsection
-\addcontentsline{toc}{chapter}{Lista kodów źródłowych}{\listoflistings}
+\addcontentsline{toc}{chapter}{Spis kodów źródłowych}{\listoflistings}
 \cleardoublepage
 \phantomsection
-\addcontentsline{toc}{chapter}{Lista algorytmów}{\listofalgorithms}
+\addcontentsline{toc}{chapter}{Spis algorytmów}{\listofalgorithms}
 \cleardoublepage
 \phantomsection
 \addcontentsline{toc}{chapter}{Bibliografia}{\printbibliography}

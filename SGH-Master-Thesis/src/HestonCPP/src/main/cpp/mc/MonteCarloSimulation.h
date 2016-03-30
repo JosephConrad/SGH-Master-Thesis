@@ -2,6 +2,7 @@
 #define HESTON_MONTECARLOSIMULATION_H
 
 #include <src/main/cpp/heston/header/HestonMC.h>
+#include <src/main/cpp/statistics/BasicStatistics.h>
 
 class MonteCarloSimulation {
 private:
@@ -14,7 +15,7 @@ public:
     MonteCarloSimulation(int simulationTrials,
                          int timeSteps);
 
-    double simulate(HestonMC *heston, Option *option);
+    BasicStatistics simulate(HestonMC *heston, Option *option);
 
     MonteCarloSimulation();
 

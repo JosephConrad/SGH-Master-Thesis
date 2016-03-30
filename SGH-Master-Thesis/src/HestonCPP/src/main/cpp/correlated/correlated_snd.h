@@ -6,7 +6,7 @@
 #define HESTON_CORELLATED_SND_H
 
 
-#include <src/main/cpp/statistics/statistics.h>
+#include <src/main/cpp/statistics/StatisticalDistribution.h>
 
 class CorrelatedSND : public StandardNormalDistribution {
 protected:

@@ -38,8 +38,6 @@ dcomp HestonExactLittleTrap::calc_D(double tau, double phi, int j) {
            ((1.0 - exp(-d * tau)) / (1.0 - c * exp(-d * tau)));
 }
 
-
-
 std::string HestonExactLittleTrap::getName() {
     return "HESTON EXACT";
 }

@@ -18,18 +18,17 @@ public:
     ~JsonReader() { };
 
     void processValuation(std::vector<Simulation> &simulations);
-    void getTimeSteps(std::vector<int> &timeSteps);
     void loadConfig(std::string filename);
+    void getVector(std::vector<int> &timeSteps, std::string nodeName);
 
 
 private:
     Simulation processOptionParams(const ptree::value_type &node);
 
-
-
     std::shared_ptr<boost::property_tree::ptree> jsonTree_;
 
     const int &getInt(const boost::use_default &aDefault);
+
 };
 
 

@@ -11,9 +11,9 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <src/main/cpp/tools/json/JsonReader.h>
 #include <src/main/cpp/heston/header/HestonExactLittleTrap.h>
+#include <src/main/cpp/volatilitysmile/VolatilitySmile.h>
 
 static const std::string DELIMITER = ";";
-
 
 void pprint(double d, OutputAndConsole &outputStream) {
     outputStream << std::fixed;
@@ -21,7 +21,16 @@ void pprint(double d, OutputAndConsole &outputStream) {
     outputStream << d << "\t";
 }
 
-void makeSimulation(Simulation &simulation, double K, int timeStep, OutputAndConsole &outputStream) {
+void printStatistics(BasicStatistics statistics,
+                     double exactPrice,
+                     OutputAndConsole &outputStream) {
+    pprint(statistics.getMean(), outputStream);
+    pprint(statistics.bias(exactPrice), outputStream);
+    pprint(statistics.getStandardError(), outputStream);
+}
+
+void makeSimulation(Simulation &simulation, double &K, int &timeStep,
+                    int &trials, OutputAndConsole &outputStream) {
 
     double S_0 = simulation.asset;
     double r = simulation.riskFree;
@@ -32,7 +41,7 @@ void makeSimulation(Simulation &simulation, double K, int timeStep, OutputAndCon
     double theta = simulation.theta;
     double epsilon = simulation.eps;
 
-    MonteCarloSimulation mc = MonteCarloSimulation(simulation.trials, timeStep);
+    MonteCarloSimulation mc = MonteCarloSimulation(trials, timeStep);
 
 
     PayOff *payOffCall = new PayOffCall(K);
@@ -46,62 +55,50 @@ void makeSimulation(Simulation &simulation, double K, int timeStep, OutputAndCon
     HestonExactLittleTrap *hestonExactLittleTrap =
             new HestonExactLittleTrap(option, kappa, theta, epsilon, rho);
     double priceExactLittleTrap = hestonExactLittleTrap->optionPrice(S_0, v_0, 0.0);
-
-    HestonMC *hestonEuler =
-            new HestonEuler(option, kappa, theta, epsilon, rho);
-    double priceEuler = mc.simulate(hestonEuler, option);
-    pprint(priceEuler, outputStream);
-    pprint(priceEuler - priceExactLittleTrap, outputStream);
-
-    HestonMC *hestonAndersen =
-            new HestonAndersen(option, kappa, theta, epsilon, rho);
-    double priceAndersen = mc.simulate(hestonAndersen, option);
-    pprint(priceAndersen, outputStream);
-    pprint(priceAndersen - priceExactLittleTrap, outputStream);
-
-    HestonMC *hestonAndersenMartingale =
-            new HestonAndersenMartingale(option, kappa, theta, epsilon, rho);
-    double priceMart = mc.simulate(hestonAndersenMartingale, option);
-    pprint(priceMart, outputStream);
-    pprint(priceMart - priceExactLittleTrap, outputStream);
-
-
-//    pprint(priceExact, outputStream);
-    pprint(priceExactLittleTrap, outputStream);
-
-
-
-//    double impliedVol = 0.05;
-//    // TODO obliczyc zmiennosc implikowana dla opcji o podanych parametrach
-//    BlackScholesAnalytic *bsAnalytic = new BlackScholesAnalytic();
-//    MCBlackScholes *mcBlackScholes = new MCBlackScholes(T, K, S_0, impliedVol, r, 100000);
-//    pprint("BS SIMULATION", mcBlackScholes->simulate());
+    std::cout << priceExactLittleTrap << std::endl;
+//    HestonMC *hestonEuler =
+//            new HestonEuler(option, kappa, theta, epsilon, rho);
+//    BasicStatistics bsEuler = mc.simulate(hestonEuler, option);
 //
-//    double call = bsAnalytic->call_price(S_0, K, r, impliedVol, T);
-//    pprint("BS ANALYTIC", call);
-//    pprint("IMPLIED VOL", bsAnalytic->impliedVolatility(S_0, T, call));
+//    printStatistics(bsEuler, priceExactLittleTrap, outputStream);
+//
+//
+//    HestonMC *hestonAndersen =
+//            new HestonAndersen(option, kappa, theta, epsilon, rho);
+//    BasicStatistics bsAndersen = mc.simulate(hestonAndersen, option);
+//
+//    printStatistics(bsAndersen, priceExactLittleTrap, outputStream);
+//
+//
+//    HestonMC *hestonAndersenMartingale =
+//            new HestonAndersenMartingale(option, kappa, theta, epsilon, rho);
+//    BasicStatistics bsMartingale = mc.simulate(hestonAndersenMartingale, option);
+//
+//    printStatistics(bsMartingale, priceExactLittleTrap, outputStream);
 
     delete option;
     delete payOffCall;
-    delete hestonAndersen;
-    delete hestonAndersenMartingale;
-    delete hestonEuler;
+//    delete hestonAndersen;
+//    delete hestonAndersenMartingale;
+//    delete hestonEuler;
     delete hestonExact;
     delete hestonExactLittleTrap;
 }
 
-void testCases(std::vector<Simulation> &simulations,
-               std::vector<int> &timeSteps) {
+
+void testCases(std::vector<Simulation> simulations, std::vector<int> timeSteps,
+               std::vector<int> trials) {
 
     OutputAndConsole output(Config::getInstance().getSettings("Simulation.output"));
 
-    output << "\tEUL\t\te\t\tAND\t\te\t\tMAR\t\te\t\tEXACT\n";
     for (Simulation &simulation:simulations) {
+        output << "No\tN\t\tEUL\t\tBias\tSE\t\tAND\t\tBias\tSE\t\tMAR\t\tBias\tSE\t\tEXACT\n";
         for (double &K: simulation.strikePrices) {
             output << "\tK = " << std::to_string(K) << "\n";
-            for (int &timeStep: timeSteps) {
-                output << std::to_string(timeStep) << "\t";
-                makeSimulation(simulation, K, timeStep, output);
+            for (int i = 0; i < timeSteps.size(); ++i) {
+                output << std::to_string(timeSteps[i]) << "\t";
+                output << std::to_string(trials[i]) << "\t";
+                makeSimulation(simulation, K, timeSteps[i], trials[i], output);
                 output << "\n";
             }
         }
@@ -114,13 +111,16 @@ int main(int argc, char **argv) {
 
     std::vector<Simulation> simulations;
     std::vector<int> timeSteps;
+    std::vector<int> trials;
     JsonReader jsonReader;
     jsonReader.loadConfig("Simulation.input");
     jsonReader.processValuation(simulations);
-    jsonReader.getTimeSteps(timeSteps);
+    jsonReader.getVector(timeSteps, "timeSteps");
+    jsonReader.getVector(trials, "trials");
 
-    testCases(simulations, timeSteps);
-//    calcVolatilitySmile(params, simulationTrials, timeSteps);
+    testCases(simulations, timeSteps, trials);
+    VolatilitySmile volatilitySmile;
+    volatilitySmile.calcVolatilitySmile(simulations[1], 30000, timeSteps[3]);
 
     return 0;
 }

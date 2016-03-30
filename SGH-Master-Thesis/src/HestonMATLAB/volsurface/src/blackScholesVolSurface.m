@@ -22,8 +22,6 @@ Maturity=matData(3:end,3);          % maturity
 Strike=matData(3:end,1);            % moneyness
 CallPrice=matData(3:end,2);         % option prices
 
-tic
 surface=VolatilitySurface(S0, r, Maturity, Strike, CallPrice);
-toc
 
 saveTightFigure('../figs/blackScholesVolSurface.pdf');

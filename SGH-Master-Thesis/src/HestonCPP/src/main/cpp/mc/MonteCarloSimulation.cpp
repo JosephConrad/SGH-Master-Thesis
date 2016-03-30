@@ -2,7 +2,7 @@
 // Created by Konrad Lisiecki on 13/01/16.
 //
 
-#include <src/main/cpp/statistics/statistics.h>
+#include <src/main/cpp/statistics/StatisticalDistribution.h>
 #include <src/main/cpp/correlated/correlated_snd.h>
 #include <iostream>
 #include "MonteCarloSimulation.h"
@@ -41,9 +41,8 @@ void corellatedNormalPaths(double rho, std::vector<double> &spot_normals,
 }
 
 
-double MonteCarloSimulation::simulate(HestonMC *heston,
-                                      Option *option) {
-    double payoffSum = 0.0;
+BasicStatistics MonteCarloSimulation::simulate(HestonMC *heston,
+                                               Option *option) {
 
     std::vector<double> spotRandom(timeSteps, 0.0);
     std::vector<double> volRandom(timeSteps, 0.0);
@@ -51,21 +50,18 @@ double MonteCarloSimulation::simulate(HestonMC *heston,
     std::vector<double> volPrices(timeSteps, option->v_0);
 
     double rho = heston->getRho();
+    double discount = option->getDiscountFactor();
+
+    std::vector<double> payoffs = {};
 
     for (auto i = 0; i < simTrials; i++) {
         corellatedNormalPaths(rho, spotRandom, volRandom);
         heston->simulateVolPath(volRandom, volPrices);
         heston->simulateSpotPath(spotRandom, volPrices, spotPrices);
         double expiryPrice = spotPrices[timeSteps - 1];
-        payoffSum += option->pay_off->operator()(expiryPrice);
+        payoffs.push_back(option->pay_off->operator()(expiryPrice) * discount);
     }
-
-
-    double discount = option->getDiscountFactor();
-    double payoffAvg = payoffSum / static_cast<double>(simTrials);
-
-    double optionPrice = payoffAvg * discount;
-    return optionPrice;
+    return BasicStatistics(payoffs);
 }
 
 MonteCarloSimulation::MonteCarloSimulation() {
