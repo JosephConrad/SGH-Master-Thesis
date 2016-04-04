@@ -56,31 +56,31 @@ void makeSimulation(Simulation &simulation, double &K, int &timeStep,
             new HestonExactLittleTrap(option, kappa, theta, epsilon, rho);
     double priceExactLittleTrap = hestonExactLittleTrap->optionPrice(S_0, v_0, 0.0);
     std::cout << priceExactLittleTrap << std::endl;
-//    HestonMC *hestonEuler =
-//            new HestonEuler(option, kappa, theta, epsilon, rho);
-//    BasicStatistics bsEuler = mc.simulate(hestonEuler, option);
-//
-//    printStatistics(bsEuler, priceExactLittleTrap, outputStream);
-//
-//
-//    HestonMC *hestonAndersen =
-//            new HestonAndersen(option, kappa, theta, epsilon, rho);
-//    BasicStatistics bsAndersen = mc.simulate(hestonAndersen, option);
-//
-//    printStatistics(bsAndersen, priceExactLittleTrap, outputStream);
-//
-//
-//    HestonMC *hestonAndersenMartingale =
-//            new HestonAndersenMartingale(option, kappa, theta, epsilon, rho);
-//    BasicStatistics bsMartingale = mc.simulate(hestonAndersenMartingale, option);
-//
-//    printStatistics(bsMartingale, priceExactLittleTrap, outputStream);
+    HestonMC *hestonEuler =
+            new HestonEuler(option, kappa, theta, epsilon, rho);
+    BasicStatistics bsEuler = mc.simulate(hestonEuler, option);
+
+    printStatistics(bsEuler, priceExactLittleTrap, outputStream);
+
+
+    HestonMC *hestonAndersen =
+            new HestonAndersen(option, kappa, theta, epsilon, rho);
+    BasicStatistics bsAndersen = mc.simulate(hestonAndersen, option);
+
+    printStatistics(bsAndersen, priceExactLittleTrap, outputStream);
+
+
+    HestonMC *hestonAndersenMartingale =
+            new HestonAndersenMartingale(option, kappa, theta, epsilon, rho);
+    BasicStatistics bsMartingale = mc.simulate(hestonAndersenMartingale, option);
+
+    printStatistics(bsMartingale, priceExactLittleTrap, outputStream);
 
     delete option;
     delete payOffCall;
-//    delete hestonAndersen;
-//    delete hestonAndersenMartingale;
-//    delete hestonEuler;
+    delete hestonAndersen;
+    delete hestonAndersenMartingale;
+    delete hestonEuler;
     delete hestonExact;
     delete hestonExactLittleTrap;
 }
@@ -119,6 +119,7 @@ int main(int argc, char **argv) {
     jsonReader.getVector(trials, "trials");
 
     testCases(simulations, timeSteps, trials);
+
     VolatilitySmile volatilitySmile;
     volatilitySmile.calcVolatilitySmile(simulations[1], 30000, timeSteps[3]);
 

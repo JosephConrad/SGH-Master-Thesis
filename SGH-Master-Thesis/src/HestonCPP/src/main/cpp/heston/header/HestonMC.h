@@ -22,14 +22,17 @@ public:
     double epsilon,
     double rho);
 
-    virtual void simulateVolPath(const std::vector<double> &volDraws,
-                                 std::vector<double> &volPath);
+    virtual 
+    void simulateVolPath(const std::vector<double> &volDraws,
+                         std::vector<double> &volPath);
 
-    virtual void simulateSpotPath(const std::vector<double> spotDraws,
-                                  const std::vector<double> &volPath,
-                                  std::vector<double> &spotPath);
+    virtual 
+    void simulateSpotPath(const std::vector<double> spotDraws,
+                          const std::vector<double> &volPath,
+                          std::vector<double> &spotPath);
 
-    virtual std::string getName();
+    virtual 
+    std::string getName();
 };
 
 #endif

@@ -1,0 +1,1 @@
+cmd='/opt/local/bin/cmake;-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG:PATH=DebugLibs;-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE:PATH=ReleaseLibs;-DCMAKE_CXX_FLAGS=;-Dgtest_force_shared_crt=ON;-DBUILD_GTEST=ON;-GUnix Makefiles;/Users/konrad/Dropbox/MastersTheses/SGH-Master-Thesis/src/HestonCPP/ext/gtest/src/googletest'

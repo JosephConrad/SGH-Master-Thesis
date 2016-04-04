@@ -36,7 +36,7 @@ HestonEuler::simulateSpotPath(const std::vector<double> spotDraws,
                       exp((option->r - 0.5 * v_max) * dt) *
                       exp(sqrt(v_max * dt) * spotDraws[i - 1]);
     }
-    }
+}
 
 std::string HestonEuler::getName() {
     return "HESTON EULER";

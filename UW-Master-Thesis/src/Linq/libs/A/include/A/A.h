@@ -85,7 +85,7 @@ class SelectOptionDistict : public SelectOption {};
 
 class SelectContinuation : public SelectOption {
 public:
-    vector<int> indexes;
+    std::vector<int> indexes;
     SelectContinuation(){}
     template <typename... Args>
     SelectContinuation(Args... args) : indexes{ args... } { }
@@ -133,7 +133,7 @@ for_each_in_sources(const std::tuple<Tp...>& t, FuncT& f, Args&... args)
 
 template<std::size_t I = 0, typename FuncT, typename... Tp, typename... Args>
 inline typename std::enable_if<I == sizeof...(Tp), bool>::type
-for_each_in_sources_indexed(const std::tuple<Tp...> &, FuncT& f, vector<int>& indexes, Args&&... args)
+for_each_in_sources_indexed(const std::tuple<Tp...> &, FuncT& f, std::vector<int>& indexes, Args&&... args)
 {
     return f(args...);
 }
@@ -141,7 +141,7 @@ for_each_in_sources_indexed(const std::tuple<Tp...> &, FuncT& f, vector<int>& in
 
 template<std::size_t I = 0, typename FuncT, typename... Tp, typename... Args>
 inline typename std::enable_if< I < sizeof...(Tp), bool>::type
-for_each_in_sources_indexed(const std::tuple<Tp...>& t, FuncT& f, vector<int>& indexes, Args&&... args)
+for_each_in_sources_indexed(const std::tuple<Tp...>& t, FuncT& f, std::vector<int>& indexes, Args&&... args)
 {
     bool isFinished;
     auto&& src = getSource(std::get<I>(t), args...);
@@ -159,7 +159,7 @@ for_each_in_sources_indexed(const std::tuple<Tp...>& t, FuncT& f, vector<int>& i
 }
 
 template <typename R, typename... Args, typename... Sources, typename... Options>
-vector<R> select(const std::function<R(Args...)>& f,                ///< output expression
+std::vector<R> select(const std::function<R(Args...)>& f,                ///< output expression
                  const std::tuple<Sources...>& sources,             ///< list of sources
                  const std::function<bool(Args...)>& filter,        ///< composition of filters
                  const Options&... options                          ///< other options and flags
@@ -169,7 +169,7 @@ vector<R> select(const std::function<R(Args...)>& f,                ///< output 
     bool isDistinct = false;
     bool isSorted = false;
 
-    vector<int>* indexes = nullptr;
+    std::vector<int>* indexes = nullptr;
 
     for_each_argument([&](const SelectOption& option){
         if (auto opt = dynamic_cast<const SelectOptionLimit*>(&option)) {  limit = opt->limit; };
@@ -178,7 +178,7 @@ vector<R> select(const std::function<R(Args...)>& f,                ///< output 
         if (auto opt = dynamic_cast<const SelectContinuation*>(&option)) { indexes = &( (const_cast<SelectContinuation*>(opt))->indexes ); };
     }, (options)...);
 
-    vector<R> result;
+    std::vector<R> result;
     int count = 0;
     auto process = [&](const Args&... args){
         if (filter(args...))
@@ -217,7 +217,7 @@ vector<R> select(const std::function<R(Args...)>& f,                ///< output 
 }
 
 template <typename R, typename... Args, typename... Sources, typename... Options>
-inline vector<R> select(std::function<R(Args...)> f,
+inline std::vector<R> select(std::function<R(Args...)> f,
                         const std::tuple<Sources...>& sources,
                         const Options&... options)
 {
@@ -237,7 +237,7 @@ inline vector<R> select(std::function<R(Args...)> f,
 
 
 template <typename R, typename... Args, typename... Sources, typename... Options>
-std::function<vector<R>()> select_lazy(const std::function<R(Args...)>& f,                ///< output expression
+std::function<std::vector<R>()> select_lazy(const std::function<R(Args...)>& f,                ///< output expression
                                        const std::tuple<Sources...>& sources,             ///< list of sources
                                        const std::function<bool(Args...)>& filter,        ///< composition of filters
                                        const Options&... options                          ///< other options and flags
@@ -248,7 +248,7 @@ std::function<vector<R>()> select_lazy(const std::function<R(Args...)>& f,      
 
 
 template <typename R, typename... Args, typename... Sources, typename... Options>
-std::function<vector<R>(const SelectContinuation& job)> select_concurrent(
+std::function<std::vector<R>(const SelectContinuation& job)> select_concurrent(
         const std::function<R(Args...)>& f,                ///< output expression
         const std::tuple<Sources...>& sources,             ///< list of sources
         const std::function<bool(Args...)>& filter,        ///< composition of filters
@@ -266,7 +266,7 @@ std::function<vector<R>(const SelectContinuation& job)> select_concurrent(
 /// Call function for each argument
 template <class F, class... Args>
 void for_each_argument(F f, Args&&... args) {
-    (void)(int[]){(f(forward<Args>(args)), 0)...};
+    (void)(int[]){(f(std::forward<Args>(args)), 0)...};
 }
 
 

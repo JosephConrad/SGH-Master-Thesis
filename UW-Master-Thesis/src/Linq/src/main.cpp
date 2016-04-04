@@ -9,9 +9,9 @@ using namespace std;
 int main()
 {
     std::cout << "Foo main" << std::endl;
-    auto print = [](vector<int>& list){ cout << "List: "; for (int x : list) cout << x << " "; cout << endl;};
+    auto print = [](std::vector<int>& list){ std::cout << "List: "; for (int x : list) std::cout << x << " "; std::cout << std::endl;};
 
-    cout << "10 naturals" << endl;
+    std::cout << "10 naturals" << std::endl;
     auto result = SELECT([](int x){ return x; }) FROM(Naturals()) LIMIT(10);
     print(result);
 
