@@ -73,11 +73,11 @@
 
 \author{Konrad Lisiecki}
 \nralbumu{48211}
-\title{Wycena Opcji przy pomocy Modeli Zmienności Stochastycznej} 
+\title{Wycena opcji przy pomocy modeli zmienności stochastycznej} 
 \kierunek{Finanse i rachunkowość}
 \instytut{Ekonometrii}
 \opiekun{dra hab. Łukasza Delonga, prof. SGH} 
-\date{Warszawa 2015}   
+\date{Warszawa 2016}   
 \newtheorem{defi}{Definicja}[section]
 \newtheorem{prop}{Własność}
  
@@ -313,7 +313,7 @@ Poprzednie podrozdziały opisywały elementy rzeczywistości ekonomicznej na kt�
 mieć przyjęta metodologia wyceny opcji. W tym pokażemy najbardziej powszechny model do wyceny opcji, 
 model Blacka-Scholesa. 
 \subsection{Klasyczny model Blacka-Scholesa} % (fold)
-\label{sub:subsection_name}
+\label{sub:classicBS}
 
 Rozważmy następujący model przedstawiający ewolucję ceny aktywa
 bazowego w czasie oraz obligacji, jako instrumentu finansowego pozbawionego ryzyka:
@@ -340,7 +340,12 @@ Model ten znany jest pod nazwą \textbf{modelu Blacka-Scholesa} i jest fundament
 narzędziem do wyceny opcji. Równanie \ref{eq:nonRiskAsset}  jest istotną częścią modelu, ponieważ 
 określa miarę w jakiej wyceniamy daną opcję. W zdecydowanej większości przypadków jest to miara 
 neutralna względem ryzyka (miara martyngałowa\index{Miara martyngałowa}). 
-Rozwiązując równania (\ref{eq:asset}) oraz (\ref{eq:nonRiskAsset}) można wyznaczyć:
+Rozwiązując równanie (\ref{eq:asset}) można wyznaczyć:
+\begin{equation}
+\label{eq:closedFormBlackSmallt} 
+  S_T = S_0 e^{(r - \frac{1}{2} \sigma^2)t+\sigma W_t}
+\end{equation}
+Po rozwiązaniu równania (\ref{eq:nonRiskAsset}) otrzymujemy natomiast:
 \begin{equation}
 B_t = e^{rt}
 \end{equation}
@@ -353,7 +358,8 @@ jest równa:
 \label{eq:discounting}
  \frac{\mathbf{E}[v(S_T)]}{e^{rT}}
 \end{equation}
-gdzie dynamikę cen aktywa bazowego opisuje następujący proces opisany w równaniu (\ref{eq:asset}).
+gdzie dynamikę cen aktywa bazowego opisuje następujący proces opisany w równaniu (\ref{eq:asset}),
+którego dryft względem miary martyngałowej wynosi $\mu = r$.
 
 Jak więc wynika z tego równania cenę opcji określamy jako zdyskontowaną na moment zerowy wartość
 oczekiwaną z wypłat opcji w momencie jej wygaśnięcia. 
@@ -377,7 +383,7 @@ Z kolei druga grupa założeń odnosi się do rynku na którym dane aktywa wyst�
 \end{enumerate}
 
 Wszystkie te założenia sprawiają, że model Blacka-Scholesa, mimo, że pozwala na wyznaczenie ceny
- opcji w postaci analitycznej, może nieprecyzyjnie wycenić wartość takiej opcji.
+opcji w postaci analitycznej, może nieprecyzyjnie wycenić wartość takiej opcji.
   
 \subsection{Zmienność implikowana} % (fold)
 \label{sub:zmienno_implikowana} 
@@ -423,9 +429,9 @@ strony kupującej (\textit{and. long call option}). Wypłata ta wynosi:
 W powyższym wzorze $K$, czyli cena wykupu opcji jest parametrem, stąd też, aby 
 wyliczyć wartość opcji należy obliczyć wartość instrumentu bazowego w momencie wygaśnięcia opcji.
 
-W tym celu należy rozwiązać stochastyczne równanie różniczkowe (\ref{eq:asset}). W modelu Blacka-Scholesa
-można pokazać, że wartość ceny aktywa bazowego na moment wygaśnięcia opcji możemy wyznaczyć przy pomocy
-następującego wzoru:
+W tym celu należy rozwiązać stochastyczne równanie różniczkowe (\ref{eq:asset}). Jak pokazano
+w sekcji \ref{sub:classicBS}, wartość ceny aktywa bazowego na moment wygaśnięcia opcji możemy wyznaczyć 
+przy pomocy następującego wzoru:
 \begin{equation}
 \label{eq:closedFormBlack} 
   S_T = S_0 e^{(r - \frac{1}{2} \sigma^2)T+\sigma \sqrt{T} X}
@@ -587,9 +593,9 @@ następującej formie:
 \begin{equation}
   dx = a(x,t) dt + b(x,t) dz
 \end{equation}
-gdzie o zmiennej $a$ można myśleć jako o współczynniku opisującym
-wielkości wzrostu, natomiast 
-o zmiennej $b$ jako o współczynniku definiującym jak duża jest losowość w danym 
+gdzie $z$ jest ruchem Browna. W równaniu wystpuje jeszcze parametr $a$, o którym 
+można myśleć jako o współczynniku opisującym
+wielkości wzrostu procesu oraz parametr $b$, definiujący jak duża jest losowość w danym 
 modelu.
 
 Dla procesów zdefiniowanych zgodnie z tym równaniem, możemy 
@@ -608,10 +614,12 @@ dv(t)      &= \kappa (\theta - v(t))dt + \varepsilon
 Aplikując do równania (\ref{eq:HestonlnS}) \textbf{dekompozycję Cholesky'ego} można
 otrzymać następującą zależność:
 \begin{equation}
+\label{eq:HestonCholesky}
   \ln S(t + \Delta) = \ln S(t) + \left( r - \frac{1}{2} v(t) \right) dt 
               + \rho \sqrt{v(t)} dW^v(t) + \sqrt{1 - \rho^2} \sqrt{v(t)} dW(t)
 \end{equation}
-Natomiast drugie równanie (\ref{eq:HestonlnY}) można przedstawić jako:
+Gdzie $W^v(t)$ jest procesem Wienera i jest niezależny od $W(t)$.
+Drugie równanie (\ref{eq:HestonlnY}) można natomiast przedstawić jako:
 \begin{equation}
   v(t + \Delta)      = v(t) + \int_t^{t+\Delta} \kappa 
                         (\theta - v(u))du + \varepsilon 
@@ -989,7 +997,7 @@ Właśnie ta metoda zostanie użyta w niniejszej pracy w celu wyznaczenia parame
 Warunkiem efektywnego zastosowania powyższej metody jest znalezienie szybkiego obliczeniowo sposobu 
 wyznaczania wartości opcji w 
 modelu Hestona. Ponieważ podejście symulacyjne jest zbyt czasochłonne w procesie kalibracji, stosuje 
-się zamknięte równanie opisujące cenę opcji. Równanie to opisano w rozdziale \ref{chap:hestonModel}.
+się równanie opisujące cenę opcji w formie jawnej. Równanie to opisano w rozdziale \ref{chap:hestonModel}.
 
 
 \section{Deterministyczne sposoby kalibracji modelu} 
@@ -1010,8 +1018,9 @@ Najprostszą metodą z tej klasy jest (liniowa) Metoda Najmniejszych Kwadratów 
 Najmniejszych Kwadratów} W świecie rzeczywistym jednak ciężko sobie wyobrazić, aby tego typu 
 specyfikacja problemu modelowała wszystkie możliwe relacje ekonomiczne. 
 
-Rozwiązaniem tego problemu jest osłabienie założenia dotyczącego liniowości zmiennych. W wyniku tego 
-otrzymujemy nową metodę zwaną \textbf{Nieliniową Metodą Najmniejszych Kwadratów}.
+Ważnym ograniczeniem tej metody jest założenie o liniowej zależności pomiędzy zmiennymi. 
+Gdy jednak zrezygnujemy z tego założenia, w wyniku otrzymamy 
+nową metodę zwaną \textbf{Nieliniową Metodą Najmniejszych Kwadratów}.
 Dla porządku, poniżej podajemy jej formalną specyfikację \cite{NLS}.
 
 \begin{defi}
@@ -1110,7 +1119,7 @@ przedstawia poniższe równanie:
   x_{k+1} = x_k - \alpha_k \nabla f(x_k)
 \end{equation}
 gdzie: $\nabla f(x_k)$ oznacza gradient, czyli pole wektorowe pokazujące kierunki najszybszego 
-wzrostu, natomiast $e_k$ jest wektorem wartości rezydualnych.
+wzrostu.
 
 
 Inna popularną metodą gradientową jest metoda Gaussa-Newtona. Różni się ona od metody największego 
@@ -1122,7 +1131,8 @@ Podobnie jak dla metody najszybszego spadku definiujemy krok algorytmu jako:
 \begin{equation}
   x_{k+1} = x_k - (J_k^TJ_k)^{-1}J_k e_k
 \end{equation}
-gdzie: $J_k$ oznacza macierz Jakobiego, czyli macierz pochodnych cząstkowych.
+gdzie: $J_k$ oznacza macierz Jakobiego, czyli macierz pochodnych cząstkowych, 
+natomiast $e_k$ jest wektorem wartości rezydualnych.
 
 Obie te metody są wydajnymi sposobami obliczania ekstremów lokalnych, jednak mają swoje wady.
 Zgodnie z literaturą \cite{LM}, pierwsza metoda dobrze się zachowuje dla punktów początkowych 
@@ -1930,7 +1940,7 @@ Zostały one przedstawione w tabeli \ref{tab:testOptionsComparison}.
 \bottomrule
 \end{tabular}
 \caption{Opcje na podstawie których zostaną porównane schematy dyskretyzacji przedstawione
-w rozdziale \ref{chap:hestonModel} \cite{Broadie}}
+w rozdziale \ref{chap:hestonModel}. Dane pochodzą z pracy Broadie \cite{Broadie}.}
 \label{tab:testOptionsComparison}
 \end{table}
 
@@ -1962,20 +1972,35 @@ zostały wyliczone zgodnie ze wzorem z równania (\ref{eq:monteCarloMean}):
 \end{equation}
 gdzie: $\hat{C}(0)$ oznacza wartość opcji otrzymaną przez zastosowanie symulacji Monte Carlo.
 
-Wyznaczona w ten sposób wartość opcji jest jednak podatna na dwa rodzaje błędów:
-\begin{itemize}
-  \item \textbf{błąd statystyczny}, który zgodnie z centralnym twierdzeniem granicznym 
-    (\textit{ang. central limit theorem}) wynosi:
-  \begin{equation}
-    SE = \frac{\sigma_f}{\sqrt{N}}
-  \end{equation}
-
-  \item \textbf{obciążenie związane z zastosowaniem dyskretyzacji} (\textit{ang. discretization bias}):
+Wyznaczona w ten sposób wartość opcji może różnić się od rzeczywistej ceny opcji. Mamy 
+do czynienia wtedy z błędem, którego określamy jako \textbf{błąd estymacji} 
+(\textit{ang. estimation error}):
   \begin{equation}
     e = C(0) - \hat{C}(0),
   \end{equation}
-  gdzie: $C(0)$ oznacza prawdziwą wartość opcji.
-\end{itemize}
+gdzie: $C(0)$ oznacza prawdziwą wartość opcji.
+
+Rzeczywista cena opcji $C(0)$ została wyznaczona w oparciu o implementację
+wzoru w postaci jawnej z uwzględnieniem \textbf{małej pułapki Hestona}.
+Implementacja nie uwzględniająca tej poprawki wykazywała się niestabilnością numeryczną 
+dla niektórych przypadków. Tabela \ref{tab:littleTrapOption1Price} przedstawia 
+rzeczywistą cenę dla opcji testowych:
+\begin{table}[htbp]
+\centering 
+\begin{tabular}{@{\hskip 0.5in}l |  @{\hskip 0.5in}r  @{\hskip 0.5in}r  }
+\toprule
+$K$ & opcja nr 1 & opcja nr 2\\
+\midrule
+80 & 44.8102 & 22.8766 \\
+100 & 34.9661 & 6.7730 \\
+130 & 23.6653 & 0.0800 \\
+\bottomrule
+\end{tabular}
+\caption{Ceny opcji testowych otrzymanych w wyniku implementacji 
+         poprawki związanej z \textit{małą pułapką Hestona}}
+\label{tab:littleTrapOption1Price}
+\end{table}
+
 
 \begin{table}[ht!]
 \centering
@@ -2017,12 +2042,21 @@ $\Delta$ & $N$ & {}  & {} & {} & K=80 \\
 \label{tab:option1Comparison}
 \end{table}
 
-Błędy te zostały obliczone dla każdej symulacji danego schematu dyskretyzacji
-i oznaczono je następująco:
+
+Na wartość $e$ mają wpływ dwa rodzaje błędów, na które podatna jest wycena opcji przy
+pomocy metod Monte Carlo:
 \begin{itemize}
-  \item $Bias$ - błąd związany z wyborem danego schematu dyskretyzacji
-  \item $SE$ - błąd statystyczny 
+  \item \textbf{błąd metody Monte Carlo}, który zgodnie z centralnym twierdzeniem granicznym 
+    (\textit{ang. central limit theorem}) wynosi:
+  \begin{equation}
+    SE = \frac{\sigma_f}{\sqrt{N}}
+  \end{equation}
+  gdzie: $\sigma_f$ oznacza odchylenie standardowe wypłaty.
+
+  \item \textbf{obciążenie związane z zastosowaniem dyskretyzacji } (\textit{ang. discretization bias}):
+
 \end{itemize}
+
 
 
 \begin{table}[ht!]
@@ -2061,45 +2095,34 @@ $\Delta$ & $N$ & {}  & {} & {} & K=80 \\
 \bottomrule
 \end{tabular}
 }
-\caption{Porównanie schematów dyskretyzacji na przykładzie opcji nr 2}
+\caption{Porównanie schematów dyskretyzacji (EUL, AND oraz MAR) na przykładzie opcji testowej nr 2}
 \label{tab:option2Comparison}
 \end{table}
 
-Analizując wyniki otrzymane w wyniku symulacji (przedstawione w tabeli 
-\ref{tab:option1Comparison}) można wyciągnąć następujące wnioski :
+
+W wyniku symulacji, na bazie otrzymanej rzeczywistej ceny opcji, został wyznaczony błąd estymacji
+oraz błąd metody Monte Carlo.
+Błędy te zostały obliczone dla każdej symulacji danego schematu dyskretyzacji
+i oznaczono je w następujący sposób:
+\begin{itemize}
+  \item $Bias$ - błąd estymacji
+  \item $SE$ - błąd metody Monte Carlo 
+\end{itemize}
+
+Analizując wyniki otrzymane w wyniku symulacji (przedstawione w tabelach 
+\ref{tab:option1Comparison} oraz \ref{tab:option2Comparison}) można wyciągnąć następujące wnioski :
 \begin{itemize}
   \item wraz ze wzrastającą liczbą wylosowanych trajektorii $N$ dla danej
-  symulacji maleje zarówno błąd statystyczny jak i obciążenie związane z zastosowaniem 
-  danego schematu dyskretyzacji. 
-  \item wartość błędu statystycznego maleje w tempie $\bigO{\sqrt{N}}$, co jest
+  symulacji maleje zarówno błąd estymacji jak i wpływający na niego błąd związany z 
+  zastosowaniem metody Monte Carlo
+  \item wartość błędu metody Monte Carlo maleje w tempie $\bigO{\sqrt{N}}$, co jest
   zgodne z treścią centralnego twierdzenia granicznego.
   \item zastosowanie poprawki martyngałowej dla schematu Andersena zwiększa
   dokładność dla każdej symulacji dla $\Delta = 320$ oraz $N = 1024000$.
   \item Dla dużych wartości $\Delta$ oraz $N$ wszystkie trzy schematy dyskretyzacji 
   wykazują dużą dokładność i regularność przy wycenie opcji.
 \end{itemize}
-Rzeczywista cena opcji $C(0)$ została wyznaczona w oparciu o implementację
-wzoru zamkniętego z uwzględnieniem \textbf{małej pułapki Hestona}.
-Implementacja nie uwzględniają tej poprawki wykazywała się niestabilnością numeryczną 
-dla niektórych przypadków. 
 
-Tabela \ref{tab:littleTrapOption1Price} przedstawia rzeczywistą cenę dla
-opcji nr 1 i opcji nr 2:
-\begin{table}[htbp]
-\centering 
-\begin{tabular}{@{\hskip 0.5in}l |  @{\hskip 0.5in}r  @{\hskip 0.5in}r  }
-\toprule
-$K$ & opcja nr 1 & opcja nr 2\\
-\midrule
-80 & 44.8102 & 22.8766 \\
-100 & 34.9661 & 6.7730 \\
-130 & 23.6653 & 0.0800 \\
-\bottomrule
-\end{tabular}
-\caption{Ceny opcji testowych otrzymanych w wyniku implementacji 
-         poprawki związanej z \textit{małą pułapką Hestona}}
-\label{tab:littleTrapOption1Price}
-\end{table}
 
 \subsection{Zmienność implikowana}
 W tym podrozdziale zostanie przedstawiona płaszczyzna zmienności dla opcji nr 1.
@@ -2207,7 +2230,8 @@ oraz $T$, które określa czas do wygaśnięcia opcji.
 210.50 & 6 & 210.50 & 13 & 210.50 & 20 \\
 \bottomrule
 \end{tabular}
-\caption{Dane wejściowe do funkcji kalibrującej model Hestona do danych giełdowych}}
+\caption{Dane wejściowe do funkcji kalibrującej model Hestona do danych giełdowych. 
+Źródło: \cite{OptionPrices}}
 \label{tab:calibration}
 \end{table}
 
@@ -2250,7 +2274,7 @@ W tym rozdziale wycenimy opcję kupna o następujących właściwościach:
 \end{figure}
 
 Na powyższym rysunku \ref{fig:hestonAssetPaths} widać wynik symulacji ceny opcji dla losowo wybranych przebiegów.
-Z definicji Monte Carlo wynika, że poprawnym estymatorem ceny
+Z definicji symulacji Monte Carlo wynika, że poprawnym estymatorem ceny
 opcji jest średnia ze wszystkich przebiegów.
 Na rysunku zaznaczono również poziomą linią wartość punktu startowego, tzn. wartość 
 aktywa bazowego w momencie zerowym. Wyraźnie widać, że średnia cena aktywa 
@@ -2460,13 +2484,13 @@ Jest ona bezpośrednią nadklasą dla innych klas definiujących
 odmienne podejścia do wyceny opcji zgodnej z modelem Hestona:
 \begin{enumerate}
   \item symulacji Monte Carlo (klasa \textit{HestonMC})
-  \item wzoru zamkniętego (klasa \textit{HestonExact})
+  \item wzoru w postaci jawnej (klasa \textit{HestonExact})
 \end{enumerate}
 
-Klasa \textit{HestonExact} zawiera w sobie implementację wzoru zamkniętego na cenę opcji.
+Klasa \textit{HestonExact} zawiera w sobie implementację wzoru formie jawnej na cenę opcji.
 Dziedziczy po niej klasa \textit{HestonExactLittleTrap}, która definiuje 
 poprawkę związaną z \textit{małą pułapką Hestona}. Dzięki tej klasie 
-otrzymujemy implementację wzoru zamkniętego na cenę opcji, która jest w o wiele
+otrzymujemy implementację jawnego wzoru na cenę opcji, która jest w o wiele
 mniejszym stopniu podatna na błędy numeryczne.
 
 Z kolei klasa \textit{HestonMC} definiuje jedynie interfejs jaki muszą spełniać klasy po niej 
@@ -2624,10 +2648,10 @@ dla każdego punktu realizacji procesu aktywa bazowego.
 
 
 \clearpage
-\subsection{Wycena opcji przy pomocy wzoru zamkniętego}
+\subsection{Wycena opcji przy pomocy wzoru w formie jawnej}
 W tym rozdziale zostaną przedstawione kody źródłowe dla alternatywnego podejścia 
 wyceny opcji w modelu Hestona. Zamiast polegać na niedeterministycznej metodzie
-Monte Carlo, zostanie użyty wzór zamknięty. Plik nagłówkowy dla tej klasy
+Monte Carlo, zostanie użyty wzór w formie jawnej. Plik nagłówkowy dla tej klasy
 został przedstawiony poniżej.
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
@@ -2650,7 +2674,7 @@ został przedstawiony poniżej.
 
 \clearpage
 \subsection{Implementacja modułu \textit{HestonExactLittleTrap}}
-Sekcja ta przedstawia kod źródłowy dla opisanej w rozdziale, implementacji wzoru zamkniętego
+Sekcja ta przedstawia kod źródłowy dla opisanej w rozdziale, implementacji wzoru w formie jawnej
 na wycenę opcji. 
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
@@ -2708,7 +2732,7 @@ modelu Blacka-Scholesa i modelu Hestona.
 \label{lst:BlackScholesh}
 \end{listing} 
 Kod źródłowy \ref{lst:BlackScholescpp} przedstawia konstruktor klasy \textit{MCBlackScholes} 
-oraz implementację metody \textit{simulate}.
+oraz implementację metody \textit{simulate} (na podstawie \cite{joshi2008c++}).
 \begin{listing}[H]
 \inputminted[mathescape, linenos, numbersep=5pt, bgcolor=bg, frame=lines, framesep=2mm]{cpp}
 {../src/HestonCPP/src/main/cpp/bs/MCBlackScholes.cpp}
