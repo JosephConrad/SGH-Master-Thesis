@@ -3,6 +3,13 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+# Different project files
+.DS_store
+SGH-Master-Thesis.zip
+SGH-Master-Thesis/src/HestonPython/implied-vol
+SGH-Master-Thesis/src/HestonCPP.zip
+SGH-Master-Thesis/TransactionHistory.numbers
+
 # Package Files #
 *.jar
 *.war
