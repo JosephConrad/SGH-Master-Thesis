@@ -1,1 +1,0 @@
-. praca/run.sh
